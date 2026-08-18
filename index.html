@@ -3,17 +3,45 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FreeFire Rooms | غرف فريفاير</title>
+    <title>FreeFire Rooms | غرف فريفاير | نشر رومات فريفاير مجانا</title>
+    <meta name="google-site-verification" content="4ZRoSNJXkxgBrZqk-pyOOZWD2ehvUvEZORUEGfzc9Z0" />
+    <!-- ====== SEO الأساسي ====== -->
+    <meta name="description" content="أفضل موقع لنشر غرف فريفاير مجاناً. انشر غرفتك واستمتع بلعب FreeFire مع أصدقائك. رومات جديدة يومياً. FreeFire Rooms, Roms, غرف فريفاير.">
+    <meta name="keywords" content="فريفاير, غرف فريفاير, roms freefire, غرف مجانية, freefire rooms, نشر غرف فريفاير, رومات فريفاير, FreeFire Roms, غرف فريفاير جديدة, رومات فريفاير مجانية, FreeFire Rooms مجانا, تحميل غرف فريفاير, FreeFire Rom, غرف فريفاير سريعة, رومات فريفاير 2026, FreeFire Rooms 2026">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://freefire-romes.vercel.app">
+    
+    <!-- ====== Open Graph (فيسبوك، تويتر) ====== -->
+    <meta property="og:title" content="FreeFire Rooms | غرف فريفاير | نشر رومات فريفاير مجانا">
+    <meta property="og:description" content="أفضل موقع لنشر غرف فريفاير مجاناً. انشر غرفتك واستمتع بلعب FreeFire مع أصدقائك. رومات جديدة يومياً.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://freefire-romes.vercel.app">
+    <meta property="og:site_name" content="FreeFire Rooms">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="FreeFire Rooms | غرف فريفاير">
+    <meta name="twitter:description" content="انشر غرف فريفاير مجاناً واستمتع بلعب FreeFire مع أصدقائك.">
+    
+    <!-- ====== كلمات إضافية ====== -->
+    <meta name="subject" content="FreeFire Rooms">
+    <meta name="copyright" content="FreeFire Rooms">
+    <meta name="language" content="ar">
+    <meta name="revisit-after" content="1 days">
+    <meta name="distribution" content="global">
+    
     <link rel="icon" href="https://i.postimg.cc/Qts4QhXw/images.jpg" type="image/jpeg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@500;600;700;800;900&family=Orbitron:wght@700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
     
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        body { background: #0d0d0d; color: #f0f0f0; min-height: 100vh; display: flex; flex-direction: column; padding-bottom: 85px; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background: #f5f7fa; color: #1a1a1a; min-height: 100vh; display: flex; flex-direction: column; padding-bottom: 85px; }
         .container { max-width: 1100px; margin: 0 auto; padding: 0 15px; }
+        
         header {
             background: linear-gradient(135deg, #1a1a1a 0%, #2a1a0a 100%);
             padding: 12px 20px;
@@ -27,12 +55,41 @@
             top: 0;
             z-index: 100;
         }
-        .logo { font-size: 24px; font-weight: 900; }
+        .logo { font-size: 24px; font-weight: 900; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; color: #fff; }
         .logo span:first-child { color: #fff; }
         .logo span:last-child { color: #ff6a00; }
         .logo i { color: #ff6a00; margin-left: 5px; }
+        
         .filter-area { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
-        .filter-label { color: #888; font-size: 13px; }
+        .filter-label { color: #888; font-size: 13px; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        
+        .gender-filter {
+            display: flex;
+            gap: 6px;
+            align-items: center;
+            background: #1a1a1a;
+            padding: 4px 6px;
+            border-radius: 30px;
+            border: 1px solid #333;
+        }
+        .gender-filter .gf-btn {
+            padding: 5px 14px;
+            border-radius: 20px;
+            border: none;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 600;
+            transition: 0.3s;
+            background: transparent;
+            color: #888;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .gender-filter .gf-btn:hover { color: #fff; }
+        .gender-filter .gf-btn.active-all { background: #4caf50; color: #fff; }
+        .gender-filter .gf-btn.active-male { background: #2196F3; color: #fff; }
+        .gender-filter .gf-btn.active-female { background: #E91E63; color: #fff; }
+        .gender-filter .gf-btn i { margin-left: 4px; }
+        
         .custom-select {
             position: relative;
             min-width: 170px;
@@ -51,6 +108,7 @@
             align-items: center;
             justify-content: space-between;
             gap: 8px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
         .custom-select .selected .arrow { color: #666; font-size: 12px; transition: 0.3s; }
         .custom-select .selected .arrow.open { transform: rotate(180deg); }
@@ -79,6 +137,7 @@
             font-size: 14px;
             transition: 0.2s;
             cursor: pointer;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
         .custom-select .option-item:hover { background: #2a2a2a; color: #fff; }
         .custom-select .option-item .star-icon {
@@ -91,6 +150,7 @@
         }
         .custom-select .option-item .star-icon:hover { transform: scale(1.3); background: rgba(255, 179, 0, 0.15); }
         .custom-select .option-item .star-icon.favorite { color: #ffb300; }
+        
         .refresh-btn {
             background: transparent;
             border: 1px solid #4caf50;
@@ -100,19 +160,10 @@
             cursor: pointer;
             font-size: 13px;
             transition: 0.3s;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
         .refresh-btn:hover { background: #4caf50; color: #fff; }
-        .admin-btn {
-            background: transparent;
-            border: 1px solid #ff6a00;
-            color: #ff6a00;
-            padding: 6px 16px;
-            border-radius: 30px;
-            cursor: pointer;
-            font-size: 13px;
-            transition: 0.3s;
-        }
-        .admin-btn:hover { background: #ff6a00; color: #fff; }
+        
         .rooms-section { padding: 15px 0 30px; flex: 1; }
         .section-header {
             display: flex;
@@ -122,7 +173,7 @@
             flex-wrap: wrap;
             gap: 10px;
         }
-        .section-header h3 { font-size: 18px; color: #4caf50; }
+        .section-header h3 { font-size: 18px; color: #4caf50; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
         .section-header .header-actions { display: flex; gap: 10px; align-items: center; }
         #roomsCount {
             background: #1a1a1a;
@@ -131,30 +182,49 @@
             font-size: 13px;
             color: #aaa;
             border: 1px solid #2a2a2a;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
         .rooms-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        
         .room-card {
-            background: linear-gradient(145deg, #161616, #0d0d0d);
             border-radius: 12px;
             padding: 14px 16px;
-            border: 1px solid #252525;
+            border: 1px solid #e8ecf1;
             transition: 0.3s;
             cursor: pointer;
             position: relative;
+            color: #1a1a1a;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
         }
         .room-card:hover {
             transform: translateY(-3px);
             border-color: #ff6a0066;
-            box-shadow: 0 8px 25px rgba(255, 106, 0, 0.12);
+            box-shadow: 0 8px 25px rgba(255, 106, 0, 0.1);
         }
+        .room-card.female {
+            background: linear-gradient(145deg, #fce4ec, #f8bbd0);
+            border-color: #f06292;
+        }
+        .room-card.female:hover { border-color: #E91E63; box-shadow: 0 8px 25px rgba(233, 30, 99, 0.2); }
+        .room-card.male {
+            background: linear-gradient(145deg, #e3f2fd, #bbdefb);
+            border-color: #64b5f6;
+        }
+        .room-card.male:hover { border-color: #2196F3; box-shadow: 0 8px 25px rgba(33, 150, 243, 0.2); }
+        .room-card.default {
+            background: #ffffff;
+            border-color: #e8ecf1;
+        }
+        
         .room-card .badge-country {
             display: inline-block;
-            background: #1a1a1a;
+            background: rgba(0,0,0,0.06);
             padding: 2px 10px;
             border-radius: 20px;
             font-size: 12px;
-            border: 1px solid #333;
-            color: #ddd;
+            border: 1px solid rgba(0,0,0,0.08);
+            color: #333;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
         .room-card .badge-mode {
             display: inline-block;
@@ -165,6 +235,16 @@
             color: #ff6a00;
             border: 1px solid #ff6a0044;
             margin-right: 5px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .room-card .badge-gender {
+            display: inline-block;
+            padding: 2px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            margin-right: 5px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: rgba(0,0,0,0.06);
         }
         .room-card .badge-owner {
             display: inline-block;
@@ -176,28 +256,30 @@
             border: 1px solid #ff6a0066;
             margin-right: 5px;
             font-weight: bold;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
-        .room-card .badge-admin {
-            display: inline-block;
-            background: #ff444422;
-            padding: 2px 8px;
+        .room-card .room-meta { display: flex; flex-wrap: wrap; gap: 10px; font-size: 12px; color: #555; margin: 6px 0 6px; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        .room-card .room-meta i { margin-left: 3px; color: #888; }
+        .room-card .room-views {
+            font-size: 12px;
+            color: #888;
+            background: rgba(0,0,0,0.04);
+            padding: 2px 10px;
             border-radius: 20px;
-            font-size: 10px;
-            color: #ff4444;
-            border: 1px solid #ff444466;
-            margin-right: 5px;
+            border: 1px solid rgba(0,0,0,0.06);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
-        .room-card .room-meta { display: flex; flex-wrap: wrap; gap: 10px; font-size: 12px; color: #999; margin: 6px 0 6px; }
-        .room-card .room-meta i { margin-left: 3px; color: #666; }
+        .room-card .room-views i { color: #ff6a00; margin-left: 4px; }
         .room-card .room-notes {
             font-size: 13px;
-            color: #aaa;
-            background: #1a1a1a;
+            color: #555;
+            background: rgba(0,0,0,0.04);
             padding: 4px 10px;
             border-radius: 8px;
             margin: 5px 0 8px;
             border-right: 2px solid #ff6a00;
             word-break: break-word;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
         .room-card .room-notes i { color: #ff6a00; margin-left: 4px; }
         .room-card .room-footer {
@@ -206,19 +288,20 @@
             align-items: center;
             margin-top: 8px;
             padding-top: 8px;
-            border-top: 1px solid #1a1a1a;
+            border-top: 1px solid rgba(0,0,0,0.06);
             flex-wrap: wrap;
             gap: 5px;
         }
-        .room-card .room-footer .status { font-size: 12px; color: #4caf50; }
+        .room-card .room-footer .status { font-size: 12px; color: #4caf50; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
         .room-card .room-footer .status i { font-size: 8px; margin-left: 4px; }
         .room-card .room-footer .time-left {
             font-size: 11px;
             color: #ff6a00;
-            background: rgba(255, 106, 0, 0.15);
+            background: rgba(255, 106, 0, 0.1);
             padding: 2px 10px;
             border-radius: 20px;
             border: 1px solid #ff6a0044;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
         .room-card .btn-details {
             background: linear-gradient(135deg, #ff6a00, #e65c00);
@@ -230,6 +313,7 @@
             cursor: pointer;
             transition: 0.3s;
             font-size: 12px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
         .room-card .btn-details:hover { transform: scale(1.05); }
         .room-card .btn-delete {
@@ -241,19 +325,21 @@
             cursor: pointer;
             font-size: 11px;
             transition: 0.3s;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
         .room-card .btn-delete:hover { background: #ff4444; color: #fff; }
-        .room-card .btn-ban {
+        .room-card .btn-share {
             background: transparent;
-            border: 1px solid #ff6a00;
-            color: #ff6a00;
+            border: 1px solid #4caf50;
+            color: #4caf50;
             padding: 4px 10px;
             border-radius: 30px;
             cursor: pointer;
             font-size: 11px;
             transition: 0.3s;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
-        .room-card .btn-ban:hover { background: #ff6a00; color: #fff; }
+        .room-card .btn-share:hover { background: #4caf50; color: #fff; }
 
         .fab-container {
             position: fixed;
@@ -291,6 +377,7 @@
             padding: 3px 12px;
             border-radius: 20px;
             backdrop-filter: blur(4px);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
         .modal {
@@ -301,69 +388,106 @@
             top: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.85);
-            backdrop-filter: blur(5px);
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(8px);
             justify-content: center;
             align-items: center;
-            animation: fadeIn 0.25s;
+            animation: fadeIn 0.3s;
         }
         @keyframes fadeIn {
             from { opacity: 0; transform: scale(0.95); }
             to { opacity: 1; transform: scale(1); }
         }
         .modal-content {
-            background: #1a1a1a;
-            border-radius: 16px;
-            padding: 28px 24px;
-            max-width: 500px;
+            background: #ffffff;
+            border-radius: 24px;
+            padding: 28px 26px 22px;
+            max-width: 420px;
             width: 95%;
-            max-height: 90vh;
-            overflow-y: auto;
-            border: 1px solid #2a2a2a;
+            border: 1px solid rgba(0,0,0,0.06);
+            box-shadow: 0 25px 60px rgba(0,0,0,0.2);
             position: relative;
+            color: #1a1a1a;
         }
         .close-btn {
             position: absolute;
             top: 10px;
             left: 15px;
             font-size: 28px;
-            color: #666;
+            color: #999;
             cursor: pointer;
             transition: 0.3s;
         }
         .close-btn:hover { color: #ff6a00; }
-        .modal-content h2 { margin-bottom: 18px; text-align: center; font-size: 22px; }
-        .modal-content h2 i { color: #ff6a00; margin-left: 8px; }
-        .form-group { margin-bottom: 14px; }
+        
+        .modal-title {
+            color: #ff6a00;
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 22px;
+            letter-spacing: 0.5px;
+            font-family: 'Cairo', sans-serif;
+        }
+
+        .form-group { margin-bottom: 12px; }
         .form-group label {
             display: block;
             margin-bottom: 4px;
-            color: #bbb;
-            font-size: 13px;
+            color: #555;
+            font-size: 12px;
             font-weight: 600;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
-        .form-group label i { margin-left: 5px; color: #ff6a00; }
+        .form-group label i {
+            margin-left: 5px;
+            color: #ff6a00;
+            font-size: 13px;
+        }
         .form-group input,
         .form-group select,
         .form-group textarea {
             width: 100%;
-            padding: 10px 14px;
-            border-radius: 10px;
-            border: 1px solid #2a2a2a;
-            background: #0d0d0d;
-            color: #fff;
-            font-size: 14px;
+            padding: 8px 12px;
+            border-radius: 8px;
+            border: 1px solid #e8ecf1;
+            background: #f8f9fa;
+            color: #1a1a1a;
+            font-size: 13px;
             transition: 0.3s;
+            outline: none;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
+        .form-group input::placeholder,
+        .form-group textarea::placeholder { color: #999; }
         .form-group input:focus,
         .form-group select:focus,
         .form-group textarea:focus {
             border-color: #ff6a00;
-            outline: none;
-            box-shadow: 0 0 15px #ff6a0022;
+            box-shadow: 0 0 15px rgba(255, 106, 0, 0.1);
         }
-        .form-group textarea { resize: vertical; min-height: 50px; font-family: inherit; }
-        .form-group .hint { font-size: 11px; color: #666; margin-top: 3px; }
+        .form-group select {
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23666' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: left 12px center;
+            padding-left: 35px;
+            cursor: pointer;
+        }
+        .form-group select option { background: #ffffff; color: #1a1a1a; }
+        .form-group textarea {
+            min-height: 50px;
+            resize: vertical;
+            font-family: inherit;
+        }
+        .form-group .hint { font-size: 10px; color: #999; margin-top: 3px; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+
+        .row-duo {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+        .row-duo .form-group { margin-bottom: 12px; }
+
         .btn-submit {
             width: 100%;
             padding: 12px;
@@ -371,96 +495,21 @@
             border-radius: 10px;
             background: linear-gradient(135deg, #ff6a00, #e65c00);
             color: #fff;
-            font-size: 17px;
+            font-size: 16px;
             font-weight: 700;
             cursor: pointer;
             transition: 0.3s;
-            margin-top: 8px;
-        }
-        .btn-submit:hover { transform: scale(1.02); box-shadow: 0 0 30px #ff6a0044; }
-        .btn-submit i { margin-left: 8px; }
-        .btn-danger {
-            background: linear-gradient(135deg, #ff4444, #cc0000);
-        }
-        .btn-danger:hover { box-shadow: 0 0 30px #ff444444; }
-        .btn-success {
-            background: linear-gradient(135deg, #4caf50, #2e7d32);
-        }
-        .btn-success:hover { box-shadow: 0 0 30px #4caf5044; }
-
-        .admin-list-item {
+            margin-top: 4px;
             display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 10px 14px;
-            background: #1a1a1a;
-            border-radius: 10px;
-            margin-bottom: 8px;
-            border: 1px solid #2a2a2a;
-        }
-        .admin-list-item .publisher-id {
-            color: #aaa;
-            font-size: 12px;
-            direction: ltr;
-            text-align: left;
-        }
-        .admin-list-item .btn-unban {
-            background: transparent;
-            border: 1px solid #4caf50;
-            color: #4caf50;
-            padding: 4px 12px;
-            border-radius: 30px;
-            cursor: pointer;
-            font-size: 12px;
-            transition: 0.3s;
-        }
-        .admin-list-item .btn-unban:hover { background: #4caf50; color: #fff; }
-
-        #detailsContent .detail-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 10px 0;
-            border-bottom: 1px solid #1a1a1a;
-            font-size: 14px;
-        }
-        #detailsContent .detail-item span:first-child { color: #888; }
-        #detailsContent .detail-item span:last-child {
-            color: #fff;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        #detailsContent .detail-item .copy-icon {
-            background: #2a2a2a;
-            border: none;
-            color: #ff6a00;
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            cursor: pointer;
-            transition: 0.3s;
-            display: inline-flex;
             align-items: center;
             justify-content: center;
-            font-size: 14px;
+            gap: 10px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
-        #detailsContent .detail-item .copy-icon:hover { background: #ff6a00; color: #fff; transform: scale(1.1); }
-        #detailsContent .detail-item .copy-icon.copied { background: #4caf50; color: #fff; }
-        #detailsContent .detail-item .check-icon {
-            color: #4caf50;
-            font-size: 18px;
-        }
-        #detailsContent .detail-notes {
-            background: #1a1a1a;
-            padding: 10px 14px;
-            border-radius: 10px;
-            margin-top: 10px;
-            border-right: 3px solid #ff6a00;
-            color: #aaa;
-            font-size: 14px;
-        }
+        .btn-submit:hover { transform: scale(1.02); box-shadow: 0 0 30px rgba(255, 106, 0, 0.3); }
+        .btn-submit:active { transform: scale(0.97); }
+        .btn-submit i { font-size: 18px; }
+
         footer {
             background: #0a0a0a;
             padding: 15px 0;
@@ -468,22 +517,462 @@
             border-top: 1px solid #1a1a1a;
             margin-top: auto;
         }
-        footer p { color: #555; font-size: 12px; }
+        footer p { color: #555; font-size: 12px; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+
+        .toast-container {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            align-items: center;
+            pointer-events: none;
+        }
+        .toast {
+            background: #1a1a1a;
+            color: #fff;
+            padding: 14px 28px;
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.25);
+            font-family: 'Cairo', sans-serif;
+            font-size: 15px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transform: translateY(20px);
+            opacity: 0;
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            pointer-events: auto;
+            border: 1px solid rgba(255,255,255,0.06);
+            min-width: 200px;
+            justify-content: center;
+        }
+        .toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+        .toast.success {
+            border-right: 4px solid #4caf50;
+        }
+        .toast.success i { color: #4caf50; }
+        .toast.error {
+            border-right: 4px solid #ff4444;
+        }
+        .toast.error i { color: #ff4444; }
+        .toast.info {
+            border-right: 4px solid #2196F3;
+        }
+        .toast.info i { color: #2196F3; }
+        .toast .toast-icon { font-size: 20px; }
+        .toast .toast-close {
+            background: none;
+            border: none;
+            color: #666;
+            cursor: pointer;
+            font-size: 16px;
+            padding: 0 4px;
+            transition: 0.2s;
+        }
+        .toast .toast-close:hover { color: #fff; }
+
+        #detailsModal .modal-content {
+            background: #ffffff;
+            border: 1px solid #e8ecf1;
+            box-shadow: 0 25px 60px rgba(0,0,0,0.15);
+            max-width: 420px;
+            padding: 20px 22px 24px;
+            border-radius: 24px;
+            overflow: hidden;
+            position: relative;
+            color: #1a1a1a;
+        }
+        #detailsModal .close-btn {
+            position: absolute;
+            top: 14px;
+            left: 18px;
+            color: #999;
+            border: 0;
+            background: none;
+            font-size: 28px;
+            cursor: pointer;
+            transition: .2s;
+            line-height: 1;
+            padding: 4px;
+            z-index: 10;
+        }
+        #detailsModal .close-btn:hover {
+            color: #ff6a00;
+            transform: rotate(90deg) scale(1.1);
+        }
+        #detailsModal .modal-title {
+            color: #1a1a1a;
+            font-size: 18px;
+            font-weight: 700;
+            margin: 0 0 16px 0;
+            line-height: 1;
+            padding-bottom: 12px;
+            border-bottom: 1px solid #e8ecf1;
+            text-align: center;
+            font-family: 'Cairo', sans-serif;
+            padding-top: 0;
+        }
+        #detailsModal .modal-title i {
+            transform: rotate(-15deg);
+            font-size: .9em;
+            margin-right: 6px;
+            color: #ff6a00;
+        }
+        
+        .hero-details {
+            display: grid;
+            grid-template-columns: 90px 1fr;
+            direction: ltr;
+            padding: 14px 16px;
+            margin-bottom: 16px;
+            background: #ffffff;
+            border: 1px solid #e8ecf1;
+            border-radius: 16px;
+            position: relative;
+            min-height: 160px;
+        }
+        .rank-details {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+        .rank-details .shield {
+            width: 75px;
+            height: 95px;
+            display: grid;
+            place-items: center;
+            font-size: 48px;
+            color: #ff6a00;
+            clip-path: polygon(50% 0, 88% 19%, 86% 68%, 50% 100%, 14% 68%, 12% 19%);
+            background: linear-gradient(145deg, #fff5e6, #ffe4cc);
+            border: 2px solid #ffcc99;
+            font-family: 'Font Awesome 6 Free';
+            position: relative;
+        }
+        .rank-details .shield:before {
+            content: "♛";
+            font-size: 24px;
+            position: absolute;
+            top: 10px;
+            color: #ff6a00;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .hero-data-details {
+            direction: rtl;
+            align-self: center;
+            padding-right: 10px;
+            position: relative;
+            z-index: 1;
+        }
+        .hero-data-details .id-label {
+            font-size: 13px;
+            color: #888;
+            font-weight: 600;
+            direction: ltr;
+            text-align: left;
+            font-family: 'Cairo', sans-serif;
+            letter-spacing: 1px;
+        }
+        .hero-data-details .id-label .mini-id {
+            font-family: Arial;
+            margin-left: 6px;
+            font-size: 10px;
+            vertical-align: middle;
+            padding: 1px 4px;
+            border-radius: 3px;
+            color: #fff;
+            background: linear-gradient(135deg, #d76aff, #60227c);
+        }
+        .hero-data-details .big-id {
+            font-family: 'Orbitron', monospace;
+            direction: ltr;
+            text-align: left;
+            color: #1a1a1a;
+            font-size: 28px;
+            line-height: 1.1;
+            font-weight: 800;
+            letter-spacing: 1px;
+        }
+        .hero-data-details .hero-line {
+            height: 1px;
+            background: #e8ecf1;
+            margin: 8px 0 10px;
+        }
+        .hero-data-details .password-label {
+            color: #4caf50;
+            font-size: 13px;
+            font-weight: 600;
+            font-family: 'Cairo', sans-serif;
+            letter-spacing: 1px;
+        }
+        .hero-data-details .password-label i {
+            margin-right: 6px;
+            transform: rotate(-35deg);
+        }
+        .hero-data-details .password {
+            font-family: 'Orbitron', monospace;
+            direction: ltr;
+            text-align: left;
+            color: #4caf50;
+            font-size: 24px;
+            font-weight: 700;
+            line-height: 1.2;
+            letter-spacing: 1px;
+        }
+        
+        .copy-stack-details {
+            position: absolute;
+            left: 8px;
+            top: 38px;
+            z-index: 2;
+            display: grid;
+            gap: 12px;
+        }
+        .copy-stack-details .copy-btn {
+            width: 42px;
+            height: 42px;
+            background: #1a1a1a;
+            color: #fff;
+            border: 1px solid #333;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.25s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+        }
+        .copy-stack-details .copy-btn i {
+            font-size: 18px;
+            color: #fff;
+        }
+        .copy-stack-details .copy-btn:hover {
+            transform: translateY(-3px) scale(1.05);
+            border-color: #ff6a00;
+            box-shadow: 0 8px 25px rgba(255, 106, 0, 0.15);
+        }
+        .copy-stack-details .copy-btn:hover i {
+            color: #ff6a00;
+        }
+        .copy-stack-details .copy-btn:active {
+            transform: scale(0.95);
+        }
+        
+        .details-grid-details {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            position: relative;
+            z-index: 1;
+        }
+        .details-grid-details .card {
+            min-height: 64px;
+            padding: 10px 12px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            position: relative;
+            z-index: 1;
+            overflow: hidden;
+            background: #f8f9fa;
+            border: 1px solid #e8ecf1;
+            border-radius: 12px;
+        }
+        .details-grid-details .card.blue { border-color: rgba(44,181,255,0.2); color: #2196F3; }
+        .details-grid-details .card.purple { border-color: rgba(183,93,255,0.2); color: #9C27B0; }
+        .details-grid-details .card.green { border-color: rgba(84,230,76,0.2); color: #4caf50; }
+        .details-grid-details .card.orange { border-color: rgba(255,127,12,0.2); color: #ff6a00; }
+        .details-grid-details .card.yellow { border-color: rgba(255,216,42,0.2); color: #ff9800; }
+        .details-grid-details .card.gray { border-color: rgba(190,198,207,0.2); color: #666; }
+        .details-grid-details .card .card-icon {
+            width: 36px;
+            height: 36px;
+            flex: none;
+            display: grid;
+            place-items: center;
+            font-size: 16px;
+            color: currentColor;
+            border-radius: 10px;
+            background: rgba(0,0,0,0.03);
+            border: 1px solid rgba(0,0,0,0.04);
+        }
+        .details-grid-details .card.purple .card-icon { font-size: 15px; }
+        .details-grid-details .card .card-content { position: relative; z-index: 1; line-height: 1.1; }
+        .details-grid-details .card .card-content .label {
+            display: block;
+            color: #999;
+            font-size: 10px;
+            font-weight: 600;
+            margin-bottom: 1px;
+            font-family: 'Cairo', sans-serif;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .details-grid-details .card .card-content .value {
+            font-size: 15px;
+            font-weight: 700;
+            color: #1a1a1a;
+            font-family: 'Cairo', sans-serif;
+        }
+        .details-grid-details .card.green .value { color: #4caf50; }
+        .details-grid-details .card.orange .value { color: #ff6a00; }
+        .details-grid-details .card.wide { grid-column: 1/-1; min-height: 64px; }
+        .details-grid-details .card.country {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .details-grid-details .card.country .flag-icon {
+            font-size: 32px;
+            line-height: 1;
+            flex: none;
+        }
+        .details-grid-details .card.country .card-content .value {
+            font-size: 16px;
+        }
+        
+        .actions-details {
+            display: grid;
+            gap: 10px;
+            margin: 16px 0 2px;
+            position: relative;
+            z-index: 1;
+        }
+        .actions-details .action {
+            min-height: 50px;
+            font-family: 'Cairo', sans-serif;
+            font-weight: 700;
+            font-size: 16px;
+            color: white;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            border: none;
+            border-radius: 12px;
+            transition: .2s;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 16px;
+        }
+        .actions-details .action:before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(130deg, rgba(255,255,255,.12), transparent 25%, transparent 70%, rgba(0,0,0,.15));
+            pointer-events: none;
+            border-radius: 12px;
+        }
+        .actions-details .action i { margin-right: 10px; font-size: 18px; vertical-align: middle; }
+        .actions-details .action.share {
+            background: linear-gradient(105deg, #0a6416, #139523 50%, #063115);
+            box-shadow: 0 4px 15px rgba(61,235,48,0.25);
+        }
+        .actions-details .action.share:hover { transform: translateY(-2px); box-shadow: 0 6px 25px rgba(61,235,48,0.35); }
+        .actions-details .action.delete {
+            background: linear-gradient(105deg, #7b1005, #b11c0a 48%, #4e1209);
+            box-shadow: 0 4px 15px rgba(255,54,12,0.25);
+        }
+        .actions-details .action.delete:hover { transform: translateY(-2px); box-shadow: 0 6px 25px rgba(255,54,12,0.35); }
+        .actions-details .action:active { transform: scale(0.97); }
 
         @media (max-width: 650px) {
             header { flex-direction: column; text-align: center; }
-            .filter-area { justify-content: center; }
+            .filter-area { justify-content: center; flex-wrap: wrap; }
+            .filter-area .custom-select { min-width: 120px; }
+            .filter-area .custom-select .selected { font-size: 12px; padding: 6px 10px; }
+            .gender-filter { flex-wrap: wrap; justify-content: center; }
             .rooms-grid { grid-template-columns: 1fr; }
-            .modal-content { padding: 20px 16px; }
-            .btn-fab { width: 58px; height: 58px; font-size: 28px; }
-            .fab-container { bottom: 18px; }
-            body { padding-bottom: 75px; }
-        }
-        @media (max-width: 450px) {
+            .room-card { padding: 12px 12px; }
+            .btn-fab { width: 55px; height: 55px; font-size: 26px; }
+            .fab-container { bottom: 15px; }
+            body { padding-bottom: 70px; }
+            .row-duo { grid-template-columns: 1fr; gap: 0; }
+            .row-duo .form-group { margin-bottom: 12px; }
+            .form-group input, .form-group select, .form-group textarea {
+                padding: 8px 10px;
+                font-size: 13px;
+            }
+            .btn-submit { padding: 12px; font-size: 16px; }
             .logo { font-size: 20px; }
-            .custom-select { min-width: 140px; }
-            .custom-select .selected { font-size: 12px; padding: 6px 10px; }
-            .room-card { padding: 10px 12px; }
+            
+            #detailsModal .modal-content { padding: 14px 12px 18px; max-width: 98%; border-radius: 18px; }
+            #detailsModal .modal-title { font-size: 18px; margin-bottom: 10px; padding-bottom: 8px; }
+            #detailsModal .close-btn { font-size: 24px; top: 10px; left: 12px; }
+            .hero-details { grid-template-columns: 80px 1fr; min-height: 150px; padding: 10px 12px; margin-bottom: 10px; }
+            .rank-details .shield { width: 70px; height: 88px; font-size: 42px; }
+            .rank-details .shield:before { font-size: 22px; top: 8px; }
+            .hero-data-details .id-label { font-size: 14px; }
+            .hero-data-details .id-label .mini-id { font-size: 10px; padding: 1px 4px; }
+            .hero-data-details .big-id { font-size: 22px; }
+            .hero-data-details .password-label { font-size: 14px; }
+            .hero-data-details .password { font-size: 20px; }
+            .hero-data-details .hero-line { margin: 6px 0 8px; }
+            .copy-stack-details { left: 4px; top: 32px; gap: 14px; }
+            .copy-stack-details .copy-btn { width: 38px; height: 38px; font-size: 14px; }
+            .details-grid-details { gap: 8px; }
+            .details-grid-details .card { min-height: 58px; padding: 8px 10px; gap: 8px; }
+            .details-grid-details .card .card-icon { width: 34px; height: 34px; font-size: 16px; }
+            .details-grid-details .card .card-content .label { font-size: 10px; }
+            .details-grid-details .card .card-content .value { font-size: 14px; }
+            .details-grid-details .card.wide { min-height: 58px; }
+            .details-grid-details .card.country .flag-icon { font-size: 28px; }
+            .actions-details { gap: 10px; margin-top: 12px; }
+            .actions-details .action { min-height: 48px; font-size: 15px; }
+            .actions-details .action i { font-size: 16px; margin-right: 8px; }
+            .toast { padding: 12px 20px; font-size: 14px; min-width: 160px; }
+        }
+        
+        @media (max-width: 400px) {
+            .filter-area .custom-select { min-width: 100px; }
+            .filter-area .custom-select .selected { font-size: 11px; padding: 4px 8px; }
+            .filter-area .refresh-btn { font-size: 11px; padding: 4px 10px; }
+            .gender-filter .gf-btn { font-size: 11px; padding: 4px 10px; }
+            .room-card { padding: 10px 10px; }
+            .room-card .badge-country { font-size: 10px; padding: 2px 6px; }
+            .room-card .badge-mode { font-size: 10px; padding: 2px 6px; }
+            .room-card .badge-gender { font-size: 9px; padding: 2px 6px; }
+            .room-card .badge-owner { font-size: 9px; padding: 2px 6px; }
+            .room-card .room-views { font-size: 9px; padding: 2px 6px; }
+            .room-card .room-footer { gap: 3px; }
+            .modal-content { padding: 16px 12px; }
+            .modal-title { font-size: 18px; }
+            
+            #detailsModal .modal-content { padding: 10px 8px 14px; border-radius: 14px; }
+            #detailsModal .modal-title { font-size: 16px; }
+            #detailsModal .close-btn { font-size: 20px; top: 8px; left: 10px; }
+            .hero-details { grid-template-columns: 60px 1fr; min-height: 120px; padding: 8px 8px; }
+            .rank-details .shield { width: 55px; height: 70px; font-size: 32px; }
+            .rank-details .shield:before { font-size: 16px; top: 6px; }
+            .hero-data-details .id-label { font-size: 12px; }
+            .hero-data-details .id-label .mini-id { font-size: 8px; padding: 1px 3px; }
+            .hero-data-details .big-id { font-size: 18px; }
+            .hero-data-details .password-label { font-size: 12px; }
+            .hero-data-details .password { font-size: 16px; }
+            .copy-stack-details { left: 3px; top: 26px; gap: 10px; }
+            .copy-stack-details .copy-btn { width: 34px; height: 34px; font-size: 12px; }
+            .details-grid-details { gap: 6px; }
+            .details-grid-details .card { min-height: 48px; padding: 6px 8px; gap: 6px; }
+            .details-grid-details .card .card-icon { width: 28px; height: 28px; font-size: 13px; }
+            .details-grid-details .card .card-content .label { font-size: 9px; }
+            .details-grid-details .card .card-content .value { font-size: 12px; }
+            .details-grid-details .card.wide { min-height: 48px; }
+            .details-grid-details .card.country .flag-icon { font-size: 24px; }
+            .actions-details { gap: 8px; margin-top: 10px; }
+            .actions-details .action { min-height: 40px; font-size: 13px; }
+            .actions-details .action i { font-size: 14px; margin-right: 6px; }
+            .toast { padding: 10px 16px; font-size: 13px; min-width: 140px; }
         }
     </style>
 </head>
@@ -503,9 +992,14 @@
             </div>
             <div class="options" id="optionsContainer"></div>
         </div>
+        
+        <div class="gender-filter" id="genderFilter">
+            <button class="gf-btn active-all" data-gender="all"><i class="fas fa-users"></i> الكل</button>
+            <button class="gf-btn" data-gender="male"><i class="fas fa-mars"></i> ذكر</button>
+            <button class="gf-btn" data-gender="female"><i class="fas fa-venus"></i> أنثى</button>
+        </div>
+        
         <button class="refresh-btn" id="refreshBtn"><i class="fas fa-sync-alt"></i> تحديث</button>
-        <!-- زر إدارة يظهر فقط للمدير -->
-        <div id="adminButtonContainer"></div>
     </div>
 </header>
 
@@ -533,110 +1027,113 @@
     <span class="fab-label">انشر غرفة</span>
 </div>
 
-<!-- ====== مودال النشر ====== -->
+<div class="toast-container" id="toastContainer"></div>
+
 <div id="createModal" class="modal">
     <div class="modal-content">
         <span class="close-btn" id="closeModal">&times;</span>
         <h2><i class="fas fa-fire"></i> نشر غرفة</h2>
         <form id="createRoomForm">
-            <div class="form-group">
-                <label><i class="fas fa-flag"></i> دولتك *</label>
-                <select id="roomCountry" required>
-                    <option value="">-- اختر دولتك --</option>
-                    <option value="المغرب">🇲🇦 المغرب</option>
-                    <option value="مصر">🇪🇬 مصر</option>
-                    <option value="السعودية">🇸🇦 السعودية</option>
-                    <option value="العراق">🇮🇶 العراق</option>
-                    <option value="الأردن">🇯🇴 الأردن</option>
-                    <option value="تونس">🇹🇳 تونس</option>
-                    <option value="الجزائر">🇩🇿 الجزائر</option>
-                    <option value="ليبيا">🇱🇾 ليبيا</option>
-                    <option value="سوريا">🇸🇾 سوريا</option>
-                    <option value="فلسطين">🇵🇸 فلسطين</option>
-                    <option value="لبنان">🇱🇧 لبنان</option>
-                    <option value="الإمارات">🇦🇪 الإمارات</option>
-                    <option value="قطر">🇶🇦 قطر</option>
-                    <option value="الكويت">🇰🇼 الكويت</option>
-                    <option value="عُمان">🇴🇲 عُمان</option>
-                    <option value="البحرين">🇧🇭 البحرين</option>
-                    <option value="اليمن">🇾🇪 اليمن</option>
-                    <option value="جيبوتي">🇩🇯 جيبوتي</option>
-                    <option value="الصومال">🇸🇴 الصومال</option>
-                    <option value="جزر القمر">🇰🇲 جزر القمر</option>
-                    <option value="موريتانيا">🇲🇷 موريتانيا</option>
-                    <option value="السودان">🇸🇩 السودان</option>
-                </select>
-                <div class="hint">اختر دولتك فقط</div>
+            <div class="row-duo">
+                <div class="form-group">
+                    <label><i class="fas fa-flag"></i> الدولة</label>
+                    <select id="roomCountry" required>
+                        <option value="">-- اختر --</option>
+                        <option value="المغرب">🇲🇦 المغرب</option>
+                        <option value="مصر">🇪🇬 مصر</option>
+                        <option value="السعودية">🇸🇦 السعودية</option>
+                        <option value="العراق">🇮🇶 العراق</option>
+                        <option value="الأردن">🇯🇴 الأردن</option>
+                        <option value="تونس">🇹🇳 تونس</option>
+                        <option value="الجزائر">🇩🇿 الجزائر</option>
+                        <option value="ليبيا">🇱🇾 ليبيا</option>
+                        <option value="سوريا">🇸🇾 سوريا</option>
+                        <option value="فلسطين">🇵🇸 فلسطين</option>
+                        <option value="لبنان">🇱🇧 لبنان</option>
+                        <option value="الإمارات">🇦🇪 الإمارات</option>
+                        <option value="قطر">🇶🇦 قطر</option>
+                        <option value="الكويت">🇰🇼 الكويت</option>
+                        <option value="عُمان">🇴🇲 عُمان</option>
+                        <option value="البحرين">🇧🇭 البحرين</option>
+                        <option value="اليمن">🇾🇪 اليمن</option>
+                        <option value="جيبوتي">🇩🇯 جيبوتي</option>
+                        <option value="الصومال">🇸🇴 الصومال</option>
+                        <option value="جزر القمر">🇰🇲 جزر القمر</option>
+                        <option value="موريتانيا">🇲🇷 موريتانيا</option>
+                        <option value="السودان">🇸🇩 السودان</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label><i class="fas fa-venus-mars"></i> الجنس</label>
+                    <select id="roomGender" required>
+                        <option value="">-- اختر --</option>
+                        <option value="male">👨 ذكر</option>
+                        <option value="female">👩 أنثى</option>
+                    </select>
+                </div>
             </div>
-            <div class="form-group">
-                <label><i class="fas fa-hashtag"></i> Room ID *</label>
-                <input type="text" id="roomId" placeholder="مثال: 587421" required>
+
+            <div class="row-duo">
+                <div class="form-group">
+                    <label><i class="fas fa-hashtag"></i> Room ID</label>
+                    <input type="text" id="roomId" placeholder="587421" required>
+                </div>
+                <div class="form-group">
+                    <label><i class="fas fa-key"></i> كلمة السر</label>
+                    <input type="text" id="roomPass" placeholder="1234" required>
+                </div>
             </div>
-            <div class="form-group">
-                <label><i class="fas fa-key"></i> كلمة السر *</label>
-                <input type="text" id="roomPass" placeholder="أي رقم" required>
-                <div class="hint">أي رقم (1، 100، 1234...)</div>
+
+            <div class="row-duo">
+                <div class="form-group">
+                    <label><i class="fas fa-gamepad"></i> النمط</label>
+                    <select id="roomMode">
+                        <option value="سولو">سولو</option>
+                        <option value="ديو">ديو</option>
+                        <option value="سكواد" selected>سكواد</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label><i class="fas fa-server"></i> السيرفر</label>
+                    <select id="roomServer">
+                        <option value="الشرق الأوسط">الشرق الأوسط</option>
+                        <option value="أوروبا">أوروبا</option>
+                        <option value="آسيا">آسيا</option>
+                        <option value="أمريكا">أمريكا</option>
+                    </select>
+                </div>
             </div>
+
             <div class="form-group">
-                <label><i class="fas fa-gamepad"></i> نمط اللعب</label>
-                <select id="roomMode">
-                    <option value="سولو">سولو</option>
-                    <option value="ديو">ديو</option>
-                    <option value="سكواد" selected>سكواد</option>
-                </select>
+                <label><i class="fas fa-pencil-alt"></i> ملاحظات</label>
+                <textarea id="roomNotes" placeholder="ممنوع الهكر، تدريب..."></textarea>
             </div>
-            <div class="form-group">
-                <label><i class="fas fa-server"></i> السيرفر</label>
-                <select id="roomServer">
-                    <option value="الشرق الأوسط">الشرق الأوسط</option>
-                    <option value="أوروبا">أوروبا</option>
-                    <option value="آسيا">آسيا</option>
-                    <option value="أمريكا">أمريكا</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label><i class="fas fa-pencil-alt"></i> معلومات إضافية</label>
-                <textarea id="roomNotes" placeholder="مثلاً: ممنوع الهكر"></textarea>
-                <div class="hint">أي معلومات مفيدة للزوار</div>
-            </div>
-            <button type="submit" class="btn-submit"><i class="fas fa-paper-plane"></i> انشر</button>
+
+            <button type="submit" class="btn-submit">
+                <i class="fas fa-paper-plane"></i> انشر
+            </button>
         </form>
     </div>
 </div>
 
-<!-- ====== مودال التفاصيل ====== -->
 <div id="detailsModal" class="modal">
-    <div class="modal-content" style="max-width:440px;">
-        <span class="close-btn" id="closeDetailsModal">&times;</span>
+    <div class="modal-content">
+        <button class="close-btn" id="closeDetailsModal">&times;</button>
         <div id="detailsContent"></div>
     </div>
 </div>
 
-<!-- ====== مودال لوحة التحكم (خاصة بالمدير) ====== -->
-<div id="adminModal" class="modal">
-    <div class="modal-content">
-        <span class="close-btn" id="closeAdminModal">&times;</span>
-        <h2><i class="fas fa-crown" style="color:#ffb300;"></i> لوحة التحكم</h2>
-        
-        <div id="adminLock">
-            <div class="form-group">
-                <label><i class="fas fa-lock"></i> كلمة مرور المدير</label>
-                <input type="password" id="adminPassword" placeholder="أدخل كلمة المرور">
+<div id="shareModal" class="modal">
+    <div class="modal-content" style="max-width:380px;">
+        <span class="close-btn" id="closeShareModal">&times;</span>
+        <h2><i class="fas fa-share-alt" style="color:#4caf50;"></i> مشاركة الغرفة</h2>
+        <div id="shareContent" style="text-align:center;">
+            <p style="color:#555; margin-bottom:15px;">اختر طريقة المشاركة</p>
+            <div style="display:flex; flex-direction:column; gap:10px;">
+                <button class="btn-submit" style="background:#25D366;" id="shareWhatsAppBtn"><i class="fab fa-whatsapp"></i> واتساب</button>
+                <button class="btn-submit" style="background:#1877F2;" id="shareFacebookBtn"><i class="fab fa-facebook"></i> فيسبوك</button>
+                <button class="btn-submit" style="background:#ff6a00;" id="shareCopyBtn"><i class="fas fa-copy"></i> نسخ الرابط</button>
             </div>
-            <button class="btn-submit" id="adminLoginBtn"><i class="fas fa-unlock"></i> دخول</button>
-        </div>
-        
-        <div id="adminPanel" style="display:none;">
-            <div style="display:flex; gap:10px; flex-wrap:wrap; margin-bottom:15px;">
-                <button class="btn-submit" id="adminRefreshBtn" style="flex:1;"><i class="fas fa-sync-alt"></i> تحديث</button>
-                <button class="btn-submit btn-danger" id="adminClearAllBtn" style="flex:1;"><i class="fas fa-trash-alt"></i> حذف الكل</button>
-            </div>
-            
-            <h3 style="color:#ff6a00; margin-bottom:10px;">🚫 المستخدمين المحظورين</h3>
-            <div id="bannedList"></div>
-            
-            <h3 style="color:#ff6a00; margin-top:15px; margin-bottom:10px;">📊 إحصائيات</h3>
-            <div id="adminStats" style="color:#aaa; font-size:14px;"></div>
         </div>
     </div>
 </div>
@@ -670,29 +1167,90 @@ const bannedRef = database.ref('bannedUsers');
 let roomsData = [];
 let favoriteCountry = null;
 let currentFilter = 'all';
+let currentGenderFilter = 'all';
 const ROOM_LIFETIME = 15 * 60 * 1000;
-const ADMIN_PASSWORD = "admin123";
+let shareRoomKey = null;
+const viewedRooms = JSON.parse(localStorage.getItem('viewedRooms') || '{}');
 
-// ====== التحقق من المدير ======
-function isAdmin() {
-    return localStorage.getItem('isAdmin') === 'true';
+function showToast(message, type = 'success', duration = 3500) {
+    const container = document.getElementById('toastContainer');
+    let icon = 'fa-check-circle';
+    if (type === 'error') icon = 'fa-times-circle';
+    if (type === 'info') icon = 'fa-info-circle';
+    
+    const toast = document.createElement('div');
+    toast.className = `toast ${type}`;
+    toast.innerHTML = `
+        <span class="toast-icon"><i class="fas ${icon}"></i></span>
+        <span>${message}</span>
+        <button class="toast-close" onclick="this.parentElement.remove()"><i class="fas fa-times"></i></button>
+    `;
+    container.appendChild(toast);
+    setTimeout(() => toast.classList.add('show'), 10);
+    const timeout = setTimeout(() => {
+        toast.classList.remove('show');
+        setTimeout(() => toast.remove(), 400);
+    }, duration);
+    toast._timeout = timeout;
+    toast.querySelector('.toast-close').addEventListener('click', () => {
+        clearTimeout(timeout);
+        toast.classList.remove('show');
+        setTimeout(() => toast.remove(), 400);
+    });
 }
 
-// ====== تحديث زر الإدارة ======
-function updateAdminButton() {
-    const container = document.getElementById('adminButtonContainer');
-    if (isAdmin()) {
-        container.innerHTML = `<button class="admin-btn" id="adminBtn"><i class="fas fa-crown"></i> إدارة</button>`;
-        document.getElementById('adminBtn').addEventListener('click', () => {
-            document.getElementById('adminModal').style.display = 'flex';
-            document.getElementById('adminLock').style.display = 'block';
-            document.getElementById('adminPanel').style.display = 'none';
-            document.getElementById('adminPassword').value = '';
-        });
-    } else {
-        container.innerHTML = '';
+function getPublisherId() {
+    let id = localStorage.getItem('publisherId');
+    if (!id) {
+        id = 'pub_' + Date.now() + '_' + Math.random().toString(36).substr(2, 6);
+        localStorage.setItem('publisherId', id);
     }
+    return id;
 }
+
+function getFlag(country) {
+    const map = {
+        'المغرب': '🇲🇦', 'مصر': '🇪🇬', 'السعودية': '🇸🇦', 'العراق': '🇮🇶',
+        'الأردن': '🇯🇴', 'تونس': '🇹🇳', 'الجزائر': '🇩🇿', 'ليبيا': '🇱🇾',
+        'سوريا': '🇸🇾', 'فلسطين': '🇵🇸', 'لبنان': '🇱🇧', 'الإمارات': '🇦🇪',
+        'قطر': '🇶🇦', 'الكويت': '🇰🇼', 'عُمان': '🇴🇲', 'البحرين': '🇧🇭', 'اليمن': '🇾🇪',
+        'جيبوتي': '🇩🇯', 'الصومال': '🇸🇴', 'جزر القمر': '🇰🇲', 'موريتانيا': '🇲🇷', 'السودان': '🇸🇩'
+    };
+    return map[country] || '🌍';
+}
+
+function getGenderIcon(gender) {
+    if (gender === 'male') return '👨';
+    if (gender === 'female') return '👩';
+    return '';
+}
+
+function getGenderClass(gender) {
+    if (gender === 'male') return 'male';
+    if (gender === 'female') return 'female';
+    return 'default';
+}
+
+function getTimeLeft(createdAt) {
+    const elapsed = Date.now() - createdAt;
+    const remaining = ROOM_LIFETIME - elapsed;
+    if (remaining <= 0) return 'انتهت';
+    const minutes = Math.floor(remaining / 60000);
+    const seconds = Math.floor((remaining % 60000) / 1000);
+    return `${minutes} min ${seconds.toString().padStart(2, '0')} s`;
+}
+
+document.querySelectorAll('.gender-filter .gf-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+        document.querySelectorAll('.gender-filter .gf-btn').forEach(b => {
+            b.className = 'gf-btn';
+        });
+        const gender = this.dataset.gender;
+        this.classList.add('active-' + gender);
+        currentGenderFilter = gender;
+        applyFilter();
+    });
+});
 
 const countryList = [
     { value: 'all', label: '🌍 الكل' },
@@ -719,35 +1277,6 @@ const countryList = [
     { value: 'موريتانيا', label: '🇲🇷 موريتانيا' },
     { value: 'السودان', label: '🇸🇩 السودان' }
 ];
-
-function getPublisherId() {
-    let id = localStorage.getItem('publisherId');
-    if (!id) {
-        id = 'pub_' + Date.now() + '_' + Math.random().toString(36).substr(2, 6);
-        localStorage.setItem('publisherId', id);
-    }
-    return id;
-}
-
-function getFlag(country) {
-    const map = {
-        'المغرب': '🇲🇦', 'مصر': '🇪🇬', 'السعودية': '🇸🇦', 'العراق': '🇮🇶',
-        'الأردن': '🇯🇴', 'تونس': '🇹🇳', 'الجزائر': '🇩🇿', 'ليبيا': '🇱🇾',
-        'سوريا': '🇸🇾', 'فلسطين': '🇵🇸', 'لبنان': '🇱🇧', 'الإمارات': '🇦🇪',
-        'قطر': '🇶🇦', 'الكويت': '🇰🇼', 'عُمان': '🇴🇲', 'البحرين': '🇧🇭', 'اليمن': '🇾🇪',
-        'جيبوتي': '🇩🇯', 'الصومال': '🇸🇴', 'جزر القمر': '🇰🇲', 'موريتانيا': '🇲🇷', 'السودان': '🇸🇩'
-    };
-    return map[country] || '🌍';
-}
-
-function getTimeLeft(createdAt) {
-    const elapsed = Date.now() - createdAt;
-    const remaining = ROOM_LIFETIME - elapsed;
-    if (remaining <= 0) return 'انتهت';
-    const minutes = Math.floor(remaining / 60000);
-    const seconds = Math.floor((remaining % 60000) / 1000);
-    return `${minutes}:${seconds.toString().padStart(2, '0')}`;
-}
 
 function buildDropdown() {
     const container = document.getElementById('optionsContainer');
@@ -800,9 +1329,11 @@ function toggleFavorite(country) {
     if (favoriteCountry === country) {
         favoriteCountry = null;
         localStorage.removeItem('favCountry');
+        showToast('تم إلغاء تحديد الدولة المفضلة', 'info');
     } else {
         favoriteCountry = country;
         localStorage.setItem('favCountry', country);
+        showToast(`✅ تم تحديد ${country} كدولة مفضلة`, 'success');
     }
     buildDropdown();
     if (favoriteCountry) currentFilter = favoriteCountry;
@@ -841,13 +1372,15 @@ function applyFilter() {
     if (currentFilter !== 'all') {
         filtered = roomsData.filter(room => room.country === currentFilter);
     }
+    if (currentGenderFilter !== 'all') {
+        filtered = filtered.filter(room => room.gender === currentGenderFilter);
+    }
     renderRooms(filtered);
 }
 
 function isBanned(publisherId) {
     const localBanned = JSON.parse(localStorage.getItem('bannedUsers') || '[]');
     if (localBanned.includes(publisherId)) return true;
-    
     let banned = false;
     bannedRef.once('value', (snapshot) => {
         const data = snapshot.val();
@@ -863,8 +1396,6 @@ function isBanned(publisherId) {
 
 roomsRef.on('value', (snapshot) => {
     const data = snapshot.val();
-    const publisherId = getPublisherId();
-    
     if (data) {
         roomsData = Object.keys(data).map(key => ({
             firebaseKey: key,
@@ -881,7 +1412,6 @@ function renderRooms(filteredRooms = null) {
     const list = document.getElementById('roomsList');
     const count = document.getElementById('roomsCount');
     const publisherId = getPublisherId();
-    const admin = isAdmin();
     
     let data = filteredRooms || roomsData;
     const now = Date.now();
@@ -903,16 +1433,20 @@ function renderRooms(filteredRooms = null) {
         const notes = room.notes ? room.notes.trim() : '';
         const timeLeft = getTimeLeft(room.createdAt);
         const isOwner = room.publisherId === publisherId;
+        const views = room.views || 0;
+        const genderIcon = getGenderIcon(room.gender);
+        const genderClass = getGenderClass(room.gender);
 
         if (isBanned(room.publisherId)) return '';
 
         return `
-            <div class="room-card" onclick="openDetails('${room.firebaseKey}')">
+            <div class="room-card ${genderClass}" onclick="openDetails('${room.firebaseKey}')">
                 <div>
                     <span class="badge-country">${flag} ${room.country}</span>
                     <span class="badge-mode">${room.mode}</span>
+                    ${genderIcon ? `<span class="badge-gender">${genderIcon}</span>` : ''}
                     ${isOwner ? '<span class="badge-owner">👑 مالك</span>' : ''}
-                    ${admin ? '<span class="badge-admin">🛡️ مدير</span>' : ''}
+                    <span class="room-views"><i class="fas fa-eye"></i> ${views}</span>
                 </div>
                 <div class="room-meta">
                     <span><i class="fas fa-server"></i> ${room.server}</span>
@@ -925,11 +1459,11 @@ function renderRooms(filteredRooms = null) {
                         <button class="btn-details" onclick="event.stopPropagation(); openDetails('${room.firebaseKey}')">
                             <i class="fas fa-eye"></i> عرض
                         </button>
-                        ${(isOwner || admin) ? `<button class="btn-delete" onclick="event.stopPropagation(); deleteRoom('${room.firebaseKey}')">
+                        <button class="btn-share" onclick="event.stopPropagation(); openShareModal('${room.firebaseKey}')">
+                            <i class="fas fa-share-alt"></i>
+                        </button>
+                        ${isOwner ? `<button class="btn-delete" onclick="event.stopPropagation(); deleteRoom('${room.firebaseKey}')">
                             <i class="fas fa-trash"></i>
-                        </button>` : ''}
-                        ${admin ? `<button class="btn-ban" onclick="event.stopPropagation(); banUser('${room.publisherId}')">
-                            <i class="fas fa-ban"></i>
                         </button>` : ''}
                     </div>
                 </div>
@@ -941,134 +1475,208 @@ function renderRooms(filteredRooms = null) {
 function openDetails(key) {
     const room = roomsData.find(r => r.firebaseKey === key);
     if (!room) return;
+    
+    const publisherId = getPublisherId();
+    const isOwner = room.publisherId === publisherId;
+    
+    if (!viewedRooms[key]) {
+        const newViews = (room.views || 0) + 1;
+        roomsRef.child(key).update({ views: newViews });
+        room.views = newViews;
+        viewedRooms[key] = true;
+        localStorage.setItem('viewedRooms', JSON.stringify(viewedRooms));
+    }
+    
     const modal = document.getElementById('detailsModal');
     const content = document.getElementById('detailsContent');
     const flag = getFlag(room.country);
     const timeLeft = getTimeLeft(room.createdAt);
-    const publisherId = getPublisherId();
-    const isOwner = room.publisherId === publisherId;
+    const ownerText = isOwner ? 'أخر' : 'آخر';
+    const genderIcon = getGenderIcon(room.gender);
+    const genderName = room.gender === 'male' ? 'ذكر' : room.gender === 'female' ? 'أنثى' : '';
+
+    startTimer(room.createdAt);
 
     content.innerHTML = `
-        <h3 style="text-align:center; margin-bottom:15px;">🔍 تفاصيل الغرفة</h3>
-        <div class="detail-item">
-            <span>${flag} الدولة</span>
-            <span>${room.country}</span>
-        </div>
-        <div class="detail-item">
-            <span>🆔 Room ID</span>
-            <span>
-                <span style="color:#ff6a00; font-weight:700;">${room.roomId}</span>
-                <button class="copy-icon" onclick="copyText('${room.roomId}', this)">
-                    <i class="fas fa-copy"></i>
+        <h2 class="modal-title"><i class="fa-solid fa-magnifying-glass"></i> تفاصيل الغرفة</h2>
+        
+        <div class="hero-details">
+            <div class="rank-details">
+                <div class="shield"><i class="fa-solid fa-shield-halved"></i></div>
+            </div>
+            <div class="hero-data-details">
+                <div class="id-label">🆔 Room ID <span class="mini-id">ID</span></div>
+                <div class="big-id">${room.roomId}</div>
+                <div class="hero-line"></div>
+                <div class="password-label"><i class="fa-solid fa-key"></i> كلمة السر</div>
+                <div class="password">${room.password}</div>
+            </div>
+            <div class="copy-stack-details">
+                <button class="copy-btn" onclick="copyText('${room.roomId}')">
+                    <i class="fa-regular fa-clipboard"></i>
                 </button>
-            </span>
-        </div>
-        <div class="detail-item">
-            <span>🔑 كلمة السر</span>
-            <span>
-                <span style="color:#ff6a00; font-weight:700;">${room.password}</span>
-                ${isOwner ? '<span class="check-icon">✅</span>' : ''}
-                <button class="copy-icon" onclick="copyText('${room.password}', this)">
-                    <i class="fas fa-copy"></i>
+                <button class="copy-btn" onclick="copyText('${room.password}')">
+                    <i class="fa-regular fa-copy"></i>
                 </button>
-            </span>
+            </div>
         </div>
-        <div class="detail-item">
-            <span>🎮 النمط</span>
-            <span>${room.mode}</span>
+        
+        <div class="details-grid-details">
+            <div class="card blue">
+                <div class="card-icon"><i class="fa-solid fa-globe"></i></div>
+                <div class="card-content">
+                    <span class="label">السيرفر</span>
+                    <span class="value">${room.server}</span>
+                </div>
+            </div>
+            <div class="card purple">
+                <div class="card-icon"><i class="fa-solid fa-gamepad"></i></div>
+                <div class="card-content">
+                    <span class="label">نمط اللعب</span>
+                    <span class="value">${room.mode}</span>
+                </div>
+            </div>
+            <div class="card green">
+                <div class="card-icon"><i class="fa-solid fa-users"></i></div>
+                <div class="card-content">
+                    <span class="label">المشاهدات</span>
+                    <span class="value">${room.views || 0}</span>
+                </div>
+            </div>
+            <div class="card orange">
+                <div class="card-icon"><i class="fa-regular fa-clock"></i></div>
+                <div class="card-content">
+                    <span class="label">الوقت المتبقي</span>
+                    <span class="value" id="timeDisplay">${timeLeft}</span>
+                </div>
+            </div>
+            <div class="card wide yellow">
+                <div class="card-icon"><i class="fa-solid fa-crown"></i></div>
+                <div class="card-content">
+                    <span class="label">المالك</span>
+                    <span class="value" style="color:#ff9e0b">${ownerText}</span>
+                </div>
+            </div>
+            <div class="card wide gray country">
+                <div class="flag-icon">${flag}</div>
+                <div class="card-content">
+                    <span class="label">الدولة</span>
+                    <span class="value">${room.country}</span>
+                </div>
+            </div>
+            ${genderIcon ? `
+            <div class="card wide" style="border-color:rgba(255,193,7,0.3); color:#ff9800; grid-column:1/-1; min-height:50px;">
+                <div class="card-icon" style="font-size:20px;">${genderIcon}</div>
+                <div class="card-content">
+                    <span class="label">الجنس</span>
+                    <span class="value" style="color:${room.gender === 'male' ? '#2196F3' : '#E91E63'};">${genderName}</span>
+                </div>
+            </div>
+            ` : ''}
         </div>
-        <div class="detail-item">
-            <span>🌐 السيرفر</span>
-            <span>${room.server}</span>
+        
+        <div class="actions-details">
+            <button class="action share" onclick="openShareModal('${room.firebaseKey}')">
+                <i class="fa-solid fa-share-nodes"></i> مشاركة الغرفة
+            </button>
+            ${isOwner ? `<button class="action delete" onclick="deleteRoom('${room.firebaseKey}')">
+                <i class="fa-solid fa-trash-can"></i> حذف الغرفة
+            </button>` : ''}
         </div>
-        <div class="detail-item">
-            <span>⏱ الوقت المتبقي</span>
-            <span style="color:#ff6a00;">${timeLeft}</span>
-        </div>
-        <div class="detail-item">
-            <span>👑 المالك</span>
-            <span>${isOwner ? 'أنت ✅' : 'آخر'}</span>
-        </div>
-        ${room.notes ? `<div class="detail-notes"><i class="fas fa-pencil-alt" style="color:#ff6a00; margin-left:6px;"></i> ${room.notes}</div>` : ''}
-        ${isAdmin() ? `<button class="btn-submit btn-danger" onclick="deleteRoom('${room.firebaseKey}')" style="margin-top:10px;">
-            <i class="fas fa-trash"></i> حذف الغرفة (مدير)
-        </button>` : ''}
     `;
     modal.style.display = 'flex';
 }
 
-function copyText(text, btn) {
-    navigator.clipboard.writeText(text).then(() => {
-        btn.innerHTML = '<i class="fas fa-check"></i>';
-        btn.classList.add('copied');
-        setTimeout(() => {
-            btn.innerHTML = '<i class="fas fa-copy"></i>';
-            btn.classList.remove('copied');
-        }, 1500);
+let timerInterval = null;
+
+function startTimer(createdAt) {
+    if (timerInterval) clearInterval(timerInterval);
+    
+    timerInterval = setInterval(() => {
+        const timeDisplay = document.getElementById('timeDisplay');
+        if (!timeDisplay) {
+            clearInterval(timerInterval);
+            return;
+        }
+        const elapsed = Date.now() - createdAt;
+        const remaining = ROOM_LIFETIME - elapsed;
+        if (remaining <= 0) {
+            timeDisplay.textContent = 'انتهت';
+            clearInterval(timerInterval);
+            return;
+        }
+        const minutes = Math.floor(remaining / 60000);
+        const seconds = Math.floor((remaining % 60000) / 1000);
+        timeDisplay.textContent = `${minutes} min ${seconds.toString().padStart(2, '0')} s`;
+    }, 1000);
+}
+
+function openShareModal(key) {
+    const room = roomsData.find(r => r.firebaseKey === key);
+    if (!room) return;
+    shareRoomKey = key;
+    document.getElementById('shareModal').style.display = 'flex';
+}
+
+document.getElementById('shareWhatsAppBtn').addEventListener('click', () => {
+    const room = roomsData.find(r => r.firebaseKey === shareRoomKey);
+    if (!room) return;
+    const msg = `🎮 غرفة FreeFire\n🆔 ID: ${room.roomId}\n🔑 كلمة السر: ${room.password}\n🌍 الدولة: ${room.country}\n🎯 النمط: ${room.mode}`;
+    window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(msg)}`, '_blank');
+    document.getElementById('shareModal').style.display = 'none';
+});
+
+document.getElementById('shareFacebookBtn').addEventListener('click', () => {
+    const room = roomsData.find(r => r.firebaseKey === shareRoomKey);
+    if (!room) return;
+    const msg = `🎮 غرفة FreeFire ID: ${room.roomId} | كلمة السر: ${room.password}`;
+    window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent('https://freefire-romes.vercel.app')}&quote=${encodeURIComponent(msg)}`, '_blank');
+    document.getElementById('shareModal').style.display = 'none';
+});
+
+document.getElementById('shareCopyBtn').addEventListener('click', () => {
+    const room = roomsData.find(r => r.firebaseKey === shareRoomKey);
+    if (!room) return;
+    const msg = `🎮 غرفة FreeFire\n🆔 ID: ${room.roomId}\n🔑 كلمة السر: ${room.password}\n🌍 الدولة: ${room.country}\n🎯 النمط: ${room.mode}`;
+    navigator.clipboard.writeText(msg).then(() => {
+        showToast('✅ تم نسخ تفاصيل الغرفة', 'success');
+        document.getElementById('shareModal').style.display = 'none';
     }).catch(() => {
-        prompt('انسخ النص:', text);
+        prompt('انسخ التفاصيل:', msg);
+        document.getElementById('shareModal').style.display = 'none';
+    });
+});
+
+function copyText(text) {
+    navigator.clipboard.writeText(text).then(() => {
+        showToast('✅ تم النسخ', 'success');
+    }).catch(() => {
+        const input = document.createElement('textarea');
+        input.value = text;
+        input.style.position = 'fixed';
+        input.style.opacity = '0';
+        document.body.appendChild(input);
+        input.select();
+        document.execCommand('copy');
+        document.body.removeChild(input);
+        showToast('✅ تم النسخ', 'success');
     });
 }
 
 function deleteRoom(key) {
-    if (!isAdmin() && !confirm('هل أنت متأكد من حذف هذه الغرفة؟')) return;
+    if (!confirm('هل أنت متأكد من حذف هذه الغرفة؟')) return;
     roomsRef.child(key).remove().then(() => {
-        alert('✅ تم حذف الغرفة بنجاح!');
+        showToast('🗑️ تم حذف الغرفة بنجاح', 'success');
     }).catch((error) => {
-        alert('❌ حدث خطأ: ' + error.message);
+        showToast('❌ حدث خطأ: ' + error.message, 'error');
     });
-}
-
-function banUser(publisherId) {
-    if (!isAdmin()) {
-        alert('⚠️ هذه الخاصية للمدير فقط!');
-        return;
-    }
-    if (!publisherId || publisherId === 'system') {
-        alert('⚠️ لا يمكن حظر هذا المستخدم.');
-        return;
-    }
-    if (confirm(`هل أنت متأكد من حظر هذا المستخدم؟\nID: ${publisherId}`)) {
-        bannedRef.push(publisherId).then(() => {
-            const localBanned = JSON.parse(localStorage.getItem('bannedUsers') || '[]');
-            if (!localBanned.includes(publisherId)) {
-                localBanned.push(publisherId);
-                localStorage.setItem('bannedUsers', JSON.stringify(localBanned));
-            }
-            alert('✅ تم حظر المستخدم بنجاح!');
-            roomsData.filter(r => r.publisherId === publisherId).forEach(r => {
-                if (r.firebaseKey) roomsRef.child(r.firebaseKey).remove();
-            });
-            applyFilter();
-        }).catch((error) => {
-            alert('❌ حدث خطأ: ' + error.message);
-        });
-    }
-}
-
-function unbanUser(publisherId) {
-    if (!isAdmin()) return;
-    bannedRef.once('value', (snapshot) => {
-        const data = snapshot.val();
-        if (data) {
-            Object.keys(data).forEach(key => {
-                if (data[key] === publisherId) {
-                    bannedRef.child(key).remove();
-                }
-            });
-        }
-    });
-    let localBanned = JSON.parse(localStorage.getItem('bannedUsers') || '[]');
-    localBanned = localBanned.filter(id => id !== publisherId);
-    localStorage.setItem('bannedUsers', JSON.stringify(localBanned));
-    alert('✅ تم إلغاء حظر المستخدم!');
-    applyFilter();
 }
 
 document.getElementById('createRoomForm').addEventListener('submit', (e) => {
     e.preventDefault();
 
     const country = document.getElementById('roomCountry').value;
+    const gender = document.getElementById('roomGender').value;
     const roomId = document.getElementById('roomId').value.trim();
     const password = document.getElementById('roomPass').value.trim();
     const mode = document.getElementById('roomMode').value;
@@ -1077,13 +1685,14 @@ document.getElementById('createRoomForm').addEventListener('submit', (e) => {
     const publisherId = getPublisherId();
 
     if (isBanned(publisherId)) {
-        alert('⚠️ أنت محظور ولا يمكنك نشر غرف!');
+        showToast('⚠️ أنت محظور ولا يمكنك نشر غرف!', 'error');
         return;
     }
 
-    if (!country) { alert('⚠️ اختر دولتك.'); return; }
-    if (!roomId) { alert('⚠️ أدخل Room ID.'); return; }
-    if (!password) { alert('⚠️ أدخل كلمة السر.'); return; }
+    if (!country) { showToast('⚠️ اختر دولتك', 'error'); return; }
+    if (!gender) { showToast('⚠️ اختر جنسك', 'error'); return; }
+    if (!roomId) { showToast('⚠️ أدخل Room ID', 'error'); return; }
+    if (!password) { showToast('⚠️ أدخل كلمة السر', 'error'); return; }
 
     const userRooms = roomsData.filter(r => r.publisherId === publisherId);
     userRooms.forEach(r => {
@@ -1097,23 +1706,29 @@ document.getElementById('createRoomForm').addEventListener('submit', (e) => {
         password: password,
         mode: mode,
         country: country,
+        gender: gender,
         server: server,
         notes: notes || '',
         createdAt: Date.now(),
-        publisherId: publisherId
+        publisherId: publisherId,
+        views: 0
     };
 
     roomsRef.push(newRoom).then(() => {
         closeModals();
         document.getElementById('createRoomForm').reset();
-        alert('✅ تم النشر! الغرفة ستكون نشطة لمدة 15 دقيقة.');
+        showToast('✅ تم النشر! الغرفة نشطة لمدة 15 دقيقة', 'success');
     }).catch((error) => {
-        alert('❌ حدث خطأ: ' + error.message);
+        showToast('❌ حدث خطأ: ' + error.message, 'error');
     });
 });
 
 function closeModals() {
     document.querySelectorAll('.modal').forEach(m => m.style.display = 'none');
+    if (timerInterval) {
+        clearInterval(timerInterval);
+        timerInterval = null;
+    }
 }
 
 document.querySelectorAll('.close-btn').forEach(btn => {
@@ -1141,74 +1756,13 @@ document.getElementById('refreshBtn').addEventListener('click', () => {
             roomsData = [];
         }
         applyFilter();
+        showToast('🔄 تم تحديث الغرف', 'info');
         const btn = document.getElementById('refreshBtn');
         btn.innerHTML = '<i class="fas fa-check"></i> تم';
         setTimeout(() => {
             btn.innerHTML = '<i class="fas fa-sync-alt"></i> تحديث';
         }, 1500);
     });
-});
-
-document.getElementById('adminLoginBtn').addEventListener('click', () => {
-    const password = document.getElementById('adminPassword').value;
-    if (password === ADMIN_PASSWORD) {
-        localStorage.setItem('isAdmin', 'true');
-        document.getElementById('adminLock').style.display = 'none';
-        document.getElementById('adminPanel').style.display = 'block';
-        loadAdminPanel();
-        updateAdminButton(); // تحديث زر الإدارة
-    } else {
-        alert('❌ كلمة مرور خاطئة!');
-    }
-});
-
-document.getElementById('adminPassword').addEventListener('keypress', (e) => {
-    if (e.key === 'Enter') {
-        document.getElementById('adminLoginBtn').click();
-    }
-});
-
-function loadAdminPanel() {
-    const stats = document.getElementById('adminStats');
-    const activeRooms = roomsData.filter(r => (Date.now() - r.createdAt) < ROOM_LIFETIME);
-    stats.innerHTML = `
-        <div>📊 الغرف النشطة: ${activeRooms.length}</div>
-        <div>👥 إجمالي الغرف المنشورة: ${roomsData.length}</div>
-        <div>👑 أنت مدير الموقع</div>
-    `;
-
-    bannedRef.once('value', (snapshot) => {
-        const data = snapshot.val();
-        const bannedList = document.getElementById('bannedList');
-        if (data) {
-            const list = Object.values(data);
-            if (list.length === 0) {
-                bannedList.innerHTML = '<div style="color:#666; text-align:center; padding:10px;">لا يوجد مستخدمين محظورين</div>';
-                return;
-            }
-            bannedList.innerHTML = list.map(id => `
-                <div class="admin-list-item">
-                    <span class="publisher-id">${id}</span>
-                    <button class="btn-unban" onclick="unbanUser('${id}')">إلغاء الحظر</button>
-                </div>
-            `).join('');
-        } else {
-            bannedList.innerHTML = '<div style="color:#666; text-align:center; padding:10px;">لا يوجد مستخدمين محظورين</div>';
-        }
-    });
-}
-
-document.getElementById('adminRefreshBtn').addEventListener('click', loadAdminPanel);
-
-document.getElementById('adminClearAllBtn').addEventListener('click', () => {
-    if (confirm('⚠️ هل أنت متأكد من حذف جميع الغرف؟ هذا لا يمكن التراجع عنه!')) {
-        roomsRef.remove().then(() => {
-            alert('✅ تم حذف جميع الغرف!');
-            loadAdminPanel();
-        }).catch((error) => {
-            alert('❌ حدث خطأ: ' + error.message);
-        });
-    }
 });
 
 document.getElementById('customSelect').addEventListener('click', function(e) {
@@ -1228,7 +1782,6 @@ if (fav) {
 }
 buildDropdown();
 updateSelectedDisplay();
-updateAdminButton(); // تفعيل زر الإدارة
 
 bannedRef.once('value', (snapshot) => {
     const data = snapshot.val();
