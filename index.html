@@ -840,9 +840,18 @@ function startFirebaseListeners(){
   window.__ffFirebaseListenersStarted=true;
   // نحمل آخر 100 روم فقط؛ الروم يعيش 15 دقيقة، لذلك لا داعي لتحميل تاريخ قديم.
   // limitToLast يقلل البيانات ويجعل وصول الرومات الجديدة أسرع خصوصاً مع كثرة المستخدمين.
+  // أولاً اعرض آخر نسخة مخزنة فوراً، ثم حدّثها من Firebase عند وصول الشبكة.
+  try{
+    const cached=JSON.parse(localStorage.getItem('ff_rooms_cache_v2')||'[]');
+    if(Array.isArray(cached)&&cached.length){
+      roomsData=[...DEMO_ROOMS,...cached].sort((a,b)=>(b.createdAt||0)-(a.createdAt||0));
+      applyFilter();
+    }
+  }catch(e){}
   roomsRef.orderByChild('createdAt').limitToLast(100).on('value',snap=>{
     const d=snap.val()||{}; const firebaseRooms=Object.keys(d).map(k=>({firebaseKey:k,...d[k]}));
     roomsData=[...DEMO_ROOMS,...firebaseRooms].sort((a,b)=>(b.createdAt||0)-(a.createdAt||0));
+    try{localStorage.setItem('ff_rooms_cache_v2',JSON.stringify(firebaseRooms));}catch(e){}
     applyFilter(); updateProfilePage();
   },err=>showFirebaseStatus('Firebase Rooms: '+firebaseErrorText(err)));
   announcementsRef.orderByChild('active').equalTo(true).limitToLast(30).on('value',snap=>{
@@ -968,22 +977,15 @@ async function createRoom(){
  const btn=document.querySelector('#createModal .submit');
  let ref=null;
  try{
-  if(!navigator.onLine){
-    notify('❌ لا يوجد اتصال بالإنترنت');
-    return;
-  }
-  // نشر الروم متاح حتى بدون حساب. الحساب اختياري لتحفظ اسمك وملفك الشخصي.
+  if(!navigator.onLine){notify('❌ لا يوجد اتصال بالإنترنت');return}
   publishingRoom=true;
-  if(btn){btn.disabled=true;btn.dataset.oldText=btn.textContent;btn.textContent='⏳ جاري النشر...';}
-
-  // إذا كان الملف محلياً أو تعذر Firebase، نستخدم وضعاً محلياً حتى لا يتوقف الموقع.
-  if(!firebaseUser && !firebaseLocalMode){
-    try{ await waitForFirebaseAuth(5000); }catch(e){
-      firebaseLocalMode=true;
-      showFirebaseStatus('Firebase غير متاح — النشر المحلي يعمل',false);
-    }
+  // لا ننتظر طلبات إضافية قبل إظهار الروم للمستخدم.
+  if(btn){btn.disabled=true;btn.dataset.oldText=btn.textContent;btn.textContent='🚀 نشر سريع…';}
+  if(!firebaseUser){
+    // لا ننتظر 5-15 ثانية. إذا كانت جلسة Firebase لم تجهز بعد نخبر المستخدم بسرعة.
+    try{ await waitForFirebaseAuth(1200); }catch(e){}
   }
-  const localOnly = !firebaseUser;
+  if(!firebaseUser){notify('⚠️ الاتصال بـ Firebase لم يجهز بعد، حاول مرة ثانية بعد لحظة');return}
 
   const country=document.getElementById('roomCountry').value;
   const g=document.getElementById('roomGender').value;
@@ -992,74 +994,45 @@ async function createRoom(){
   const roomId=document.getElementById('roomId').value.trim();
   const password=document.getElementById('roomPass').value.trim();
   const notes=document.getElementById('roomNotes').value.trim();
-  const publisherId=firebaseUser?.uid || localPublisherId();
+  const publisherId=firebaseUser.uid;
   if(!country||!g||!mode||!server||!roomId||!password){notify('⚠️ أكمل جميع بيانات الروم');return}
-  if(!localOnly && await isBanned(publisherId)){notify('⚠️ أنت محظور ولا يمكنك نشر غرف!');return}
+  if(await isBanned(publisherId)){notify('⚠️ أنت محظور ولا يمكنك نشر غرف!');return}
 
-  // لكل حساب روم واحد فقط: احذف الروم القديم قبل نشر الجديد لمنع السبام.
-  if(localOnly){
-    const oldLocal=JSON.parse(localStorage.getItem('ff_local_rooms')||'[]');
-    const kept=oldLocal.filter(r=>r.publisherId!==publisherId);
-    localStorage.setItem('ff_local_rooms',JSON.stringify(kept));
-    roomsData=roomsData.filter(r=>r.publisherId!==publisherId || r.demo);
-  }else{
-    // نبحث عن روم الحساب الحالي، لكن لا ننتظر حذف كل روم بشكل منفصل.
-    // سيتم حذف القديم ونشر الجديد في تحديث Firebase واحد لتقليل زمن النشر.
-    const oldSnap=await roomsRef.orderByChild('publisherId').equalTo(publisherId).once('value');
-    const old=oldSnap.val()||{};
-    roomsData=roomsData.filter(r=>r.publisherId!==publisherId || r.demo);
-    window.__ffOldRoomKeys=Object.keys(old);
-  }
-
-  // نضع الروم محليًا فورًا حتى يظهر للمستخدم بدون انتظار Firebase،
-  // ثم نرسل الحذف + النشر في طلب واحد ليظهر لحظيًا لجميع الزوار المتصلين.
-  const ref=roomsRef.push();
+  // نجهز الروم ونظهره فوراً قبل انتظار حذف الروم القديم أو الكتابة في الشبكة.
+  ref=roomsRef.push();
   const localCreatedAt=Date.now();
   const approvedCreator=approvedCreatorForUid(publisherId);
   const creatorSnapshot=approvedCreator?{id:approvedCreator.id,name:approvedCreator.name,handle:approvedCreator.handle||approvedCreator.username,image:approvedCreator.image||'',badgeType:approvedCreator.badgeType||'check',verified:approvedCreator.verified!==false,socials:approvedCreator.socials||approvedCreator.social||[]}:null;
   const optimisticRoom={
-    firebaseKey:ref.key,
-    name:`روم ${mode} - ${profile.name||'لاعب'}`,
-    roomId,password,mode,country,gender:g,server,notes,
+    firebaseKey:ref.key,name:`روم ${mode} - ${profile.name||'لاعب'}`,roomId,password,mode,country,gender:g,server,notes,
     createdAt:localCreatedAt,publisherId,publisherName:profile.name||'لاعب',publisherUsername:profile.username||'player',publisherImage:profile.image||'',views:0,creator:creatorSnapshot
   };
-  roomsData=[optimisticRoom,...roomsData.filter(r=>r.firebaseKey!==ref.key)];
+  roomsData=[optimisticRoom,...roomsData.filter(r=>r.publisherId!==publisherId || r.demo)];
   applyFilter();
+  closeModal('createModal');
+  document.getElementById('roomId').value='';document.getElementById('roomPass').value='';document.getElementById('roomNotes').value='';
+  profile.posted=(profile.posted||0)+1; saveState(); updateProfilePage();
+  notify('🔥 تم نشر الروم');
 
-  if(localOnly){
-    const localRooms=JSON.parse(localStorage.getItem('ff_local_rooms')||'[]');
-    localRooms.unshift(optimisticRoom); localStorage.setItem('ff_local_rooms',JSON.stringify(localRooms.slice(0,100)));
-    closeModal('createModal');
-    document.getElementById('roomId').value=''; document.getElementById('roomPass').value=''; document.getElementById('roomNotes').value='';
-    profile.posted=(profile.posted||0)+1; saveState(); updateProfilePage();
-    notify('🔥 تم نشر الروم محلياً. بعد رفع الموقع على HTTPS سيظهر للجميع عبر Firebase');
-    return;
-  }
-  // ServerValue.TIMESTAMP يعطي كل الأجهزة نفس وقت Firebase.
+  // احذف القديم + أضف الجديد في تحديث Firebase واحد.
+  const oldSnap=await roomsRef.orderByChild('publisherId').equalTo(publisherId).once('value');
+  const old=oldSnap.val()||{};
   const newRoom={...optimisticRoom,createdAt:firebase.database.ServerValue.TIMESTAMP};
   const atomicUpdates={};
-  (window.__ffOldRoomKeys||[]).forEach(k=>{ atomicUpdates['rooms/'+k]=null; });
+  Object.keys(old).forEach(k=>{ if(k!==ref.key) atomicUpdates['rooms/'+k]=null; });
   atomicUpdates['rooms/'+ref.key]=newRoom;
-  window.__ffOldRoomKeys=[];
   await database.ref().update(atomicUpdates);
-
-  closeModal('createModal');
-  document.getElementById('roomId').value='';
-  document.getElementById('roomPass').value='';
-  document.getElementById('roomNotes').value='';
-  profile.posted=(profile.posted||0)+1;
-  saveState();
-  updateProfilePage();
-  notify('🔥 تم نشر الروم وظهر للجميع فورًا');
+  try{
+    const cached=roomsData.filter(r=>!r.demo&&r.createdAt&&Date.now()-r.createdAt<ROOM_LIFETIME).slice(0,100);
+    localStorage.setItem('ff_rooms_cache_v2',JSON.stringify(cached));
+  }catch(e){}
  }catch(e){
   console.error('createRoom Firebase error:',e);
-  // إذا فشل الحفظ، نحذف النسخة المحلية المؤقتة حتى لا يظهر روم غير موجود في Firebase.
-  if(typeof ref!=='undefined' && ref?.key){
-    roomsData=roomsData.filter(r=>r.firebaseKey!==ref.key);
-    applyFilter();
-  }
-  const msg=e?.code==='PERMISSION_DENIED' ? 'صلاحيات Firebase تمنع النشر. تأكد أن Rules منشورة.' : (e?.message||'تحقق من اتصال Firebase');
-  notify('❌ لم يتم النشر: '+msg,'error');
+  // لا نرجع برسالة طويلة؛ الروم ظهر فوراً، وإذا فشل الحفظ نزيله حتى لا يبقى وهمياً.
+  if(ref?.key){roomsData=roomsData.filter(r=>r.firebaseKey!==ref.key);applyFilter();}
+  profile.posted=Math.max(0,(profile.posted||0)-1);saveState();updateProfilePage();
+  const msg=e?.code==='PERMISSION_DENIED'?'صلاحيات Firebase تمنع النشر. تأكد أن Rules منشورة.':(e?.message||'تحقق من اتصال Firebase');
+  notify('❌ لم يتم حفظ الروم: '+msg,'error');
  }finally{
   publishingRoom=false;
   if(btn){btn.disabled=false;btn.textContent=btn.dataset.oldText||'🚀 نشر الروم الآن';}
@@ -1271,12 +1244,44 @@ async function refreshFollowButton(){
 async function togglePublicFollow(){
   if(!requireAccount())return;
   if(!publicProfileUid||publicProfileUid===getPublisherId())return;
-  const was=(profile.followingList||[]).includes(publicProfileUid);
-  if(was){profile.followingList=profile.followingList.filter(x=>x!==publicProfileUid);profile.following=profile.followingList.length;saveState();try{if(firebaseUser)await followsRef.child(publicProfileUid).child(firebaseUser.uid).remove();}catch(e){} }
-  else{profile.followingList=[...(profile.followingList||[]),publicProfileUid];profile.following=profile.followingList.length;saveState();try{if(firebaseUser)await followsRef.child(publicProfileUid).child(firebaseUser.uid).set(true);}catch(e){} }
-  updateProfilePage(); await refreshFollowButton();
-  if(publicProfileData){publicProfileData.followers=Math.max(0,(publicProfileData.followers||0)+(was?-1:1));try{if(firebaseUser)await usersRef.child(publicProfileUid).update({followers:publicProfileData.followers});}catch(e){}}
+  const targetUid=publicProfileUid, me=getPublisherId();
+  const was=(profile.followingList||[]).includes(targetUid);
+  // تحديث الواجهة فوراً؛ Firebase يكمل في الخلفية.
+  if(was){
+    profile.followingList=profile.followingList.filter(x=>x!==targetUid);
+    profile.following=profile.followingList.length;
+    if(publicProfileData)publicProfileData.followers=Math.max(0,(publicProfileData.followers||0)-1);
+  }else{
+    profile.followingList=[...(profile.followingList||[]),targetUid];
+    profile.following=profile.followingList.length;
+    if(publicProfileData)publicProfileData.followers=(publicProfileData.followers||0)+1;
+  }
+  saveState(); updateProfilePage(); await refreshFollowButton();
   notify(was?'تم إلغاء المتابعة':'✓ تمت المتابعة');
+  if(!firebaseUser)return;
+  try{
+    const updates={};
+    updates['follows/'+targetUid+'/'+me]=was?null:true;
+    // عدّ المتابعين يُحسب من العلاقات نفسها، وليس من رقم يرسله المستخدم.
+    const followersSnap=await followsRef.child(targetUid).once('value');
+    const followers=followersSnap.val()||{};
+    let followerCount=0;Object.keys(followers).forEach(k=>{if(followers[k]===true)followerCount++});
+    if(was)followerCount=Math.max(0,followerCount-1);else followerCount++;
+    updates['users/'+targetUid+'/followers']=followerCount;
+    const mineSnap=await followsRef.once('value');
+    const all=mineSnap.val()||{}; let myFollowing=0;
+    Object.keys(all).forEach(t=>{if(all[t]&&all[t][me]===true)myFollowing++});
+    myFollowing=was?Math.max(0,myFollowing-1):myFollowing+1;
+    updates['users/'+me+'/following']=myFollowing;
+    await database.ref().update(updates);
+    if(publicProfileData)publicProfileData.followers=followerCount;
+  }catch(e){
+    // نعيد الحالة محلياً إذا فشل الحفظ.
+    if(was)profile.followingList=[...(profile.followingList||[]),targetUid];
+    else profile.followingList=profile.followingList.filter(x=>x!==targetUid);
+    profile.following=profile.followingList.length;saveState();updateProfilePage();await refreshFollowButton();
+    notify('⚠️ تعذر حفظ المتابعة، تحقق من Firebase Rules');
+  }
 }
 function sharePublicProfile(){
   const u='@'+String(publicProfileData?.username||'player').replace(/^@/,'');
@@ -1311,7 +1316,17 @@ function updateProfileUI(){
 function previewProfileImage(e){
  const file=e.target.files?.[0]; if(!file)return;
  const reader=new FileReader();
- reader.onload=()=>{profile.image=reader.result;document.getElementById('profilePreviewImg').src=reader.result;document.getElementById('profileBigImg').src=reader.result;saveState();syncPublicProfile()};
+ reader.onload=()=>{
+   const img=new Image();
+   img.onload=()=>{
+     const max=256, scale=Math.min(1,max/Math.max(img.width,img.height));
+     const c=document.createElement('canvas');c.width=Math.max(1,Math.round(img.width*scale));c.height=Math.max(1,Math.round(img.height*scale));
+     c.getContext('2d').drawImage(img,0,0,c.width,c.height);
+     const data=c.toDataURL('image/jpeg',0.68);
+     profile.image=data;document.getElementById('profilePreviewImg').src=data;document.getElementById('profileBigImg').src=data;saveState();syncPublicProfile();
+   };
+   img.src=reader.result;
+ };
  reader.readAsDataURL(file);
 }
 function saveProfile(){
