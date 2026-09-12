@@ -838,20 +838,24 @@ firebaseAuth.onAuthStateChanged(user=>{
 function startFirebaseListeners(){
   if(window.__ffFirebaseListenersStarted || !firebaseUser)return;
   window.__ffFirebaseListenersStarted=true;
-  // نحمل آخر 100 روم فقط؛ الروم يعيش 15 دقيقة، لذلك لا داعي لتحميل تاريخ قديم.
-  // limitToLast يقلل البيانات ويجعل وصول الرومات الجديدة أسرع خصوصاً مع كثرة المستخدمين.
-  // أولاً اعرض آخر نسخة مخزنة فوراً، ثم حدّثها من Firebase عند وصول الشبكة.
+  const normalizeRooms=(list)=>{
+    const now=Date.now(), cutoff=now-ROOM_LIFETIME;
+    const seen=new Set();
+    return list.filter(r=>r&&r.createdAt&&r.createdAt>=cutoff)
+      .sort((a,b)=>(b.createdAt||0)-(a.createdAt||0))
+      .filter(r=>{if(r.demo)return true; const id=r.publisherId||r.firebaseKey; if(seen.has(id))return false; seen.add(id); return true;});
+  };
+  // اعرض الكاش فوراً، ثم حدّثه من Firebase بدون انتظار أي طلب آخر.
   try{
     const cached=JSON.parse(localStorage.getItem('ff_rooms_cache_v2')||'[]');
-    if(Array.isArray(cached)&&cached.length){
-      roomsData=[...DEMO_ROOMS,...cached].sort((a,b)=>(b.createdAt||0)-(a.createdAt||0));
-      applyFilter();
-    }
+    if(Array.isArray(cached)&&cached.length){ roomsData=[...DEMO_ROOMS,...normalizeRooms(cached)]; applyFilter(); }
   }catch(e){}
   roomsRef.orderByChild('createdAt').limitToLast(100).on('value',snap=>{
-    const d=snap.val()||{}; const firebaseRooms=Object.keys(d).map(k=>({firebaseKey:k,...d[k]}));
-    roomsData=[...DEMO_ROOMS,...firebaseRooms].sort((a,b)=>(b.createdAt||0)-(a.createdAt||0));
-    try{localStorage.setItem('ff_rooms_cache_v2',JSON.stringify(firebaseRooms));}catch(e){}
+    const d=snap.val()||{};
+    const firebaseRooms=Object.keys(d).map(k=>({firebaseKey:k,...d[k]}));
+    const active=normalizeRooms(firebaseRooms);
+    roomsData=[...DEMO_ROOMS,...active];
+    try{localStorage.setItem('ff_rooms_cache_v2',JSON.stringify(active));}catch(e){}
     applyFilter(); updateProfilePage();
   },err=>showFirebaseStatus('Firebase Rooms: '+firebaseErrorText(err)));
   announcementsRef.orderByChild('active').equalTo(true).limitToLast(30).on('value',snap=>{
@@ -998,8 +1002,9 @@ async function createRoom(){
   if(!country||!g||!mode||!server||!roomId||!password){notify('⚠️ أكمل جميع بيانات الروم');return}
   if(await isBanned(publisherId)){notify('⚠️ أنت محظور ولا يمكنك نشر غرف!');return}
 
-  // نجهز الروم ونظهره فوراً قبل انتظار حذف الروم القديم أو الكتابة في الشبكة.
-  ref=roomsRef.push();
+  // مفتاح ثابت لكل لاعب: نشر الروم يصبح كتابة واحدة بلا قراءة مسبقة ولا حذف قديم.
+  // هذا يحافظ على قاعدة: لكل لاعب روم واحد فقط.
+  ref=roomsRef.child(publisherId);
   const localCreatedAt=Date.now();
   const approvedCreator=approvedCreatorForUid(publisherId);
   const creatorSnapshot=approvedCreator?{id:approvedCreator.id,name:approvedCreator.name,handle:approvedCreator.handle||approvedCreator.username,image:approvedCreator.image||'',badgeType:approvedCreator.badgeType||'check',verified:approvedCreator.verified!==false,socials:approvedCreator.socials||approvedCreator.social||[]}:null;
@@ -1014,14 +1019,9 @@ async function createRoom(){
   profile.posted=(profile.posted||0)+1; saveState(); updateProfilePage();
   notify('🔥 تم نشر الروم');
 
-  // احذف القديم + أضف الجديد في تحديث Firebase واحد.
-  const oldSnap=await roomsRef.orderByChild('publisherId').equalTo(publisherId).once('value');
-  const old=oldSnap.val()||{};
+  // كتابة واحدة فقط — لا يوجد lookup للروم القديم، لذلك النشر أسرع بكثير.
   const newRoom={...optimisticRoom,createdAt:firebase.database.ServerValue.TIMESTAMP};
-  const atomicUpdates={};
-  Object.keys(old).forEach(k=>{ if(k!==ref.key) atomicUpdates['rooms/'+k]=null; });
-  atomicUpdates['rooms/'+ref.key]=newRoom;
-  await database.ref().update(atomicUpdates);
+  await ref.set(newRoom);
   try{
     const cached=roomsData.filter(r=>!r.demo&&r.createdAt&&Date.now()-r.createdAt<ROOM_LIFETIME).slice(0,100);
     localStorage.setItem('ff_rooms_cache_v2',JSON.stringify(cached));
@@ -1041,7 +1041,7 @@ async function createRoom(){
 
 async function openDetails(key){
  const r=roomsData.find(x=>x.firebaseKey===key);if(!r)return;
- if(!r.demo && !viewedRooms[key]){const v=(r.views||0)+1;roomsRef.child(key).update({views:v});r.views=v;viewedRooms[key]=true;localStorage.setItem('viewedRooms',JSON.stringify(viewedRooms))}
+ if(!r.demo && !viewedRooms[key]){const v=(r.views||0)+1;roomsRef.child(key).update({views:firebase.database.ServerValue.increment(1)});r.views=v;viewedRooms[key]=true;localStorage.setItem('viewedRooms',JSON.stringify(viewedRooms))}
  const own=r.publisherId===getPublisherId();
  document.getElementById('detailsTitle').textContent='🎮 '+(r.name||'تفاصيل الروم');
  document.getElementById('detailsBox').innerHTML=`<div class="detail-row"><span>الدولة</span><b>${getFlag(r.country)} ${esc(r.country)}</b></div><div class="detail-row"><span>السيرفر</span><b>${esc(r.server)}</b></div><div class="detail-row"><span>النوع</span><b>${esc(r.mode)}</b></div><div class="detail-row"><span>الجنس</span><b>${getGenderIcon(r.gender)} ${getGenderName(r.gender)}</b></div><div class="detail-row"><span>Room ID</span><b>${esc(r.roomId)} <button class="copy" onclick="copyText('${esc(r.roomId)}')">نسخ</button></b></div><div class="detail-row"><span>كلمة السر</span><b>${esc(r.password)} <button class="copy" onclick="copyText('${esc(r.password)}')">نسخ</button></b></div><div class="detail-row"><span>المشاهدات</span><b>${r.views||0}</b></div>${r.notes?`<div class="detail-row"><span>ملاحظات</span><b>${esc(r.notes)}</b></div>`:''}<div class="detail-row"><span>المالك</span><b>${own?'أنت':'لاعب'}</b></div>`;
@@ -1140,9 +1140,10 @@ function updateProfilePage(){
 function syncPublicProfile(){
   try{
     if(firebaseUser && typeof usersRef!=='undefined'){
-      usersRef.child(firebaseUser.uid).set({
+      // لا نستخدم set حتى لا نمسح عدادات المتابعين أثناء تحديث الملف.
+      usersRef.child(firebaseUser.uid).update({
         uid:firebaseUser.uid,name:profile.name||'',username:profile.username||'',bio:profile.bio||'',image:profile.image||'',
-        posted:profile.posted||0,joined:profile.joined||0,followers:profile.followers||0,following:profile.followingList?.length||0,
+        posted:profile.posted||0,joined:profile.joined||0,
         privacy:{hideFollowers:!!profile.privacy?.hideFollowers,hideFollowing:!!profile.privacy?.hideFollowing},updatedAt:firebase.database.ServerValue.TIMESTAMP
       }).catch(()=>{});
     }
@@ -1262,19 +1263,10 @@ async function togglePublicFollow(){
   try{
     const updates={};
     updates['follows/'+targetUid+'/'+me]=was?null:true;
-    // عدّ المتابعين يُحسب من العلاقات نفسها، وليس من رقم يرسله المستخدم.
-    const followersSnap=await followsRef.child(targetUid).once('value');
-    const followers=followersSnap.val()||{};
-    let followerCount=0;Object.keys(followers).forEach(k=>{if(followers[k]===true)followerCount++});
-    if(was)followerCount=Math.max(0,followerCount-1);else followerCount++;
-    updates['users/'+targetUid+'/followers']=followerCount;
-    const mineSnap=await followsRef.once('value');
-    const all=mineSnap.val()||{}; let myFollowing=0;
-    Object.keys(all).forEach(t=>{if(all[t]&&all[t][me]===true)myFollowing++});
-    myFollowing=was?Math.max(0,myFollowing-1):myFollowing+1;
-    updates['users/'+me+'/following']=myFollowing;
+    // تحديث ذري بدون قراءة قائمة المتابعين كاملة أو قراءة شجرة follows كلها.
+    updates['users/'+targetUid+'/followers']=firebase.database.ServerValue.increment(was?-1:1);
+    updates['users/'+me+'/following']=firebase.database.ServerValue.increment(was?-1:1);
     await database.ref().update(updates);
-    if(publicProfileData)publicProfileData.followers=followerCount;
   }catch(e){
     // نعيد الحالة محلياً إذا فشل الحفظ.
     if(was)profile.followingList=[...(profile.followingList||[]),targetUid];
