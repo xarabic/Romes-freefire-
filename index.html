@@ -838,9 +838,12 @@ firebaseAuth.onAuthStateChanged(user=>{
 function startFirebaseListeners(){
   if(window.__ffFirebaseListenersStarted || !firebaseUser)return;
   window.__ffFirebaseListenersStarted=true;
-  roomsRef.on('value',snap=>{
+  // نحمل آخر 100 روم فقط؛ الروم يعيش 15 دقيقة، لذلك لا داعي لتحميل تاريخ قديم.
+  // limitToLast يقلل البيانات ويجعل وصول الرومات الجديدة أسرع خصوصاً مع كثرة المستخدمين.
+  roomsRef.orderByChild('createdAt').limitToLast(100).on('value',snap=>{
     const d=snap.val()||{}; const firebaseRooms=Object.keys(d).map(k=>({firebaseKey:k,...d[k]}));
-    roomsData=[...DEMO_ROOMS,...firebaseRooms].sort((a,b)=>(b.createdAt||0)-(a.createdAt||0)); applyFilter(); updateProfilePage();
+    roomsData=[...DEMO_ROOMS,...firebaseRooms].sort((a,b)=>(b.createdAt||0)-(a.createdAt||0));
+    applyFilter(); updateProfilePage();
   },err=>showFirebaseStatus('Firebase Rooms: '+firebaseErrorText(err)));
   announcementsRef.orderByChild('active').equalTo(true).limitToLast(30).on('value',snap=>{
     const d=snap.val()||{}; globalAnnouncements=Object.keys(d).map(k=>({...d[k],id:k,source:'admin'})).sort((a,b)=>Number(b.createdAt||0)-Number(a.createdAt||0)); updateNotificationBadge(); if(document.getElementById('notificationsModal')?.classList.contains('show')) renderNotificationsOnly();
@@ -1000,16 +1003,16 @@ async function createRoom(){
     localStorage.setItem('ff_local_rooms',JSON.stringify(kept));
     roomsData=roomsData.filter(r=>r.publisherId!==publisherId || r.demo);
   }else{
+    // نبحث عن روم الحساب الحالي، لكن لا ننتظر حذف كل روم بشكل منفصل.
+    // سيتم حذف القديم ونشر الجديد في تحديث Firebase واحد لتقليل زمن النشر.
     const oldSnap=await roomsRef.orderByChild('publisherId').equalTo(publisherId).once('value');
     const old=oldSnap.val()||{};
-    const removes=[];
-    Object.keys(old).forEach(k=>{removes.push(roomsRef.child(k).remove())});
-    if(removes.length) await Promise.all(removes);
     roomsData=roomsData.filter(r=>r.publisherId!==publisherId || r.demo);
+    window.__ffOldRoomKeys=Object.keys(old);
   }
 
-  // نضع الروم محليًا فورًا حتى يظهر للمستخدم بدون انتظار إعادة تحميل الصفحة،
-  // ثم نحفظه في Firebase ليظهر لحظيًا لجميع الزوار المتصلين.
+  // نضع الروم محليًا فورًا حتى يظهر للمستخدم بدون انتظار Firebase،
+  // ثم نرسل الحذف + النشر في طلب واحد ليظهر لحظيًا لجميع الزوار المتصلين.
   const ref=roomsRef.push();
   const localCreatedAt=Date.now();
   const approvedCreator=approvedCreatorForUid(publisherId);
@@ -1034,7 +1037,11 @@ async function createRoom(){
   }
   // ServerValue.TIMESTAMP يعطي كل الأجهزة نفس وقت Firebase.
   const newRoom={...optimisticRoom,createdAt:firebase.database.ServerValue.TIMESTAMP};
-  await ref.set(newRoom);
+  const atomicUpdates={};
+  (window.__ffOldRoomKeys||[]).forEach(k=>{ atomicUpdates['rooms/'+k]=null; });
+  atomicUpdates['rooms/'+ref.key]=newRoom;
+  window.__ffOldRoomKeys=[];
+  await database.ref().update(atomicUpdates);
 
   closeModal('createModal');
   document.getElementById('roomId').value='';
