@@ -1,1796 +1,1327 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FreeFire Rooms | غرف فريفاير | نشر رومات فريفاير مجانا</title>
-    <meta name="google-site-verification" content="4ZRoSNJXkxgBrZqk-pyOOZWD2ehvUvEZORUEGfzc9Z0" />
-    <!-- ====== SEO الأساسي ====== -->
-    <meta name="description" content="أفضل موقع لنشر غرف فريفاير مجاناً. انشر غرفتك واستمتع بلعب FreeFire مع أصدقائك. رومات جديدة يومياً. FreeFire Rooms, Roms, غرف فريفاير.">
-    <meta name="keywords" content="فريفاير, غرف فريفاير, roms freefire, غرف مجانية, freefire rooms, نشر غرف فريفاير, رومات فريفاير, FreeFire Roms, غرف فريفاير جديدة, رومات فريفاير مجانية, FreeFire Rooms مجانا, تحميل غرف فريفاير, FreeFire Rom, غرف فريفاير سريعة, رومات فريفاير 2026, FreeFire Rooms 2026">
-    <meta name="robots" content="index, follow">
-    <link rel="canonical" href="https://freefire-romes.vercel.app">
-    
-    <!-- ====== Open Graph (فيسبوك، تويتر) ====== -->
-    <meta property="og:title" content="FreeFire Rooms | غرف فريفاير | نشر رومات فريفاير مجانا">
-    <meta property="og:description" content="أفضل موقع لنشر غرف فريفاير مجاناً. انشر غرفتك واستمتع بلعب FreeFire مع أصدقائك. رومات جديدة يومياً.">
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://freefire-romes.vercel.app">
-    <meta property="og:site_name" content="FreeFire Rooms">
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="FreeFire Rooms | غرف فريفاير">
-    <meta name="twitter:description" content="انشر غرف فريفاير مجاناً واستمتع بلعب FreeFire مع أصدقائك.">
-    
-    <!-- ====== كلمات إضافية ====== -->
-    <meta name="subject" content="FreeFire Rooms">
-    <meta name="copyright" content="FreeFire Rooms">
-    <meta name="language" content="ar">
-    <meta name="revisit-after" content="1 days">
-    <meta name="distribution" content="global">
-    
-    <link rel="icon" href="https://i.postimg.cc/Qts4QhXw/images.jpg" type="image/jpeg">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@500;600;700;800;900&family=Orbitron:wght@700;800;900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
-    
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { background: #f5f7fa; color: #1a1a1a; min-height: 100vh; display: flex; flex-direction: column; padding-bottom: 85px; }
-        .container { max-width: 1100px; margin: 0 auto; padding: 0 15px; }
-        
-        header {
-            background: linear-gradient(135deg, #1a1a1a 0%, #2a1a0a 100%);
-            padding: 12px 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 2px solid #ff6a00;
-            flex-wrap: wrap;
-            gap: 10px;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-        .logo { font-size: 24px; font-weight: 900; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; color: #fff; }
-        .logo span:first-child { color: #fff; }
-        .logo span:last-child { color: #ff6a00; }
-        .logo i { color: #ff6a00; margin-left: 5px; }
-        
-        .filter-area { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
-        .filter-label { color: #888; font-size: 13px; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        
-        .gender-filter {
-            display: flex;
-            gap: 6px;
-            align-items: center;
-            background: #1a1a1a;
-            padding: 4px 6px;
-            border-radius: 30px;
-            border: 1px solid #333;
-        }
-        .gender-filter .gf-btn {
-            padding: 5px 14px;
-            border-radius: 20px;
-            border: none;
-            cursor: pointer;
-            font-size: 13px;
-            font-weight: 600;
-            transition: 0.3s;
-            background: transparent;
-            color: #888;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-        .gender-filter .gf-btn:hover { color: #fff; }
-        .gender-filter .gf-btn.active-all { background: #4caf50; color: #fff; }
-        .gender-filter .gf-btn.active-male { background: #2196F3; color: #fff; }
-        .gender-filter .gf-btn.active-female { background: #E91E63; color: #fff; }
-        .gender-filter .gf-btn i { margin-left: 4px; }
-        
-        .custom-select {
-            position: relative;
-            min-width: 170px;
-            background: #0d0d0d;
-            border-radius: 30px;
-            border: 1px solid #333;
-            cursor: pointer;
-            transition: 0.3s;
-        }
-        .custom-select:hover { border-color: #ff6a00; }
-        .custom-select .selected {
-            padding: 8px 14px;
-            color: #ddd;
-            font-size: 14px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 8px;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-        .custom-select .selected .arrow { color: #666; font-size: 12px; transition: 0.3s; }
-        .custom-select .selected .arrow.open { transform: rotate(180deg); }
-        .custom-select .options {
-            display: none;
-            position: absolute;
-            top: 110%;
-            right: 0;
-            left: 0;
-            background: #1a1a1a;
-            border-radius: 12px;
-            border: 1px solid #2a2a2a;
-            max-height: 250px;
-            overflow-y: auto;
-            z-index: 200;
-            padding: 6px 0;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.8);
-        }
-        .custom-select .options.show { display: block; }
-        .custom-select .option-item {
-            padding: 8px 16px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            color: #ccc;
-            font-size: 14px;
-            transition: 0.2s;
-            cursor: pointer;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-        .custom-select .option-item:hover { background: #2a2a2a; color: #fff; }
-        .custom-select .option-item .star-icon {
-            color: #555;
-            font-size: 14px;
-            transition: 0.2s;
-            cursor: pointer;
-            padding: 4px 6px;
-            border-radius: 50%;
-        }
-        .custom-select .option-item .star-icon:hover { transform: scale(1.3); background: rgba(255, 179, 0, 0.15); }
-        .custom-select .option-item .star-icon.favorite { color: #ffb300; }
-        
-        .refresh-btn {
-            background: transparent;
-            border: 1px solid #4caf50;
-            color: #4caf50;
-            padding: 6px 16px;
-            border-radius: 30px;
-            cursor: pointer;
-            font-size: 13px;
-            transition: 0.3s;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-        .refresh-btn:hover { background: #4caf50; color: #fff; }
-        
-        .rooms-section { padding: 15px 0 30px; flex: 1; }
-        .section-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 15px;
-            flex-wrap: wrap;
-            gap: 10px;
-        }
-        .section-header h3 { font-size: 18px; color: #4caf50; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        .section-header .header-actions { display: flex; gap: 10px; align-items: center; }
-        #roomsCount {
-            background: #1a1a1a;
-            padding: 4px 14px;
-            border-radius: 30px;
-            font-size: 13px;
-            color: #aaa;
-            border: 1px solid #2a2a2a;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-        .rooms-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
-        
-        .room-card {
-            border-radius: 12px;
-            padding: 14px 16px;
-            border: 1px solid #e8ecf1;
-            transition: 0.3s;
-            cursor: pointer;
-            position: relative;
-            color: #1a1a1a;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
-        }
-        .room-card:hover {
-            transform: translateY(-3px);
-            border-color: #ff6a0066;
-            box-shadow: 0 8px 25px rgba(255, 106, 0, 0.1);
-        }
-        .room-card.female {
-            background: linear-gradient(145deg, #fce4ec, #f8bbd0);
-            border-color: #f06292;
-        }
-        .room-card.female:hover { border-color: #E91E63; box-shadow: 0 8px 25px rgba(233, 30, 99, 0.2); }
-        .room-card.male {
-            background: linear-gradient(145deg, #e3f2fd, #bbdefb);
-            border-color: #64b5f6;
-        }
-        .room-card.male:hover { border-color: #2196F3; box-shadow: 0 8px 25px rgba(33, 150, 243, 0.2); }
-        .room-card.default {
-            background: #ffffff;
-            border-color: #e8ecf1;
-        }
-        
-        .room-card .badge-country {
-            display: inline-block;
-            background: rgba(0,0,0,0.06);
-            padding: 2px 10px;
-            border-radius: 20px;
-            font-size: 12px;
-            border: 1px solid rgba(0,0,0,0.08);
-            color: #333;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-        .room-card .badge-mode {
-            display: inline-block;
-            background: #ff6a0011;
-            padding: 2px 10px;
-            border-radius: 20px;
-            font-size: 12px;
-            color: #ff6a00;
-            border: 1px solid #ff6a0044;
-            margin-right: 5px;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-        .room-card .badge-gender {
-            display: inline-block;
-            padding: 2px 10px;
-            border-radius: 20px;
-            font-size: 12px;
-            margin-right: 5px;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: rgba(0,0,0,0.06);
-        }
-        .room-card .badge-owner {
-            display: inline-block;
-            background: #ff6a0022;
-            padding: 2px 10px;
-            border-radius: 20px;
-            font-size: 11px;
-            color: #ff6a00;
-            border: 1px solid #ff6a0066;
-            margin-right: 5px;
-            font-weight: bold;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-        .room-card .room-meta { display: flex; flex-wrap: wrap; gap: 10px; font-size: 12px; color: #555; margin: 6px 0 6px; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        .room-card .room-meta i { margin-left: 3px; color: #888; }
-        .room-card .room-views {
-            font-size: 12px;
-            color: #888;
-            background: rgba(0,0,0,0.04);
-            padding: 2px 10px;
-            border-radius: 20px;
-            border: 1px solid rgba(0,0,0,0.06);
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-        .room-card .room-views i { color: #ff6a00; margin-left: 4px; }
-        .room-card .room-notes {
-            font-size: 13px;
-            color: #555;
-            background: rgba(0,0,0,0.04);
-            padding: 4px 10px;
-            border-radius: 8px;
-            margin: 5px 0 8px;
-            border-right: 2px solid #ff6a00;
-            word-break: break-word;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-        .room-card .room-notes i { color: #ff6a00; margin-left: 4px; }
-        .room-card .room-footer {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-top: 8px;
-            padding-top: 8px;
-            border-top: 1px solid rgba(0,0,0,0.06);
-            flex-wrap: wrap;
-            gap: 5px;
-        }
-        .room-card .room-footer .status { font-size: 12px; color: #4caf50; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        .room-card .room-footer .status i { font-size: 8px; margin-left: 4px; }
-        .room-card .room-footer .time-left {
-            font-size: 11px;
-            color: #ff6a00;
-            background: rgba(255, 106, 0, 0.1);
-            padding: 2px 10px;
-            border-radius: 20px;
-            border: 1px solid #ff6a0044;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-        .room-card .btn-details {
-            background: linear-gradient(135deg, #ff6a00, #e65c00);
-            border: none;
-            color: #fff;
-            padding: 4px 14px;
-            border-radius: 30px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: 0.3s;
-            font-size: 12px;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-        .room-card .btn-details:hover { transform: scale(1.05); }
-        .room-card .btn-delete {
-            background: transparent;
-            border: 1px solid #ff4444;
-            color: #ff4444;
-            padding: 4px 10px;
-            border-radius: 30px;
-            cursor: pointer;
-            font-size: 11px;
-            transition: 0.3s;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-        .room-card .btn-delete:hover { background: #ff4444; color: #fff; }
-        .room-card .btn-share {
-            background: transparent;
-            border: 1px solid #4caf50;
-            color: #4caf50;
-            padding: 4px 10px;
-            border-radius: 30px;
-            cursor: pointer;
-            font-size: 11px;
-            transition: 0.3s;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-        .room-card .btn-share:hover { background: #4caf50; color: #fff; }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>FreeFire Rooms | غرف فريفاير</title>
+<meta name="theme-color" content="#ff6a00">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --orange:#ff6900;--orange2:#ff8a00;--green:#35bd58;--dark:#11151a;
+  --dark2:#19130e;--muted:#718096;--bg:#f5f7fb;--card:#fff;--line:#e7ebf1;
+  --shadow:0 12px 35px rgba(20,28,40,.09)
+}
+body{font-family:Cairo,Arial,sans-serif;background:var(--bg);color:#182231;min-height:100vh}
+button,input,select{font:inherit}
+button{cursor:pointer;border:0}
+.app{max-width:980px;margin:auto;background:var(--bg);min-height:100vh;box-shadow:0 0 45px rgba(0,0,0,.08)}
+.hero{
+  position:relative;overflow:hidden;color:#fff;padding:18px 28px 20px;
+  background:
+    radial-gradient(circle at 80% 15%,rgba(255,112,0,.35),transparent 25%),
+    radial-gradient(circle at 15% 90%,rgba(255,105,0,.16),transparent 30%),
+    linear-gradient(135deg,#171717,#24160d 58%,#130f0b);
+  border-bottom:4px solid var(--orange)
+}
+.hero:after{content:"";position:absolute;width:240px;height:240px;border-radius:50%;left:-100px;top:-100px;background:rgba(255,106,0,.07)}
+.top{position:relative;z-index:2;display:flex;align-items:center;justify-content:space-between;gap:15px}
+.brand{font-size:30px;font-weight:900;letter-spacing:-1.5px}
+.brand span{color:var(--orange)}
+.brand small{display:block;font-size:12px;color:#ffbd83;font-weight:600;letter-spacing:0}
+.account{display:flex;gap:8px;align-items:center}
+.icon-btn,.avatar{
+  width:44px;height:44px;border-radius:50%;display:grid;place-items:center;
+  background:#ffffff12;color:#fff;border:1px solid #ffffff20
+}
+.avatar{background:#fff;color:#1c2633;font-weight:900}
+.login{background:linear-gradient(135deg,var(--orange),#ff4d00);color:#fff;padding:9px 14px;border-radius:13px;font-weight:800}
+.hero-title{position:relative;z-index:2;text-align:right;margin-top:14px}
+.hero-title h1{font-size:19px}
+.hero-title p{color:#d7dbe1;font-size:13px;margin-top:2px}
+.stats{
+  position:relative;z-index:2;display:grid;grid-template-columns:1fr 1fr;
+  width:min(390px,100%);margin-top:10px;background:#0b1117;border:1px solid #303841;border-radius:20px;overflow:hidden
+}
+.stat{padding:7px 10px;display:flex;align-items:center;gap:7px}
+.stat+ .stat{border-right:1px solid #303841}
+.stat .sicon{width:32px;height:32px;border-radius:10px;background:#ff690018;display:grid;place-items:center;font-size:22px}
+.stat b{display:block;font-size:15px;color:#fff}.stat span{font-size:8px;color:#aeb7c2}
 
-        .fab-container {
-            position: fixed;
-            bottom: 25px;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 999;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 5px;
-        }
-        .btn-fab {
-            width: 65px;
-            height: 65px;
-            border-radius: 50%;
-            border: none;
-            background: linear-gradient(135deg, #ff6a00, #e65c00);
-            color: #fff;
-            font-size: 32px;
-            font-weight: 700;
-            cursor: pointer;
-            transition: 0.3s;
-            box-shadow: 0 6px 30px rgba(255, 106, 0, 0.5);
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .btn-fab:hover { transform: scale(1.08); box-shadow: 0 8px 50px rgba(255, 106, 0, 0.7); }
-        .btn-fab:active { transform: scale(0.95); }
-        .fab-label {
-            color: #888;
-            font-size: 12px;
-            background: rgba(0,0,0,0.7);
-            padding: 3px 12px;
-            border-radius: 20px;
-            backdrop-filter: blur(4px);
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
+.controls{padding:12px 28px 2px}
+.filters{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+.select,.filter-btn{
+  height:44px;border:1px solid #dfe5ed;background:#fff;border-radius:13px;
+  display:flex;align-items:center;justify-content:space-between;padding:0 15px;color:#293548;font-weight:700
+}
+.select select{border:0;outline:0;background:transparent;width:100%;color:inherit;font-weight:700;appearance:none}
+.filter-btn.active{background:var(--orange);color:#fff;border-color:var(--orange)}
+.actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px}
+.action{
+  height:42px;border-radius:12px;background:#fff;border:1px solid #dfe5ed;color:#293548;font-weight:800
+}
+.action.primary{background:#202a35;color:#fff;border-color:#202a35}
+.action.orange{background:var(--orange);color:#fff;border-color:var(--orange)}
 
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 1000;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.6);
-            backdrop-filter: blur(8px);
-            justify-content: center;
-            align-items: center;
-            animation: fadeIn 0.3s;
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: scale(0.95); }
-            to { opacity: 1; transform: scale(1); }
-        }
-        .modal-content {
-            background: #ffffff;
-            border-radius: 24px;
-            padding: 28px 26px 22px;
-            max-width: 420px;
-            width: 95%;
-            border: 1px solid rgba(0,0,0,0.06);
-            box-shadow: 0 25px 60px rgba(0,0,0,0.2);
-            position: relative;
-            color: #1a1a1a;
-        }
-        .close-btn {
-            position: absolute;
-            top: 10px;
-            left: 15px;
-            font-size: 28px;
-            color: #999;
-            cursor: pointer;
-            transition: 0.3s;
-        }
-        .close-btn:hover { color: #ff6a00; }
-        
-        .modal-title {
-            color: #ff6a00;
-            font-size: 20px;
-            font-weight: 700;
-            margin-bottom: 22px;
-            letter-spacing: 0.5px;
-            font-family: 'Cairo', sans-serif;
-        }
+.section-head{padding:16px 28px 8px;display:flex;align-items:center;justify-content:space-between}
+.section-head h2{font-size:18px}
+.live{display:flex;align-items:center;gap:7px;color:#219b45;font-weight:900}
+.dot{width:13px;height:13px;background:#57c95b;border-radius:50%;box-shadow:0 0 0 5px #57c95b1b}
 
-        .form-group { margin-bottom: 12px; }
-        .form-group label {
-            display: block;
-            margin-bottom: 4px;
-            color: #555;
-            font-size: 12px;
-            font-weight: 600;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-        .form-group label i {
-            margin-left: 5px;
-            color: #ff6a00;
-            font-size: 13px;
-        }
-        .form-group input,
-        .form-group select,
-        .form-group textarea {
-            width: 100%;
-            padding: 8px 12px;
-            border-radius: 8px;
-            border: 1px solid #e8ecf1;
-            background: #f8f9fa;
-            color: #1a1a1a;
-            font-size: 13px;
-            transition: 0.3s;
-            outline: none;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-        .form-group input::placeholder,
-        .form-group textarea::placeholder { color: #999; }
-        .form-group input:focus,
-        .form-group select:focus,
-        .form-group textarea:focus {
-            border-color: #ff6a00;
-            box-shadow: 0 0 15px rgba(255, 106, 0, 0.1);
-        }
-        .form-group select {
-            appearance: none;
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23666' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
-            background-repeat: no-repeat;
-            background-position: left 12px center;
-            padding-left: 35px;
-            cursor: pointer;
-        }
-        .form-group select option { background: #ffffff; color: #1a1a1a; }
-        .form-group textarea {
-            min-height: 50px;
-            resize: vertical;
-            font-family: inherit;
-        }
-        .form-group .hint { font-size: 10px; color: #999; margin-top: 3px; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+.quick{display:flex;gap:7px;overflow:auto;padding:0 28px 4px;scrollbar-width:none}
+.quick::-webkit-scrollbar{display:none}
+.quick button{white-space:nowrap;background:#fff;border:1px solid var(--line);padding:9px 13px;border-radius:13px;color:#4b5563;font-size:12px;font-weight:800}
+.quick button.on{color:var(--orange);border-color:#ffd0b0;background:#fff7f1}
 
-        .row-duo {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-        }
-        .row-duo .form-group { margin-bottom: 12px; }
+.rooms{padding:7px 28px 95px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.room{
+  background:var(--card);border:1px solid #e9edf2;border-radius:16px;padding:11px;
+  box-shadow:var(--shadow);position:relative
+}
+.room-top{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+.room-name{font-size:14px;font-weight:900}
+.owner{font-size:11px;color:#64748b;margin-top:2px}
+.badge{background:#eaf9ee;color:#1d9b43;padding:5px 10px;border-radius:999px;font-size:10px;font-weight:900}
+.room-meta{display:flex;flex-wrap:wrap;gap:5px;margin-top:7px}
+.meta{background:#f4f6f9;border-radius:8px;padding:4px 7px;font-size:9px;color:#536070;font-weight:700}
+.meta strong{color:#1f2937}
+.info-grid{display:grid;grid-template-columns:repeat(3,1fr);background:#f7f9fc;border-radius:11px;margin-top:8px;overflow:hidden}
+.info{padding:7px 5px;text-align:center}.info+.info{border-right:1px solid #e6ebf1}
+.info b{display:block;font-size:11px}.info span{font-size:8px;color:#7b8797}
+.room-actions{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:8px}
+.join,.details{height:37px;border-radius:10px;font-size:11px;font-weight:900}
+.join{background:linear-gradient(135deg,var(--orange),#ff5100);color:#fff}
+.details{background:#fff;border:1px solid #cbd5e1;color:#354154}
+.more{position:absolute;left:14px;top:58px;background:transparent;color:#8b95a3;font-size:22px}
 
-        .btn-submit {
-            width: 100%;
-            padding: 12px;
-            border: none;
-            border-radius: 10px;
-            background: linear-gradient(135deg, #ff6a00, #e65c00);
-            color: #fff;
-            font-size: 16px;
-            font-weight: 700;
-            cursor: pointer;
-            transition: 0.3s;
-            margin-top: 4px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-        .btn-submit:hover { transform: scale(1.02); box-shadow: 0 0 30px rgba(255, 106, 0, 0.3); }
-        .btn-submit:active { transform: scale(0.97); }
-        .btn-submit i { font-size: 18px; }
+.empty{display:none;text-align:center;padding:60px 20px;color:#687384}
+.empty .big{font-size:54px}.empty h3{font-size:19px;color:#303b4b;margin:8px 0}.empty p{font-size:12px}
 
-        footer {
-            background: #0a0a0a;
-            padding: 15px 0;
-            text-align: center;
-            border-top: 1px solid #1a1a1a;
-            margin-top: auto;
-        }
-        footer p { color: #555; font-size: 12px; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+.fab{
+  position:fixed;bottom:62px;left:50%;transform:translateX(-50%);
+  width:58px;height:58px;border-radius:50%;background:linear-gradient(135deg,var(--orange),#ff5000);
+  color:#fff;font-size:30px;box-shadow:0 8px 22px #ff690055,0 0 0 8px #ffffff;z-index:30
+}
+.fab-label{position:fixed;bottom:45px;left:50%;transform:translate(-50%,45px);background:#171a1f;color:#fff;padding:5px 12px;border-radius:9px;font-size:10px;z-index:31;white-space:nowrap}
 
-        .toast-container {
-            position: fixed;
-            bottom: 30px;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 9999;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            align-items: center;
-            pointer-events: none;
-        }
-        .toast {
-            background: #1a1a1a;
-            color: #fff;
-            padding: 14px 28px;
-            border-radius: 12px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.25);
-            font-family: 'Cairo', sans-serif;
-            font-size: 15px;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            transform: translateY(20px);
-            opacity: 0;
-            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-            pointer-events: auto;
-            border: 1px solid rgba(255,255,255,0.06);
-            min-width: 200px;
-            justify-content: center;
-        }
-        .toast.show {
-            transform: translateY(0);
-            opacity: 1;
-        }
-        .toast.success {
-            border-right: 4px solid #4caf50;
-        }
-        .toast.success i { color: #4caf50; }
-        .toast.error {
-            border-right: 4px solid #ff4444;
-        }
-        .toast.error i { color: #ff4444; }
-        .toast.info {
-            border-right: 4px solid #2196F3;
-        }
-        .toast.info i { color: #2196F3; }
-        .toast .toast-icon { font-size: 20px; }
-        .toast .toast-close {
-            background: none;
-            border: none;
-            color: #666;
-            cursor: pointer;
-            font-size: 16px;
-            padding: 0 4px;
-            transition: 0.2s;
-        }
-        .toast .toast-close:hover { color: #fff; }
+.bottom{
+  position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:min(980px,100%);
+  height:58px;background:rgba(255,255,255,.97);border-top:1px solid #e5e9ef;
+  display:grid;grid-template-columns:repeat(5,1fr);z-index:25;padding-bottom:env(safe-area-inset-bottom)
+}
+.nav{background:none;color:#718096;font-size:10px;font-weight:800;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px}
+.nav i{font-style:normal;font-size:22px}.nav.active{color:var(--orange)}
+.nav.create{padding-bottom:8px}.nav.create i{opacity:0}
 
-        #detailsModal .modal-content {
-            background: #ffffff;
-            border: 1px solid #e8ecf1;
-            box-shadow: 0 25px 60px rgba(0,0,0,0.15);
-            max-width: 420px;
-            padding: 20px 22px 24px;
-            border-radius: 24px;
-            overflow: hidden;
-            position: relative;
-            color: #1a1a1a;
-        }
-        #detailsModal .close-btn {
-            position: absolute;
-            top: 14px;
-            left: 18px;
-            color: #999;
-            border: 0;
-            background: none;
-            font-size: 28px;
-            cursor: pointer;
-            transition: .2s;
-            line-height: 1;
-            padding: 4px;
-            z-index: 10;
-        }
-        #detailsModal .close-btn:hover {
-            color: #ff6a00;
-            transform: rotate(90deg) scale(1.1);
-        }
-        #detailsModal .modal-title {
-            color: #1a1a1a;
-            font-size: 18px;
-            font-weight: 700;
-            margin: 0 0 16px 0;
-            line-height: 1;
-            padding-bottom: 12px;
-            border-bottom: 1px solid #e8ecf1;
-            text-align: center;
-            font-family: 'Cairo', sans-serif;
-            padding-top: 0;
-        }
-        #detailsModal .modal-title i {
-            transform: rotate(-15deg);
-            font-size: .9em;
-            margin-right: 6px;
-            color: #ff6a00;
-        }
-        
-        .hero-details {
-            display: grid;
-            grid-template-columns: 90px 1fr;
-            direction: ltr;
-            padding: 14px 16px;
-            margin-bottom: 16px;
-            background: #ffffff;
-            border: 1px solid #e8ecf1;
-            border-radius: 16px;
-            position: relative;
-            min-height: 160px;
-        }
-        .rank-details {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-        }
-        .rank-details .shield {
-            width: 75px;
-            height: 95px;
-            display: grid;
-            place-items: center;
-            font-size: 48px;
-            color: #ff6a00;
-            clip-path: polygon(50% 0, 88% 19%, 86% 68%, 50% 100%, 14% 68%, 12% 19%);
-            background: linear-gradient(145deg, #fff5e6, #ffe4cc);
-            border: 2px solid #ffcc99;
-            font-family: 'Font Awesome 6 Free';
-            position: relative;
-        }
-        .rank-details .shield:before {
-            content: "♛";
-            font-size: 24px;
-            position: absolute;
-            top: 10px;
-            color: #ff6a00;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-        .hero-data-details {
-            direction: rtl;
-            align-self: center;
-            padding-right: 10px;
-            position: relative;
-            z-index: 1;
-        }
-        .hero-data-details .id-label {
-            font-size: 13px;
-            color: #888;
-            font-weight: 600;
-            direction: ltr;
-            text-align: left;
-            font-family: 'Cairo', sans-serif;
-            letter-spacing: 1px;
-        }
-        .hero-data-details .id-label .mini-id {
-            font-family: Arial;
-            margin-left: 6px;
-            font-size: 10px;
-            vertical-align: middle;
-            padding: 1px 4px;
-            border-radius: 3px;
-            color: #fff;
-            background: linear-gradient(135deg, #d76aff, #60227c);
-        }
-        .hero-data-details .big-id {
-            font-family: 'Orbitron', monospace;
-            direction: ltr;
-            text-align: left;
-            color: #1a1a1a;
-            font-size: 28px;
-            line-height: 1.1;
-            font-weight: 800;
-            letter-spacing: 1px;
-        }
-        .hero-data-details .hero-line {
-            height: 1px;
-            background: #e8ecf1;
-            margin: 8px 0 10px;
-        }
-        .hero-data-details .password-label {
-            color: #4caf50;
-            font-size: 13px;
-            font-weight: 600;
-            font-family: 'Cairo', sans-serif;
-            letter-spacing: 1px;
-        }
-        .hero-data-details .password-label i {
-            margin-right: 6px;
-            transform: rotate(-35deg);
-        }
-        .hero-data-details .password {
-            font-family: 'Orbitron', monospace;
-            direction: ltr;
-            text-align: left;
-            color: #4caf50;
-            font-size: 24px;
-            font-weight: 700;
-            line-height: 1.2;
-            letter-spacing: 1px;
-        }
-        
-        .copy-stack-details {
-            position: absolute;
-            left: 8px;
-            top: 38px;
-            z-index: 2;
-            display: grid;
-            gap: 12px;
-        }
-        .copy-stack-details .copy-btn {
-            width: 42px;
-            height: 42px;
-            background: #1a1a1a;
-            color: #fff;
-            border: 1px solid #333;
-            border-radius: 8px;
-            font-size: 16px;
-            cursor: pointer;
-            transition: all 0.25s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
-        }
-        .copy-stack-details .copy-btn i {
-            font-size: 18px;
-            color: #fff;
-        }
-        .copy-stack-details .copy-btn:hover {
-            transform: translateY(-3px) scale(1.05);
-            border-color: #ff6a00;
-            box-shadow: 0 8px 25px rgba(255, 106, 0, 0.15);
-        }
-        .copy-stack-details .copy-btn:hover i {
-            color: #ff6a00;
-        }
-        .copy-stack-details .copy-btn:active {
-            transform: scale(0.95);
-        }
-        
-        .details-grid-details {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 8px;
-            position: relative;
-            z-index: 1;
-        }
-        .details-grid-details .card {
-            min-height: 64px;
-            padding: 10px 12px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            position: relative;
-            z-index: 1;
-            overflow: hidden;
-            background: #f8f9fa;
-            border: 1px solid #e8ecf1;
-            border-radius: 12px;
-        }
-        .details-grid-details .card.blue { border-color: rgba(44,181,255,0.2); color: #2196F3; }
-        .details-grid-details .card.purple { border-color: rgba(183,93,255,0.2); color: #9C27B0; }
-        .details-grid-details .card.green { border-color: rgba(84,230,76,0.2); color: #4caf50; }
-        .details-grid-details .card.orange { border-color: rgba(255,127,12,0.2); color: #ff6a00; }
-        .details-grid-details .card.yellow { border-color: rgba(255,216,42,0.2); color: #ff9800; }
-        .details-grid-details .card.gray { border-color: rgba(190,198,207,0.2); color: #666; }
-        .details-grid-details .card .card-icon {
-            width: 36px;
-            height: 36px;
-            flex: none;
-            display: grid;
-            place-items: center;
-            font-size: 16px;
-            color: currentColor;
-            border-radius: 10px;
-            background: rgba(0,0,0,0.03);
-            border: 1px solid rgba(0,0,0,0.04);
-        }
-        .details-grid-details .card.purple .card-icon { font-size: 15px; }
-        .details-grid-details .card .card-content { position: relative; z-index: 1; line-height: 1.1; }
-        .details-grid-details .card .card-content .label {
-            display: block;
-            color: #999;
-            font-size: 10px;
-            font-weight: 600;
-            margin-bottom: 1px;
-            font-family: 'Cairo', sans-serif;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-        .details-grid-details .card .card-content .value {
-            font-size: 15px;
-            font-weight: 700;
-            color: #1a1a1a;
-            font-family: 'Cairo', sans-serif;
-        }
-        .details-grid-details .card.green .value { color: #4caf50; }
-        .details-grid-details .card.orange .value { color: #ff6a00; }
-        .details-grid-details .card.wide { grid-column: 1/-1; min-height: 64px; }
-        .details-grid-details .card.country {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-        .details-grid-details .card.country .flag-icon {
-            font-size: 32px;
-            line-height: 1;
-            flex: none;
-        }
-        .details-grid-details .card.country .card-content .value {
-            font-size: 16px;
-        }
-        
-        .actions-details {
-            display: grid;
-            gap: 10px;
-            margin: 16px 0 2px;
-            position: relative;
-            z-index: 1;
-        }
-        .actions-details .action {
-            min-height: 50px;
-            font-family: 'Cairo', sans-serif;
-            font-weight: 700;
-            font-size: 16px;
-            color: white;
-            cursor: pointer;
-            position: relative;
-            overflow: hidden;
-            border: none;
-            border-radius: 12px;
-            transition: .2s;
-            text-shadow: 0 1px 2px rgba(0,0,0,0.2);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 0 16px;
-        }
-        .actions-details .action:before {
-            content: "";
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(130deg, rgba(255,255,255,.12), transparent 25%, transparent 70%, rgba(0,0,0,.15));
-            pointer-events: none;
-            border-radius: 12px;
-        }
-        .actions-details .action i { margin-right: 10px; font-size: 18px; vertical-align: middle; }
-        .actions-details .action.share {
-            background: linear-gradient(105deg, #0a6416, #139523 50%, #063115);
-            box-shadow: 0 4px 15px rgba(61,235,48,0.25);
-        }
-        .actions-details .action.share:hover { transform: translateY(-2px); box-shadow: 0 6px 25px rgba(61,235,48,0.35); }
-        .actions-details .action.delete {
-            background: linear-gradient(105deg, #7b1005, #b11c0a 48%, #4e1209);
-            box-shadow: 0 4px 15px rgba(255,54,12,0.25);
-        }
-        .actions-details .action.delete:hover { transform: translateY(-2px); box-shadow: 0 6px 25px rgba(255,54,12,0.35); }
-        .actions-details .action:active { transform: scale(0.97); }
+.modal-bg{position:fixed;inset:0;background:#0a0d12aa;backdrop-filter:blur(5px);display:none;align-items:flex-end;justify-content:center;z-index:300;pointer-events:none}.modal-bg.show{display:flex;pointer-events:auto}
+.modal-bg.show{display:flex}
+.modal{position:relative;z-index:301;
+  width:min(600px,100%);max-height:90vh;overflow:auto;background:#fff;border-radius:28px 28px 0 0;
+  padding:20px;animation:up .22s ease
+}
+@keyframes up{from{transform:translateY(40px);opacity:.5}to{transform:none;opacity:1}}
+.modal-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:15px}
+.modal-head h3{font-size:20px}.close{background:#f1f3f6;width:38px;height:38px;border-radius:12px}
+.form{display:grid;gap:10px}.form label{font-size:11px;font-weight:800;color:#566273}
+.form input,.form select{height:48px;border:1px solid #dfe5ed;border-radius:13px;padding:0 13px;outline:none;background:#fafbfd}
+.form input:focus,.form select:focus{border-color:var(--orange)}
+.submit{height:50px;background:var(--orange);color:#fff;border-radius:14px;font-weight:900;margin-top:5px}
+.detail-box{background:#f7f9fc;border-radius:16px;padding:15px;display:grid;gap:9px}
+.detail-row{display:flex;justify-content:space-between;gap:15px;font-size:12px}.detail-row b{color:#263243}
+.copy{background:#fff;border:1px solid #dfe5ed;border-radius:9px;padding:4px 8px;font-size:10px}
 
-        @media (max-width: 650px) {
-            header { flex-direction: column; text-align: center; }
-            .filter-area { justify-content: center; flex-wrap: wrap; }
-            .filter-area .custom-select { min-width: 120px; }
-            .filter-area .custom-select .selected { font-size: 12px; padding: 6px 10px; }
-            .gender-filter { flex-wrap: wrap; justify-content: center; }
-            .rooms-grid { grid-template-columns: 1fr; }
-            .room-card { padding: 12px 12px; }
-            .btn-fab { width: 55px; height: 55px; font-size: 26px; }
-            .fab-container { bottom: 15px; }
-            body { padding-bottom: 70px; }
-            .row-duo { grid-template-columns: 1fr; gap: 0; }
-            .row-duo .form-group { margin-bottom: 12px; }
-            .form-group input, .form-group select, .form-group textarea {
-                padding: 8px 10px;
-                font-size: 13px;
-            }
-            .btn-submit { padding: 12px; font-size: 16px; }
-            .logo { font-size: 20px; }
-            
-            #detailsModal .modal-content { padding: 14px 12px 18px; max-width: 98%; border-radius: 18px; }
-            #detailsModal .modal-title { font-size: 18px; margin-bottom: 10px; padding-bottom: 8px; }
-            #detailsModal .close-btn { font-size: 24px; top: 10px; left: 12px; }
-            .hero-details { grid-template-columns: 80px 1fr; min-height: 150px; padding: 10px 12px; margin-bottom: 10px; }
-            .rank-details .shield { width: 70px; height: 88px; font-size: 42px; }
-            .rank-details .shield:before { font-size: 22px; top: 8px; }
-            .hero-data-details .id-label { font-size: 14px; }
-            .hero-data-details .id-label .mini-id { font-size: 10px; padding: 1px 4px; }
-            .hero-data-details .big-id { font-size: 22px; }
-            .hero-data-details .password-label { font-size: 14px; }
-            .hero-data-details .password { font-size: 20px; }
-            .hero-data-details .hero-line { margin: 6px 0 8px; }
-            .copy-stack-details { left: 4px; top: 32px; gap: 14px; }
-            .copy-stack-details .copy-btn { width: 38px; height: 38px; font-size: 14px; }
-            .details-grid-details { gap: 8px; }
-            .details-grid-details .card { min-height: 58px; padding: 8px 10px; gap: 8px; }
-            .details-grid-details .card .card-icon { width: 34px; height: 34px; font-size: 16px; }
-            .details-grid-details .card .card-content .label { font-size: 10px; }
-            .details-grid-details .card .card-content .value { font-size: 14px; }
-            .details-grid-details .card.wide { min-height: 58px; }
-            .details-grid-details .card.country .flag-icon { font-size: 28px; }
-            .actions-details { gap: 10px; margin-top: 12px; }
-            .actions-details .action { min-height: 48px; font-size: 15px; }
-            .actions-details .action i { font-size: 16px; margin-right: 8px; }
-            .toast { padding: 12px 20px; font-size: 14px; min-width: 160px; }
-        }
-        
-        @media (max-width: 400px) {
-            .filter-area .custom-select { min-width: 100px; }
-            .filter-area .custom-select .selected { font-size: 11px; padding: 4px 8px; }
-            .filter-area .refresh-btn { font-size: 11px; padding: 4px 10px; }
-            .gender-filter .gf-btn { font-size: 11px; padding: 4px 10px; }
-            .room-card { padding: 10px 10px; }
-            .room-card .badge-country { font-size: 10px; padding: 2px 6px; }
-            .room-card .badge-mode { font-size: 10px; padding: 2px 6px; }
-            .room-card .badge-gender { font-size: 9px; padding: 2px 6px; }
-            .room-card .badge-owner { font-size: 9px; padding: 2px 6px; }
-            .room-card .room-views { font-size: 9px; padding: 2px 6px; }
-            .room-card .room-footer { gap: 3px; }
-            .modal-content { padding: 16px 12px; }
-            .modal-title { font-size: 18px; }
-            
-            #detailsModal .modal-content { padding: 10px 8px 14px; border-radius: 14px; }
-            #detailsModal .modal-title { font-size: 16px; }
-            #detailsModal .close-btn { font-size: 20px; top: 8px; left: 10px; }
-            .hero-details { grid-template-columns: 60px 1fr; min-height: 120px; padding: 8px 8px; }
-            .rank-details .shield { width: 55px; height: 70px; font-size: 32px; }
-            .rank-details .shield:before { font-size: 16px; top: 6px; }
-            .hero-data-details .id-label { font-size: 12px; }
-            .hero-data-details .id-label .mini-id { font-size: 8px; padding: 1px 3px; }
-            .hero-data-details .big-id { font-size: 18px; }
-            .hero-data-details .password-label { font-size: 12px; }
-            .hero-data-details .password { font-size: 16px; }
-            .copy-stack-details { left: 3px; top: 26px; gap: 10px; }
-            .copy-stack-details .copy-btn { width: 34px; height: 34px; font-size: 12px; }
-            .details-grid-details { gap: 6px; }
-            .details-grid-details .card { min-height: 48px; padding: 6px 8px; gap: 6px; }
-            .details-grid-details .card .card-icon { width: 28px; height: 28px; font-size: 13px; }
-            .details-grid-details .card .card-content .label { font-size: 9px; }
-            .details-grid-details .card .card-content .value { font-size: 12px; }
-            .details-grid-details .card.wide { min-height: 48px; }
-            .details-grid-details .card.country .flag-icon { font-size: 24px; }
-            .actions-details { gap: 8px; margin-top: 10px; }
-            .actions-details .action { min-height: 40px; font-size: 13px; }
-            .actions-details .action i { font-size: 14px; margin-right: 6px; }
-            .toast { padding: 10px 16px; font-size: 13px; min-width: 140px; }
-        }
-    </style>
+.toast{position:fixed;top:18px;left:50%;transform:translateX(-50%) translateY(-90px);background:#18202a;color:#fff;padding:11px 17px;border-radius:14px;z-index:100;font-size:12px;font-weight:800;transition:.25s;box-shadow:0 8px 25px #0002}
+.toast.show{transform:translateX(-50%) translateY(0)}
+
+@media(max-width:760px){
+  body{background:var(--bg)}
+  .app{margin:0;max-width:none;min-height:100vh;border-radius:0;box-shadow:none}
+  .rooms{grid-template-columns:1fr}
+}
+@media(max-width:620px){
+  .hero{padding:19px 16px 24px}.brand{font-size:28px}.login{padding:10px 11px;font-size:11px}
+  .filters{grid-template-columns:1fr 1fr}.filters .select:first-child{grid-column:span 2}
+  .actions{grid-template-columns:1fr 1fr}.actions .action:first-child{grid-column:span 2}
+  .controls,.section-head{padding-left:14px;padding-right:14px}.quick,.rooms{padding-left:14px;padding-right:14px}
+}
+
+.profile-modal{max-width:520px}
+.profile-preview{display:flex;align-items:center;gap:14px;background:#f7f9fc;border:1px solid #e8edf3;border-radius:18px;padding:14px;margin-bottom:14px}
+.profile-avatar-wrap{position:relative;width:68px;height:68px;flex:0 0 68px}
+.profile-avatar{width:68px;height:68px;border-radius:50%;object-fit:cover;background:#e9edf2;border:3px solid #fff;box-shadow:0 3px 12px #0002}
+.camera{position:absolute;bottom:-2px;left:-3px;width:25px;height:25px;border-radius:50%;display:grid;place-items:center;background:var(--orange);color:#fff;font-size:12px;cursor:pointer;border:2px solid #fff}
+.profile-name{font-size:18px;font-weight:900}.profile-sub{font-size:10px;color:#7a8695;margin-top:2px}
+.score-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-top:12px}
+.score{background:#f7f9fc;border:1px solid #e7ebf1;border-radius:13px;text-align:center;padding:10px 5px}
+.score b{display:block;font-size:17px;color:#ff6900}.score span{font-size:8px;color:#778394;font-weight:700}
+
+.compact-filter-row{
+  display:flex!important;
+  align-items:center;
+  gap:6px!important;
+  flex-wrap:nowrap;
+}
+.compact-filter-row .country-select{
+  flex:1 1 auto;
+  min-width:0;
+  height:38px;
+  border-radius:11px;
+  padding:0 10px;
+}
+.compact-filter-row .filter-btn{
+  flex:0 0 auto;
+  width:auto;
+  min-width:62px;
+  height:38px;
+  padding:0 10px;
+  border-radius:11px;
+  font-size:10px;
+}
+.profile-page{
+  position:fixed;inset:0;background:#f5f7fb;z-index:80;display:none;overflow:auto;
+}
+.profile-page.show{display:block}
+.profile-close{position:absolute;top:14px;right:14px;width:44px;height:44px;border-radius:50%;background:rgba(0,0,0,.45);border:1px solid rgba(255,255,255,.28);color:#fff;font-size:30px;line-height:1;z-index:10;backdrop-filter:blur(8px);box-shadow:0 8px 25px rgba(0,0,0,.18)}
+.profile-close:hover{background:#ff6900}
+.profile-cover{
+  height:210px;
+  background:
+    radial-gradient(circle at 80% 20%,rgba(255,120,0,.35),transparent 24%),
+    linear-gradient(135deg,#11151a,#2b190d 58%,#111);
+  position:relative;
+}
+.profile-cover:after{
+  content:"";position:absolute;inset:auto 0 0;height:90px;
+  background:linear-gradient(transparent,#f5f7fb);
+}
+.profile-page-inner{max-width:900px;margin:auto;padding:0 22px 50px;position:relative}
+.profile-main-card{
+  background:#fff;border:1px solid #e7ebf1;border-radius:22px;
+  margin-top:-58px;position:relative;z-index:2;padding:20px;
+  box-shadow:0 15px 45px rgba(18,28,40,.10);
+}
+.profile-page-top{display:flex;align-items:flex-end;gap:18px}
+.profile-big-wrap{position:relative;width:112px;height:112px;flex:0 0 112px}
+.profile-big{
+  width:112px;height:112px;border-radius:50%;object-fit:cover;
+  background:#e8edf3;border:5px solid #fff;box-shadow:0 5px 18px #0002
+}
+.profile-level{
+  position:absolute;bottom:2px;right:2px;background:#ff6900;color:#fff;
+  border:3px solid #fff;border-radius:99px;padding:3px 8px;font-size:9px;font-weight:900
+}
+.profile-page-name{font-size:25px;font-weight:900}
+.profile-page-user{font-size:11px;color:#7a8695;margin-top:2px}
+.profile-page-actions{margin-right:auto;display:flex;gap:7px}
+.profile-page-actions button{
+  height:38px;border-radius:11px;padding:0 13px;font-size:10px;font-weight:900
+}
+.edit-profile{background:#ff6900;color:#fff}.back-profile{background:#f0f2f5;color:#344052}
+.profile-bio{font-size:12px;color:#697586;margin:17px 0 14px}
+.profile-stats{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:8px
+}
+.profile-stat-card{
+  background:#f7f9fc;border:1px solid #e8edf3;border-radius:14px;text-align:center;padding:12px 6px
+}
+.profile-stat-card b{display:block;font-size:19px;color:#ff6900}
+.profile-stat-card span{font-size:9px;color:#778394;font-weight:700}
+.profile-section{margin-top:18px}
+.profile-section h3{font-size:15px;margin-bottom:9px}
+.profile-activity{
+  background:#fff;border:1px solid #e7ebf1;border-radius:16px;padding:13px;
+  display:flex;justify-content:space-between;align-items:center;font-size:11px
+}
+.profile-activity + .profile-activity{margin-top:7px}
+.profile-activity small{color:#7c8795}
+@media(max-width:620px){
+  .compact-filter-row .filter-btn{min-width:57px;padding:0 7px}
+  .profile-cover{height:165px}
+  .profile-page-inner{padding:0 12px 35px}
+  .profile-main-card{padding:15px;border-radius:18px}
+  .profile-page-top{align-items:center;flex-wrap:wrap}
+  .profile-big-wrap,.profile-big{width:86px;height:86px}
+  .profile-page-name{font-size:20px}
+  .profile-page-actions{width:100%;margin-right:0;display:grid;grid-template-columns:1fr 1fr 1fr}
+  .profile-page-actions button{width:100%;padding:0 5px}
+  .profile-stats{grid-template-columns:repeat(2,1fr)}
+}
+
+.owner-line{display:flex;align-items:center;gap:7px;margin-top:2px}
+.owner-line .owner{margin:0;flex:1}
+.mini-follow{
+  height:25px;padding:0 8px;border-radius:8px;border:1px solid #ffd1b2;
+  background:#fff7f1;color:#f15d00;font-size:8px;font-weight:900
+}
+.mini-follow:hover{background:#ff6900;color:#fff}
+.follow-main{
+  height:38px;border-radius:11px;padding:0 13px;background:#ff6900;color:#fff;
+  font-size:10px;font-weight:900
+}
+.follow-main.following{background:#eef8f0;color:#239c48;border:1px solid #cdebd5}
+.notification-modal{max-width:560px}
+.notifications-list{display:grid;gap:8px}
+.notification-item{
+  display:flex;gap:10px;align-items:flex-start;padding:11px;background:#f7f9fc;
+  border:1px solid #e8edf3;border-radius:13px
+}
+.notification-icon{width:34px;height:34px;border-radius:10px;background:#fff0e6;display:grid;place-items:center;flex:0 0 34px}
+.notification-item b{display:block;font-size:11px}.notification-item p{font-size:10px;color:#687586;margin-top:2px}.notification-item time{font-size:8px;color:#a0a8b2}
+.no-notifications{text-align:center;padding:35px 10px;color:#8490a0;font-size:11px}
+
+.notification-bell{position:relative}
+.notification-badge{
+  position:absolute;top:2px;right:2px;width:9px;height:9px;border-radius:50%;
+  background:#ff3b30;border:2px solid #171717;display:none
+}
+.notification-badge.show{display:block}
+
+.compact-account{gap:5px}
+.mini-stat-btn{height:32px;min-width:62px;padding:0 7px;border:1px solid #30343b;border-radius:9px;background:#20242a;color:#fff;display:flex;align-items:center;justify-content:center;gap:4px;font-size:11px;cursor:pointer}
+.mini-stat-btn b{font-size:10px;color:#ff8a32}.mini-stat-btn span{font-size:7px;color:#aeb6c2;font-weight:800}
+@media(max-width:600px){.mini-stat-btn{min-width:56px;height:29px;padding:0 5px;font-size:10px}.mini-stat-btn b{font-size:9px}.mini-stat-btn span{font-size:6px}}
+
+.auth-note{font-size:10px;color:#8792a0;background:#f7f9fc;border:1px solid #e8edf3;padding:9px 11px;border-radius:11px;margin-bottom:10px}
+.auth-required{display:none!important}
+.follow-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:10px}
+.follow-card{background:#f7f9fc;border:1px solid #e7ebf1;border-radius:14px;padding:12px;text-align:center;cursor:pointer}
+.follow-card b{display:block;font-size:19px;color:#ff6900}.follow-card span{font-size:9px;color:#778394;font-weight:800}
+.profile-avatar-edit{position:absolute;bottom:4px;left:4px;width:31px;height:31px;border-radius:50%;background:#ff6900;color:#fff;border:3px solid #fff;display:grid;place-items:center;cursor:pointer}
+.logout-btn{background:#fff0ed!important;color:#e34b2d!important;border:1px solid #ffd2c8!important}
+/* Compact filter bar: country + gender + refresh in one row */
+.controls{display:flex;align-items:center;gap:6px;flex-wrap:nowrap;padding:10px 18px 2px}
+.controls .filters{display:flex!important;align-items:center;gap:6px!important;flex:1;min-width:0}
+.controls .compact-filter-row{display:flex!important;flex-wrap:nowrap!important;overflow:hidden}
+.controls .compact-filter-row .country-select{height:32px;min-width:0;flex:1 1 auto;padding:0 8px;border-radius:9px;font-size:9px}
+.controls .compact-filter-row .filter-btn{height:32px;min-width:48px;padding:0 7px;border-radius:9px;font-size:9px}
+.controls .actions{display:flex!important;gap:0;margin:0!important;flex:0 0 auto}
+.controls .action{height:32px;padding:0 9px;border-radius:9px;font-size:9px;white-space:nowrap}
+
+.profile-image-click{position:relative;display:block;width:120px;height:120px;cursor:pointer}
+.profile-image-click .profile-big{display:block;width:120px;height:120px}
+.profile-image-edit{position:absolute;right:4px;bottom:4px;width:30px;height:30px;border-radius:50%;background:#ff6a00;display:flex;align-items:center;justify-content:center;font-size:15px;border:3px solid #111}
+.profile-image-click:hover .profile-image-edit{transform:scale(1.06)}
+.profile-form input[readonly]{opacity:.65;cursor:not-allowed}
+.profile-settings-summary{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin:8px 0 12px}
+.settings-stat{background:#f7f9fc;border:1px solid #e7ebf1;border-radius:11px;text-align:center;padding:9px 3px}
+.settings-stat b{display:block;font-size:14px;color:#ff6900}.settings-stat span{display:block;font-size:7px;color:#7d8998;margin-top:2px}
+@media(max-width:560px){.profile-settings-summary{grid-template-columns:repeat(3,1fr)}}
+
+.room-owner-profile{display:flex;align-items:center;gap:8px;margin:9px 0 0;padding:8px 10px;border-radius:13px;background:#f7f9fc;border:1px solid #e7ebf1;cursor:pointer}.room-owner-avatar{width:38px;height:38px;border-radius:50%;object-fit:cover;background:#e8edf3;border:2px solid #fff}.room-owner-main{flex:1;min-width:0}.room-owner-name{font-size:11px;font-weight:900}.room-owner-handle{font-size:8px;color:#8490a0;margin-top:2px}.room-owner-follow{border:0;background:#ff6900;color:#fff;border-radius:9px;padding:7px 9px;font-size:8px;font-weight:900}.public-profile-actions{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:12px}.public-profile-actions button{height:38px;border-radius:10px;font-size:9px;font-weight:900;border:0}.public-follow{background:#ff6900;color:#fff}.public-follow.following{background:#eef8f0;color:#239c48;border:1px solid #cdebd5!important}.public-share{background:#f2f4f7;color:#344052}.public-profile-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-top:12px}.public-profile-stat{background:#f7f9fc;border:1px solid #e8edf3;border-radius:12px;text-align:center;padding:9px 3px}.public-profile-stat b{display:block;font-size:15px;color:#ff6900}.public-profile-stat span{font-size:7px;color:#7c8795;font-weight:800}.public-private-note{text-align:center;padding:16px;background:#f7f9fc;border:1px solid #e7ebf1;border-radius:12px;color:#7d8997;font-size:10px;margin-top:10px}@media(max-width:560px){.public-profile-stats{grid-template-columns:repeat(2,1fr)}}
+/* ===== Creator Hub ===== */
+.creator-page{position:fixed;inset:0;background:#f5f7fb;z-index:90;display:none;overflow:auto}
+.creator-page.show{display:block}
+/* Creator modals must appear above the Creator Hub */
+#creatorApplyModal,#creatorStatusModal{z-index:200}
+.creator-shell{max-width:980px;margin:auto;min-height:100vh}
+.creator-hero{background:radial-gradient(circle at 15% 20%,rgba(255,106,0,.28),transparent 25%),radial-gradient(circle at 90% 70%,rgba(255,160,0,.15),transparent 25%),linear-gradient(135deg,#0d1116,#24150c 62%,#0d0f12);color:#fff;padding:16px 18px 24px;position:relative;overflow:hidden}
+.creator-top{display:flex;align-items:center;gap:10px}
+.creator-plus{display:none;margin-right:auto;width:42px;height:42px;border-radius:13px;border:1px solid #ffffff25;background:#ff6900;color:#fff;font-size:25px;font-weight:900;cursor:pointer;box-shadow:0 8px 20px #ff690044}.creator-back{width:42px;height:42px;border-radius:13px;background:#ffffff14;color:#fff;border:1px solid #ffffff1c;font-size:22px}.creator-top-title{font-size:18px;font-weight:900}.creator-top-title small{display:block;color:#b9c0c9;font-size:9px;font-weight:600;margin-top:1px}
+.creator-hero-copy{text-align:center;padding:26px 10px 10px}.creator-hero-copy .eyebrow{display:inline-flex;background:#ff690018;border:1px solid #ff690044;color:#ffab6e;padding:5px 10px;border-radius:999px;font-size:9px;font-weight:900}.creator-hero-copy h1{font-size:27px;margin-top:9px}.creator-hero-copy p{font-size:11px;color:#c5cbd3;max-width:550px;margin:5px auto 0}.creator-search{margin:17px auto 0;max-width:620px;background:#fff12;border:1px solid #ffffff1c;border-radius:15px;display:flex;align-items:center;padding:0 12px}.creator-search span{font-size:18px}.creator-search input{flex:1;height:44px;background:transparent;border:0;outline:0;color:#fff;font-size:12px;padding:0 9px}.creator-search input::placeholder{color:#aab2bc}.creator-tabs{display:flex;gap:7px;overflow:auto;padding:14px 0 0;scrollbar-width:none}.creator-tabs::-webkit-scrollbar{display:none}.creator-tab{white-space:nowrap;background:#ffffff0d;color:#dbe0e6;border:1px solid #ffffff14;padding:8px 12px;border-radius:10px;font-size:9px;font-weight:900}.creator-tab.active{background:#ff6900;color:#fff;border-color:#ff6900}
+.creator-content{padding:16px 18px 90px}.creator-section-title{display:flex;justify-content:space-between;align-items:center;margin:4px 0 10px}.creator-section-title h2{font-size:17px}.creator-section-title span{font-size:9px;color:#7b8796;font-weight:800}.creator-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:11px}.creator-card{background:#fff;border:1px solid #e7ebf1;border-radius:18px;overflow:hidden;box-shadow:0 10px 30px rgba(20,28,40,.07);cursor:pointer}.creator-cover{height:72px;background:radial-gradient(circle at 75% 25%,#ff9a3d66,transparent 25%),linear-gradient(135deg,#151a20,#3a1c0c);position:relative}.creator-avatar{width:66px;height:66px;border-radius:50%;position:absolute;right:13px;bottom:-33px;border:4px solid #fff;object-fit:cover;background:#e9edf2}.creator-verified{position:absolute;right:62px;bottom:-29px;background:#1687ff;color:#fff;border:3px solid #fff;border-radius:50%;width:20px;height:20px;font-size:10px;display:grid;place-items:center}.creator-card-body{padding:39px 12px 12px}.creator-name-row{display:flex;align-items:center;gap:5px}.creator-name{font-size:14px;font-weight:900}.creator-handle{font-size:9px;color:#8490a0;margin-top:1px}.creator-bio{font-size:9px;color:#667384;margin-top:7px;min-height:28px}.creator-mini-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;margin-top:9px}.creator-mini-stat{background:#f7f9fc;border-radius:9px;text-align:center;padding:6px 2px}.creator-mini-stat b{display:block;font-size:11px;color:#ff6900}.creator-mini-stat span{font-size:7px;color:#8792a0}.creator-card-actions{display:grid;grid-template-columns:1fr 1fr;gap:5px;margin-top:9px}.creator-card-actions button{height:32px;border-radius:9px;font-size:9px;font-weight:900}.creator-view{background:#ff6900;color:#fff}.creator-follow{background:#fff7f1;color:#f15d00;border:1px solid #ffd1b2}.creator-follow.following{background:#eef8f0;color:#239c48;border-color:#cdebd5}
+.challenge-banner{margin:17px 0;background:linear-gradient(135deg,#161b21,#2a170b);border:1px solid #3b2a1d;color:#fff;border-radius:19px;padding:15px;display:flex;align-items:center;gap:12px}.challenge-icon{width:48px;height:48px;border-radius:14px;background:#ff69001c;display:grid;place-items:center;font-size:25px;flex:0 0 48px}.challenge-banner h3{font-size:13px}.challenge-banner p{font-size:9px;color:#b9c0c8;margin-top:2px}.challenge-banner button{margin-right:auto;background:#ff6900;color:#fff;height:34px;border-radius:10px;padding:0 10px;font-size:9px;font-weight:900;white-space:nowrap}
+.creator-detail{position:fixed;inset:0;background:#f5f7fb;z-index:100;display:none;overflow:auto}.creator-detail.show{display:block}.creator-detail-cover{height:230px;background:radial-gradient(circle at 80% 15%,rgba(255,106,0,.35),transparent 25%),linear-gradient(135deg,#0c1117,#321807 62%,#0c0e11);position:relative}.creator-detail-cover:after{content:'';position:absolute;left:0;right:0;bottom:0;height:80px;background:linear-gradient(transparent,#f5f7fb)}.creator-detail-inner{max-width:900px;margin:auto;padding:0 18px 90px}.creator-detail-card{background:#fff;border:1px solid #e7ebf1;border-radius:22px;margin-top:-58px;position:relative;z-index:2;padding:18px;box-shadow:0 15px 45px rgba(18,28,40,.1)}.creator-detail-head{display:flex;gap:14px;align-items:flex-end}.creator-detail-avatar{width:105px;height:105px;border-radius:50%;border:5px solid #fff;box-shadow:0 5px 18px #0002;object-fit:cover;background:#e8edf3}.creator-detail-name{font-size:24px;font-weight:900}.creator-detail-handle{font-size:10px;color:#7d8998}.verified-badge{display:inline-flex;align-items:center;gap:4px;background:#e9f4ff;color:#1687ff;padding:4px 8px;border-radius:999px;font-size:8px;font-weight:900;margin-right:5px}.creator-detail-actions{margin-right:auto;display:flex;gap:6px}.creator-detail-actions button{height:37px;border-radius:10px;padding:0 12px;font-size:9px;font-weight:900}.creator-follow-main{background:#ff6900;color:#fff}.creator-follow-main.following{background:#eef8f0;color:#239c48;border:1px solid #cdebd5}.creator-share{background:#f2f4f7;color:#344052}.creator-detail-bio{font-size:11px;color:#687586;margin:14px 0}.creator-detail-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:7px}.creator-detail-stat{background:#f7f9fc;border:1px solid #e8edf3;border-radius:13px;text-align:center;padding:10px 4px}.creator-detail-stat b{display:block;font-size:16px;color:#ff6900}.creator-detail-stat span{font-size:7px;color:#7c8795;font-weight:800}.creator-detail-grid{display:grid;grid-template-columns:1.25fr .75fr;gap:11px;margin-top:15px}.creator-panel{background:#fff;border:1px solid #e7ebf1;border-radius:17px;padding:13px}.creator-panel h3{font-size:13px;margin-bottom:9px}.creator-room{border:1px solid #e9edf2;border-radius:12px;padding:9px;margin-top:7px;display:flex;align-items:center;gap:8px}.creator-room-icon{width:36px;height:36px;border-radius:10px;background:#fff2e8;display:grid;place-items:center}.creator-room-main{flex:1}.creator-room-main b{font-size:10px}.creator-room-main span{display:block;font-size:8px;color:#7d8997;margin-top:2px}.creator-room button{background:#ff6900;color:#fff;height:30px;border-radius:8px;padding:0 9px;font-size:8px;font-weight:900}.social-list{display:grid;gap:7px}.social-link{display:flex;align-items:center;justify-content:space-between;background:#f7f9fc;border:1px solid #e7ebf1;border-radius:10px;padding:9px;font-size:9px;font-weight:800}.social-link b{color:#ff6900}.creator-empty{text-align:center;padding:30px 10px;color:#8a95a3;font-size:10px}.creator-rank{display:inline-grid;place-items:center;width:23px;height:23px;border-radius:7px;background:#fff4e9;color:#ff6900;font-size:9px;font-weight:900;margin-left:7px}.creator-challenge-list{display:grid;gap:7px}.challenge-row{display:flex;align-items:center;background:#f7f9fc;border:1px solid #e7ebf1;border-radius:12px;padding:9px}.challenge-avatar{width:36px;height:36px;border-radius:50%;object-fit:cover;background:#e7ebf1;margin-left:8px}.challenge-info{flex:1}.challenge-info b{font-size:10px}.challenge-info span{display:block;font-size:8px;color:#7f8a98;margin-top:2px}.challenge-points{text-align:left}.challenge-points b{font-size:12px;color:#ff6900}.challenge-points span{display:block;font-size:7px;color:#8792a0}.creator-dashboard{display:none}.creator-admin-note{font-size:8px;color:#7c8795;background:#f7f9fc;border:1px solid #e7ebf1;border-radius:10px;padding:8px;margin-top:9px}.room-creator{margin:9px 0 0;padding:9px 10px;border-radius:14px;background:linear-gradient(135deg,#fff7f0,#f7f9fc);border:1px solid #ffe0c8;display:flex;align-items:center;gap:9px}.room-creator-avatar{width:42px;height:42px;border-radius:50%;object-fit:cover;border:2px solid #fff;box-shadow:0 2px 8px #0002}.room-creator-main{flex:1;min-width:0}.room-creator-name{font-size:11px;font-weight:900;display:flex;align-items:center;gap:4px}.room-creator-name .tick{display:inline-grid;place-items:center;width:17px;height:17px;border-radius:50%;background:#1687ff;color:#fff;font-size:9px}.room-creator-handle{font-size:8px;color:#7d8998;margin-top:2px}.room-creator-socials{display:flex;gap:5px;margin-top:5px}.room-social-icon{width:24px;height:24px;border-radius:8px;background:#fff;border:1px solid #e5e9ef;display:grid;place-items:center;font-size:13px;text-decoration:none}.creator-social-icons{display:flex;gap:7px;flex-wrap:wrap;margin-top:10px}.creator-social-icon{width:40px;height:40px;border-radius:12px;background:#f7f9fc;border:1px solid #e7ebf1;display:grid;place-items:center;text-decoration:none;font-size:21px}.creator-social-icon:hover{transform:translateY(-1px);border-color:#ffcfaa}
+@media(max-width:760px){.creator-grid{grid-template-columns:repeat(2,1fr)}.creator-detail-grid{grid-template-columns:1fr}}
+@media(max-width:560px){.creator-grid{grid-template-columns:1fr}.creator-hero-copy h1{font-size:23px}.creator-detail-head{align-items:center;flex-wrap:wrap}.creator-detail-avatar{width:82px;height:82px}.creator-detail-name{font-size:19px}.creator-detail-actions{width:100%;margin-right:0;display:grid;grid-template-columns:1fr 1fr}.creator-detail-stats{grid-template-columns:repeat(2,1fr)}}
+
+
+</style>
+
+<style>
+.top{position:sticky;top:0;z-index:50;}
+.top-stats{display:flex;align-items:center;gap:7px;margin-right:auto;}
+.top-stat{min-width:62px;padding:5px 8px;border:1px solid rgba(255,106,0,.25);border-radius:10px;background:#151515;text-align:center;line-height:1.05;}
+.top-stat b{display:block;font-size:12px;color:#fff;}
+.top-stat span{display:block;font-size:9px;color:#aaa;margin-top:3px;}
+.hero-copy{position:sticky;top:58px;z-index:40;background:#0d0d0d;padding:10px 0 12px;margin-bottom:4px;}
+@media(max-width:600px){.top-stats{gap:4px}.top-stat{min-width:55px;padding:4px 6px}.top-stat b{font-size:11px}.top-stat span{font-size:8px}.hero-copy{top:54px}}
+</style>
 </head>
 <body>
-
-<header>
-    <div class="logo">
-        <i class="fas fa-fire"></i>
-        <span>FreeFire</span><span>Rooms</span>
+<div class="app">
+  <header class="hero">
+    <div class="top">
+      <div class="brand">FreeFire<span>Rooms</span><small>🔥 العب • انضم • استمتع</small></div>
+      <div class="top-stats">
+        <div class="top-stat"><b id="online">8,742</b><span>👥 متصل</span></div>
+        <div class="top-stat"><b id="activeCount">4</b><span>🔥 نشط</span></div>
+      </div>
+      <div style="display:flex;align-items:center;gap:5px;margin-right:8px"><div id="firebaseStatus" style="font-size:8px;color:#9ca3af;white-space:nowrap">Firebase: يعمل في الخلفية…</div><button onclick="openFirebaseDiagnostics()" style="border:0;background:#f3f4f6;border-radius:8px;padding:3px 6px;font-size:9px;cursor:pointer">🔍 تشخيص</button></div>
     </div>
-    <div class="filter-area">
-        <span class="filter-label"><i class="fas fa-flag"></i></span>
-        <div class="custom-select" id="customSelect">
-            <div class="selected" id="selectedDisplay">
-                <span>🌍 الكل</span>
-                <span class="arrow"><i class="fas fa-chevron-down"></i></span>
-            </div>
-            <div class="options" id="optionsContainer"></div>
-        </div>
-        
-        <div class="gender-filter" id="genderFilter">
-            <button class="gf-btn active-all" data-gender="all"><i class="fas fa-users"></i> الكل</button>
-            <button class="gf-btn" data-gender="male"><i class="fas fa-mars"></i> ذكر</button>
-            <button class="gf-btn" data-gender="female"><i class="fas fa-venus"></i> أنثى</button>
-        </div>
-        
-        <button class="refresh-btn" id="refreshBtn"><i class="fas fa-sync-alt"></i> تحديث</button>
+    <div class="hero-title hero-copy">
+      <h1>اجتمعوا في مكان واحد 🎮</h1>
+      <p>انشر معلومات روم فريفاير ودع اللاعبين ينضمون إليك</p>
     </div>
-</header>
+  </header>
 
-<section class="rooms-section">
-    <div class="container">
-        <div class="section-header">
-            <h3>🟢 الغرف النشطة</h3>
-            <div class="header-actions">
-                <span id="roomsCount">0</span>
-            </div>
-        </div>
-        <div id="roomsList" class="rooms-grid">
-            <div style="grid-column:1/-1; text-align:center; padding:40px 0; color:#888;">
-                <i class="fas fa-spinner fa-spin" style="font-size:24px; display:block; margin-bottom:10px; color:#ff6a00;"></i>
-                جاري تحميل الغرف...
-            </div>
-        </div>
+  <section class="controls">
+    <div class="filters compact-filter-row">
+      <div class="select country-select">🌍 <select id="countryFilter" onchange="renderRooms()">
+        <option value="">كل الدول</option><option>موريتانيا</option><option>مصر</option><option>الجزائر</option><option>المغرب</option><option>السعودية</option>
+      </select></div>
+      <button class="filter-btn" onclick="setGender(this,'ذكر')">♂ ذكر</button>
+      <button class="filter-btn" onclick="setGender(this,'أنثى')">♀ أنثى</button>
     </div>
-</section>
+    <div class="actions">
+      <button class="action orange" onclick="refreshRooms()">↻ تحديث</button>
+    </div>
+  </section>
 
-<div class="fab-container">
-    <button class="btn-fab" id="openCreateModal">
-        <i class="fas fa-plus"></i>
-    </button>
-    <span class="fab-label">انشر غرفة</span>
+  <div class="section-head">
+    <h2>الرومات القريبة / المقترحة 📍</h2>
+    <div class="live"><span class="dot"></span> نشطة</div>
+  </div>
+
+  <div class="quick">
+    <button class="on" onclick="sortRooms('all',this)">⭐ الكل</button>
+    <button onclick="sortRooms('new',this)">🆕 الأحدث</button>
+    <button onclick="sortRooms('fast',this)">⚡ الأسرع امتلاءً</button>
+    <button onclick="sortRooms('fav',this)">♡ المفضلة</button>
+  </div>
+
+  <main class="rooms" id="rooms"></main>
+  <div class="empty" id="empty"><div class="big">📭</div><h3>لا توجد غرف حالياً</h3><p>أنشئ غرفتك الآن واجعل اللاعبين ينضمون إليك.</p></div>
 </div>
 
-<div class="toast-container" id="toastContainer"></div>
+<button class="fab" onclick="openCreate()">+</button>
+<div class="fab-label">إنشاء روم</div>
 
-<div id="createModal" class="modal">
-    <div class="modal-content">
-        <span class="close-btn" id="closeModal">&times;</span>
-        <h2><i class="fas fa-fire"></i> نشر غرفة</h2>
-        <form id="createRoomForm">
-            <div class="row-duo">
-                <div class="form-group">
-                    <label><i class="fas fa-flag"></i> الدولة</label>
-                    <select id="roomCountry" required>
-                        <option value="">-- اختر --</option>
-                        <option value="المغرب">🇲🇦 المغرب</option>
-                        <option value="مصر">🇪🇬 مصر</option>
-                        <option value="السعودية">🇸🇦 السعودية</option>
-                        <option value="العراق">🇮🇶 العراق</option>
-                        <option value="الأردن">🇯🇴 الأردن</option>
-                        <option value="تونس">🇹🇳 تونس</option>
-                        <option value="الجزائر">🇩🇿 الجزائر</option>
-                        <option value="ليبيا">🇱🇾 ليبيا</option>
-                        <option value="سوريا">🇸🇾 سوريا</option>
-                        <option value="فلسطين">🇵🇸 فلسطين</option>
-                        <option value="لبنان">🇱🇧 لبنان</option>
-                        <option value="الإمارات">🇦🇪 الإمارات</option>
-                        <option value="قطر">🇶🇦 قطر</option>
-                        <option value="الكويت">🇰🇼 الكويت</option>
-                        <option value="عُمان">🇴🇲 عُمان</option>
-                        <option value="البحرين">🇧🇭 البحرين</option>
-                        <option value="اليمن">🇾🇪 اليمن</option>
-                        <option value="جيبوتي">🇩🇯 جيبوتي</option>
-                        <option value="الصومال">🇸🇴 الصومال</option>
-                        <option value="جزر القمر">🇰🇲 جزر القمر</option>
-                        <option value="موريتانيا">🇲🇷 موريتانيا</option>
-                        <option value="السودان">🇸🇩 السودان</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label><i class="fas fa-venus-mars"></i> الجنس</label>
-                    <select id="roomGender" required>
-                        <option value="">-- اختر --</option>
-                        <option value="male">👨 ذكر</option>
-                        <option value="female">👩 أنثى</option>
-                    </select>
-                </div>
-            </div>
+<nav class="bottom" id="bottomNav">
+  <button class="nav active" id="navHome" onclick="goHome()"><i>⌂</i>الرئيسية</button>
+  <button class="nav" id="navCreators" onclick="openCreatorHub()"><i>🎥</i>صنّاع المحتوى</button>
+  <button class="nav create" onclick="openCreate()"><i>+</i><span>إنشاء</span></button>
+  <button class="nav notification-bell" id="navNotifications" onclick="openNotifications()"><i>🔔</i><span class="notification-badge" id="notificationBadge"></span>الإشعارات</button>
+  <button class="nav" onclick="showAccount()"><i>♙</i>حسابي</button>
+</nav>
 
-            <div class="row-duo">
-                <div class="form-group">
-                    <label><i class="fas fa-hashtag"></i> Room ID</label>
-                    <input type="text" id="roomId" placeholder="587421" required>
-                </div>
-                <div class="form-group">
-                    <label><i class="fas fa-key"></i> كلمة السر</label>
-                    <input type="text" id="roomPass" placeholder="1234" required>
-                </div>
-            </div>
-
-            <div class="row-duo">
-                <div class="form-group">
-                    <label><i class="fas fa-gamepad"></i> النمط</label>
-                    <select id="roomMode">
-                        <option value="سولو">سولو</option>
-                        <option value="ديو">ديو</option>
-                        <option value="سكواد" selected>سكواد</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label><i class="fas fa-server"></i> السيرفر</label>
-                    <select id="roomServer">
-                        <option value="الشرق الأوسط">الشرق الأوسط</option>
-                        <option value="أوروبا">أوروبا</option>
-                        <option value="آسيا">آسيا</option>
-                        <option value="أمريكا">أمريكا</option>
-                    </select>
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label><i class="fas fa-pencil-alt"></i> ملاحظات</label>
-                <textarea id="roomNotes" placeholder="ممنوع الهكر، تدريب..."></textarea>
-            </div>
-
-            <button type="submit" class="btn-submit">
-                <i class="fas fa-paper-plane"></i> انشر
-            </button>
-        </form>
+<div class="modal-bg" id="loginModal" onclick="backdropClose(event,'loginModal')">
+  <div class="modal">
+    <div class="modal-head"><h3>مرحباً بك في FreeFire Rooms 👋</h3><button class="close" onclick="closeModal('loginModal')">✕</button></div>
+    <p style="font-size:12px;color:#718096;margin-bottom:14px">سجّل باسمك وكلمة مرور فقط. حسابك سيبقى محفوظًا على هذا الجهاز.</p>
+    <div class="form">
+      <label>اسم المستخدم</label>
+      <input id="username" maxlength="24" placeholder="اكتب اسمك">
+      <label>كلمة المرور</label>
+      <input type="password" id="password" minlength="4" placeholder="اكتب كلمة المرور">
+      <button class="submit" onclick="login()" id="loginSubmit">إنشاء الحساب</button>
     </div>
+  </div>
 </div>
 
-<div id="detailsModal" class="modal">
-    <div class="modal-content">
-        <button class="close-btn" id="closeDetailsModal">&times;</button>
-        <div id="detailsContent"></div>
+<div class="modal-bg" id="createModal" onclick="backdropClose(event,'createModal')">
+  <div class="modal">
+    <div class="modal-head"><h3>🔥 إنشاء روم جديد</h3><button class="close" onclick="closeModal('createModal')">✕</button></div>
+    <div class="form" id="createRoomForm">
+      <label>الدولة</label><select id="roomCountry"><option value="موريتانيا">موريتانيا</option><option value="مصر">مصر</option><option value="الجزائر">الجزائر</option><option value="المغرب">المغرب</option><option value="السعودية">السعودية</option><option value="تونس">تونس</option><option value="العراق">العراق</option><option value="الأردن">الأردن</option><option value="ليبيا">ليبيا</option><option value="السودان">السودان</option></select>
+      <label>الجنس</label><select id="roomGender"><option value="">اختر الجنس</option><option value="male">👨 ذكر</option><option value="female">👩 أنثى</option></select>
+      <label>نوع الروم</label><select id="roomMode"><option>كلاسيك</option><option>باتل رويال</option><option>دراغونوف سولو</option></select>
+      <label>السيرفر</label><select id="roomServer"><option>الشرق الأوسط</option><option>أوروبا</option><option>آسيا</option><option>أمريكا</option></select>
+      <label>Room ID</label><input id="roomId" inputmode="numeric" placeholder="مثال: 123456789">
+      <label>كلمة السر</label><input id="roomPass" inputmode="numeric" placeholder="مثال: 1234">
+      <label>ملاحظات</label><input id="roomNotes" maxlength="120" placeholder="مثال: نحتاج لاعبين إضافيين 🎮">
+      <button class="submit" type="button" onclick="createRoom()">🚀 نشر الروم الآن</button>
     </div>
+  </div>
 </div>
 
-<div id="shareModal" class="modal">
-    <div class="modal-content" style="max-width:380px;">
-        <span class="close-btn" id="closeShareModal">&times;</span>
-        <h2><i class="fas fa-share-alt" style="color:#4caf50;"></i> مشاركة الغرفة</h2>
-        <div id="shareContent" style="text-align:center;">
-            <p style="color:#555; margin-bottom:15px;">اختر طريقة المشاركة</p>
-            <div style="display:flex; flex-direction:column; gap:10px;">
-                <button class="btn-submit" style="background:#25D366;" id="shareWhatsAppBtn"><i class="fab fa-whatsapp"></i> واتساب</button>
-                <button class="btn-submit" style="background:#1877F2;" id="shareFacebookBtn"><i class="fab fa-facebook"></i> فيسبوك</button>
-                <button class="btn-submit" style="background:#ff6a00;" id="shareCopyBtn"><i class="fas fa-copy"></i> نسخ الرابط</button>
-            </div>
+<div class="modal-bg" id="detailsModal" onclick="backdropClose(event,'detailsModal')">
+  <div class="modal">
+    <div class="modal-head"><h3 id="detailsTitle">تفاصيل الروم</h3><button class="close" onclick="closeModal('detailsModal')">✕</button></div>
+    <div class="detail-box" id="detailsBox"></div>
+  </div>
+</div>
+
+<div class="creator-page" id="creatorPage">
+  <div class="creator-shell">
+    <section class="creator-hero">
+      <div class="creator-top"><button class="creator-back" onclick="closeCreatorHub()">←</button><div class="creator-top-title">صنّاع المحتوى 🎥<small>اكتشف مجتمعك المفضل</small></div></div>
+      <div class="creator-hero-copy"><span class="eyebrow">🔥 CREATOR HUB</span><h1>اكتشف صنّاع Free Fire</h1><p>تابع صناع المحتوى المفضلين لديك، ادخل روماتهم وشارك في تحدياتهم وبطولاتهم.</p>
+        <div class="creator-search"><span>⌕</span><input id="creatorSearch" oninput="renderCreatorHub()" placeholder="ابحث عن صانع محتوى أو اسم مستخدم..."></div><div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px"><button class="creator-view" style="padding:11px 16px;border:0" onclick="openCreatorApply()">🎥 قدّم كصانع محتوى</button><button class="creator-follow" style="padding:11px 16px" onclick="openCreatorStatus()">📋 متابعة طلبي</button></div>
+      </div>
+      <div class="creator-tabs"><button class="creator-tab active" onclick="creatorFilter='all';setCreatorTab(this);renderCreatorHub()">⭐ الكل</button><button class="creator-tab" onclick="creatorFilter='verified';setCreatorTab(this);renderCreatorHub()">✓ موثّقون</button><button class="creator-tab" onclick="creatorFilter='top';setCreatorTab(this);renderCreatorHub()">🏆 الأكثر متابعة</button><button class="creator-tab" onclick="creatorFilter='new';setCreatorTab(this);renderCreatorHub()">🆕 جديد</button></div>
+    </section>
+    <main class="creator-content">
+      <div class="creator-section-title"><h2>صنّاع المحتوى المميزون</h2><span id="creatorCount">0 صانع</span></div>
+      <div class="creator-grid" id="creatorGrid"></div>
+      <div class="challenge-banner"><div class="challenge-icon">🏆</div><div><h3>Creator Challenge</h3><p>اجمع متابعين حقيقيين عبر رابطك الخاص واربح جائزة Free Fire.</p></div><button onclick="openCreatorChallenge()">عرض الترتيب</button></div>
+    </main>
+  </div>
+</div>
+
+<div class="creator-detail" id="creatorDetail">
+  <button class="profile-close" onclick="closeCreatorDetail()">×</button>
+  <div class="creator-detail-cover"></div>
+  <div class="creator-detail-inner"><div class="creator-detail-card">
+    <div class="creator-detail-head"><img id="creatorDetailAvatar" class="creator-detail-avatar"><div><div id="creatorDetailName" class="creator-detail-name"></div><div id="creatorDetailHandle" class="creator-detail-handle"></div><span id="creatorDetailBadge" class="verified-badge"></span></div><div class="creator-detail-actions"><button id="creatorDetailFollow" class="creator-follow-main" onclick="toggleCreatorFollow()">＋ متابعة</button><button class="creator-share" onclick="shareCreator()">↗ مشاركة</button></div></div>
+    <div id="creatorDetailBio" class="creator-detail-bio"></div>
+    <div class="creator-detail-stats"><div class="creator-detail-stat"><b id="cdFollowers">0</b><span>متابع</span></div><div class="creator-detail-stat"><b id="cdRooms">0</b><span>روم</span></div><div class="creator-detail-stat"><b id="cdTournaments">0</b><span>بطولة</span></div><div class="creator-detail-stat"><b id="cdPoints">0</b><span>نقاط</span></div></div>
+    <div class="creator-detail-grid"><div class="creator-panel"><h3>🔥 رومات الصانع</h3><div id="creatorDetailRooms"></div></div><div><div class="creator-panel"><h3>🏆 البطولات</h3><div id="creatorDetailTournaments"></div></div><div class="creator-panel" style="margin-top:10px"><h3>🌐 روابط الصانع</h3><div class="social-list" id="creatorSocials"></div></div></div></div>
+    <div class="creator-admin-note">صفحة عامة لصانع المحتوى — يمكن لاحقًا ربط الرومات والبطولات والجوائز مباشرة ببيانات Firebase الحقيقية.</div>
+  </div></div>
+</div>
+
+<div class="modal-bg" id="creatorRoomCreateModal" onclick="backdropClose(event,'creatorRoomCreateModal')"><div class="modal"><div class="modal-head"><h3>🎥 نشر روم للصانع</h3><button class="close" onclick="closeModal('creatorRoomCreateModal')">✕</button></div><p style="font-size:11px;color:#778394;margin-bottom:12px">هذا الزر يظهر لصنّاع المحتوى فقط.</p><div class="form"><label>اسم الروم</label><input id="creatorRoomName" placeholder="مثال: روم المتابعين 🔥"><label>كود الروم</label><input id="creatorRoomCode" placeholder="أدخل كود الروم"><button class="submit" onclick="publishCreatorRoom()">نشر الروم 🚀</button></div></div></div>
+
+
+
+<div class="modal-bg" id="creatorApplyModal" onclick="backdropClose(event,'creatorApplyModal')"><div class="modal" style="max-width:650px"><div class="modal-head"><h3>🎥 طلب صانع محتوى</h3><button class="close" onclick="closeModal('creatorApplyModal')">✕</button></div><p id="creatorApplyIntro" style="font-size:12px;color:#778394;margin-bottom:12px"></p><div class="form"><label>صورة صفحتك على TikTok أو Instagram أو YouTube</label><input id="applyImageFile" type="file" accept="image/*" onchange="previewCreatorApplyImage(event)"><div id="applyImagePreview" style="display:none;margin:8px 0;text-align:center"><img id="applyImagePreviewImg" style="width:90px;height:90px;border-radius:18px;object-fit:cover;border:2px solid rgba(255,255,255,.12)"></div><input id="applyImage" type="hidden"><label>اسمك</label><input id="applyName" maxlength="40" placeholder="مثال: غيث"><label>اسم المستخدم</label><input id="applyUsername" maxlength="30" placeholder="@ghith_ff"><label>الدولة</label><input id="applyCountry" maxlength="30" placeholder="مثال: المغرب"><label>طريقة التواصل</label><input id="applyContact" maxlength="100" placeholder="مثال: Discord: Ghith#1234 أو Telegram: @ghith"><label>رابط TikTok (اختياري)</label><input id="applyTikTok" type="url" placeholder="https://www.tiktok.com/@username"><label>رابط YouTube (اختياري)</label><input id="applyYouTube" type="url" placeholder="https://youtube.com/@username"><label>رابط Instagram (اختياري)</label><input id="applyInstagram" type="url" placeholder="https://instagram.com/username"><label>شيء تحب تكتبه (اختياري)</label><textarea id="applyBio" maxlength="300" placeholder="اكتب أي شيء تحب نعرفه عنك أو عن محتواك..."></textarea><button class="submit" onclick="submitCreatorApplication()">🚀 إرسال طلب صانع محتوى</button></div></div></div>
+
+<div class="modal-bg" id="creatorChallengeModal" onclick="backdropClose(event,'creatorChallengeModal')"><div class="modal" style="max-width:600px"><div class="modal-head"><h3>🏆 Creator Challenge</h3><button class="close" onclick="closeModal('creatorChallengeModal')">✕</button></div><p style="font-size:10px;color:#778394;margin-bottom:10px">الترتيب يعتمد على المتابعين الحقيقيين القادمين من روابط الصنّاع.</p><div id="challengeList" class="creator-challenge-list"></div><div class="creator-admin-note">مهم: قبل إطلاق الجوائز المالية أو الماسية فعليًا، يجب نقل احتساب النقاط والتحقق من المستخدمين إلى Firebase Auth + Security Rules + Cloud Functions وعدم الاعتماد على localStorage.</div></div></div>
+
+<div class="modal-bg" id="creatorStatusModal" onclick="backdropClose(event,'creatorStatusModal')"><div class="modal" style="max-width:600px"><div class="modal-head"><h3>📋 حالة طلب صانع المحتوى</h3><button class="close" onclick="closeModal('creatorStatusModal')">✕</button></div><div id="creatorStatusBox" class="creator-empty">أدخلت طلبك؟ سيتم عرض حالته هنا.</div></div></div>
+
+<div class="toast" id="toast"></div>
+
+
+
+<div class="modal-bg" id="publicProfileModal" onclick="backdropClose(event,'publicProfileModal')">
+  <div class="modal" style="max-width:560px">
+    <div class="modal-head"><h3>👤 ملف اللاعب</h3><button class="close" onclick="closeModal('publicProfileModal')">✕</button></div>
+    <div style="text-align:center;padding:5px 0">
+      <img id="publicProfileImg" class="profile-avatar" style="width:92px;height:92px;margin:auto;display:block" alt="صورة اللاعب">
+      <h2 id="publicProfileName" style="font-size:20px;margin-top:9px">لاعب</h2>
+      <div id="publicProfileUsername" style="font-size:9px;color:#8490a0;margin-top:2px">@player</div>
+      <p id="publicProfileBio" style="font-size:10px;color:#687586;margin:10px 0">لاعب في مجتمع FreeFire Rooms 🎮</p>
+      <div class="public-profile-stats">
+        <div class="public-profile-stat" id="publicFollowersStat"><b id="publicFollowers">0</b><span>المتابعون</span></div>
+        <div class="public-profile-stat" id="publicFollowingStat"><b id="publicFollowing">0</b><span>أتابعهم</span></div>
+        <div class="public-profile-stat"><b id="publicPosted">0</b><span>رومات نشرتها</span></div>
+      </div>
+      <div class="public-profile-actions">
+        <button id="publicFollowBtn" class="public-follow" onclick="togglePublicFollow()">＋ متابعة</button>
+        <button class="public-share" onclick="sharePublicProfile()">↗ مشاركة</button>
+      </div>
+      <div id="publicProfileNote" class="public-private-note" style="display:none"></div>
+    </div>
+  </div>
+</div>
+
+<div class="profile-page" id="profilePage">
+  <button class="profile-close" onclick="closeProfilePage()" aria-label="العودة للرئيسية">×</button>
+  <div class="profile-cover"></div>
+  <div class="profile-page-inner">
+    <div class="profile-main-card">
+      <div class="profile-page-top">
+        <div class="profile-big-wrap">
+          <label class="profile-image-click" title="تغيير الصورة">
+            <img id="profileBigImg" class="profile-big" alt="الصورة الشخصية">
+            <span class="profile-image-edit">📷</span>
+            <input type="file" accept="image/*" onchange="previewProfileImage(event)" hidden>
+          </label>
+          <span class="profile-level">PLAYER • عضو</span>
         </div>
+        <div style="flex:1">
+          <div class="profile-page-name" id="profilePageName">لاعب جديد</div>
+          <div class="profile-page-user" id="profilePageUser">@player</div>
+          <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:9px"><button type="button" onclick="openProfileEditor()" style="border:0;border-radius:10px;padding:8px 13px;background:#ff6900;color:#fff;font-weight:900;font-size:10px;cursor:pointer">✏️ تعديل الملف</button><button type="button" onclick="openProfileSettings()" style="border:1px solid #e5e9ef;border-radius:10px;padding:8px 13px;background:#fff;color:#344052;font-weight:900;font-size:10px;cursor:pointer">⚙️ الإعدادات</button></div>
+        </div>
+      </div>
+
+      <div class="profile-bio" id="profileBio">لاعب في مجتمع FreeFire Rooms 🎮</div>
+
+      <div class="profile-stats">
+        <div class="profile-stat-card"><b id="pagePosted">0</b><span>رومات نشرتها</span></div>
+        <div class="profile-stat-card"><b id="pageJoined">0</b><span>انضمامات</span></div>
+        <div class="profile-stat-card follow-stat"><b id="pageFollowers">0</b><span>المتابعون</span></div>
+        <div class="profile-stat-card"><b id="pageFollowing">0</b><span>أتابعهم</span></div>
+        <div class="profile-stat-card"><b id="pageFav">0</b><span>المفضلة</span></div>
+      </div>
+
+      <div class="profile-section">
+        <h3>📊 نشاط الحساب</h3>
+        <div class="profile-activity"><span>🔥 مستوى النشاط</span><b id="activityLevel">مبتدئ</b></div>
+        <div class="profile-activity"><span>🎮 آخر نشاط</span><small>FreeFire Rooms</small></div>
+      </div>
+
+      <div class="profile-section">
+        <h3>🏆 إنجازاتك</h3>
+        <div class="profile-activity"><span>🚀 أول روم تنشره</span><b>مفتوح</b></div>
+        <div class="profile-activity"><span>👥 عضو نشيط في المجتمع</span><b id="memberStatus">جديد</b></div>
+      </div>
     </div>
+  </div>
 </div>
 
-<footer>
-    <div class="container">
-        <p>© 2026 FreeFire Rooms - غير تابع لـ Garena</p>
+<div class="modal-bg" id="profileModal" onclick="backdropClose(event,'profileModal')">
+  <div class="modal profile-modal">
+    <div class="modal-head">
+      <h3>👤 ملفي الشخصي</h3>
+      <button class="close" onclick="closeModal('profileModal')">✕</button>
     </div>
-</footer>
+    <div class="profile-preview">
+      <div class="profile-avatar-wrap">
+        <img id="profilePreviewImg" class="profile-avatar" alt="الصورة الشخصية">
+        <label class="camera" for="profileImage">📷</label>
+        <input id="profileImage" type="file" accept="image/*" hidden onchange="previewProfileImage(event)">
+      </div>
+      <div>
+        <div class="profile-name" id="profilePreviewName">لاعب جديد</div>
+        <div class="profile-sub">ملفك العام في FreeFire Rooms</div>
+      </div>
+    </div>
+    <div class="form profile-form">
+      <label>اسمك</label>
+      <input id="profileNameInput" maxlength="24" placeholder="اسمك">
+      <label>اسم المستخدم (Username)</label>
+      <input id="profileUsernameInput" maxlength="24" placeholder="مثال: ghith_ff">
+      <label>نبذة عنك</label>
+      <input id="profileBioInput" maxlength="80" placeholder="مثال: أحب الرومات والتحديات 🎮">
+      <button class="submit" onclick="saveProfile()">💾 حفظ الملف الشخصي</button>
+    </div>
+  </div>
+</div>
 
+<div class="modal-bg" id="profileSettingsModal" onclick="backdropClose(event,'profileSettingsModal')">
+  <div class="modal" style="max-height:88vh;overflow:auto">
+    <div class="modal-head"><h3>⚙️ الإعدادات والملف</h3><button class="close" onclick="closeModal('profileSettingsModal')">✕</button></div>
+    <div class="profile-settings-summary">
+      <div class="settings-stat"><b id="settingsPosted">0</b><span>روماتي</span></div>
+      <div class="settings-stat"><b id="settingsJoined">0</b><span>انضمامات</span></div>
+      <div class="settings-stat"><b id="settingsFollowers">0</b><span>متابعين</span></div>
+      <div class="settings-stat"><b id="settingsFollowing">0</b><span>أتابعهم</span></div>
+      <div class="settings-stat"><b id="settingsFav">0</b><span>المفضلة</span></div>
+    </div>
+    <div class="form">
+      <div style="font-size:12px;font-weight:900;margin:3px 0 2px">👥 الخصوصية عند الناس</div>
+      <p style="font-size:9px;color:#7d8998;margin-bottom:8px">هذه الخيارات تخص ما يظهر للزوار في ملفك العام، وليست مجرد إخفاء عندك.</p>
+      <label style="display:flex;align-items:center;justify-content:space-between;gap:10px;background:#f7f9fc;border:1px solid #e7ebf1;border-radius:12px;padding:12px;cursor:pointer"><span>إخفاء عدد المتابعين عن الناس</span><input id="hideFollowers" type="checkbox" style="width:18px;height:18px"></label>
+      <label style="display:flex;align-items:center;justify-content:space-between;gap:10px;background:#f7f9fc;border:1px solid #e7ebf1;border-radius:12px;padding:12px;cursor:pointer"><span>إخفاء عدد الأشخاص الذين أتابعهم عن الناس</span><input id="hideFollowing" type="checkbox" style="width:18px;height:18px"></label>
+      <button class="submit" type="button" onclick="saveProfileSettings()">💾 حفظ الإعدادات</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-bg" id="notificationsModal" onclick="backdropClose(event,'notificationsModal')">
+  <div class="modal notification-modal">
+    <div class="modal-head">
+      <h3>🔔 الإشعارات</h3>
+      <button class="close" onclick="closeModal('notificationsModal')">✕</button>
+    </div>
+    <div id="notificationsList" class="notifications-list"></div>
+  </div>
+</div>
+<div class="modal-bg" id="firebaseDiagModal" onclick="backdropClose(event,'firebaseDiagModal')">
+  <div class="modal" style="max-width:520px">
+    <div class="modal-head"><h3>🔍 تشخيص اتصال Firebase</h3><button class="close" onclick="closeModal('firebaseDiagModal')">✕</button></div>
+    <div style="padding:16px;direction:rtl">
+      <div id="firebaseDiagText" style="font-size:13px;line-height:1.9;word-break:break-word"></div>
+      <button class="submit" onclick="retryFirebaseDiagnostics()" style="margin-top:12px">🔄 إعادة المحاولة</button>
+    </div>
+  </div>
+</div>
+<script>
+function openFirebaseDiagnostics(){
+  const cfg=window.firebase?.apps?.[0]?.options||{};
+  const lines=[
+    'البروتوكول: '+location.protocol,
+    'النطاق: '+(location.host||'(لا يوجد — ملف محلي)'),
+    'الاتصال بالإنترنت: '+(navigator.onLine?'متصل ✓':'غير متصل ✕'),
+    'Firebase SDK: '+(window.firebase?'تم التحميل ✓':'غير محمل ✕'),
+    'المشروع: '+(cfg.projectId||'غير معروف'),
+    'Auth domain: '+(cfg.authDomain||'غير معروف'),
+    'Firebase Auth: '+(firebaseAuth?.currentUser?'متصل ✓':'غير متصل'),
+    'آخر خطأ: '+(firebaseAuthError?(firebaseAuthError.code+' — '+(firebaseAuthError.message||'')):'لا يوجد خطأ مسجل')
+  ];
+  const el=document.getElementById('firebaseDiagText');
+  if(el)el.innerHTML=lines.map(x=>'<div>• '+esc(x)+'</div>').join('');
+  document.getElementById('firebaseDiagModal')?.classList.add('show');
+}
+async function retryFirebaseDiagnostics(){
+  firebaseAuthStarted=false; firebaseAuthError=null; firebaseLocalMode=false;
+  showFirebaseStatus('Firebase: إعادة المحاولة…');
+  try{ await startFirebaseAuth(); }catch(e){}
+  openFirebaseDiagnostics();
+}
+</script>
 <script>
 // ============================================================
-// 🔥 إعدادات Firebase
+// 🔥 Firebase — مأخوذ من موقعك الأصلي، مع إبقاء تصميم الصفحة كما هو
 // ============================================================
-const firebaseConfig = {
-    apiKey: "AIzaSyDrwLgV3VhX80MiJiXuuVv31wIsJBHAGmA",
-    authDomain: "freefire-romes.firebaseapp.com",
-    databaseURL: "https://freefire-romes-default-rtdb.firebaseio.com",
-    projectId: "freefire-romes",
-    storageBucket: "freefire-romes.firebasestorage.app",
-    messagingSenderId: "798987864557",
-    appId: "1:798987864557:web:51aa9a0b32e6214e81bfe4"
-};
-// ============================================================
+// ===== Creator Hub data / UI =====
+const CREATOR_KEY='ff_creators_demo_v1';
+let creatorFilter='all', selectedCreatorId=null;
+const DEFAULT_CREATORS=[
+ {id:'ghith',name:'غيث',handle:'@ghith_ff',followers:12840,rooms:34,tournaments:8,points:9840,verified:true,joinedAt:1,bio:'صانع محتوى Free Fire 🎮 | رومات وتحديات أسبوعية 🔥',image:'',socials:[['TikTok','@ghith_ff'],['YouTube','Ghith FF']],rooms:[{name:'روم المتابعين 🔥',mode:'سكواد',country:'السعودية',server:'الشرق الأوسط',roomId:'587421',status:'نشط'}],tournaments:['بطولة غيث الأسبوعية 🏆']},
+ {id:'ninja',name:'Ninja FF',handle:'@ninjaff',followers:9650,rooms:21,tournaments:5,points:7210,verified:true,joinedAt:2,bio:'رومات يومية + تحديات للمتابعين ⚡',image:'',socials:[['TikTok','@ninjaff'],['YouTube','Ninja FF']],rooms:[{name:'Squad Night ⚡',mode:'كلاسيك',country:'المغرب',server:'أوروبا',roomId:'741852',status:'نشط'}],tournaments:['Ninja Night Cup']},
+ {id:'rayan',name:'Rayan Gaming',handle:'@rayan_g',followers:7340,rooms:17,tournaments:3,points:5980,verified:true,joinedAt:3,bio:'ألعب مع المتابعين وأصنع تحديات مجنونة 🔥',image:'',socials:[['TikTok','@rayan_g'],['YouTube','Rayan Gaming']],rooms:[{name:'روم التحدي 🎯',mode:'باتل رويال',country:'الجزائر',server:'الشرق الأوسط',roomId:'963258',status:'نشط'}],tournaments:['Rayan Challenge']},
+ {id:'simo',name:'Simo FF',handle:'@simo_freefire',followers:5210,rooms:12,tournaments:2,points:4010,verified:false,joinedAt:4,bio:'مجتمع Free Fire صغير لكن نار 🔥',image:'',socials:[['TikTok','@simo_freefire']],rooms:[],tournaments:[]}
+];
+let creators=(()=>{try{return JSON.parse(localStorage.getItem(CREATOR_KEY))||DEFAULT_CREATORS}catch(e){return DEFAULT_CREATORS}})();
+function creatorAvatar(c,size=120){if(c.image)return c.image; const initials=encodeURIComponent((c.name||'FF').slice(0,2));return 'data:image/svg+xml;charset=UTF-8,'+encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}"><defs><linearGradient id="g" x1="0" x2="1"><stop stop-color="#ff6900"/><stop offset="1" stop-color="#ff9b45"/></linearGradient></defs><rect width="100%" height="100%" rx="50%" fill="url(#g)"/><text x="50%" y="57%" text-anchor="middle" fill="white" font-size="42" font-family="Arial" font-weight="900">${initials}</text></svg>`)}
+function creatorFollowing(id){return Array.isArray(profile.creatorFollowing)&&profile.creatorFollowing.includes(id)}
+function setCreatorTab(btn){document.querySelectorAll('.creator-tab').forEach(x=>x.classList.remove('active'));btn.classList.add('active')}
+function openCreatorHub(){document.getElementById('creatorPage').classList.add('show');document.body.style.overflow='hidden';setNav('navCreators');renderCreatorHub()}
+function closeCreatorHub(){document.getElementById('creatorPage').classList.remove('show');document.body.style.overflow='';setNav('navHome')}
+function renderCreatorHub(){const q=(document.getElementById('creatorSearch')?.value||'').trim().toLowerCase();let list=creators.filter(c=>(!q||(c.name+c.handle).toLowerCase().includes(q)));if(creatorFilter==='verified')list=list.filter(c=>c.verified);if(creatorFilter==='top')list=[...list].sort((a,b)=>b.followers-a.followers);if(creatorFilter==='new')list=[...list].sort((a,b)=>b.joinedAt-a.joinedAt);const el=document.getElementById('creatorGrid');if(!el)return;document.getElementById('creatorCount').textContent=list.length+' صانع';el.innerHTML=list.length?list.map(c=>{const following=creatorFollowing(c.id);return `<article class="creator-card" onclick="openCreatorDetail('${esc(c.id)}')"><div class="creator-cover"><img class="creator-avatar" src="${creatorAvatar(c)}"><span class="creator-verified" style="display:${(c.badgeType&&c.badgeType!=='none')||c.verified?'grid':'none'}">${creatorBadgeHtml(c)||'✓'}</span></div><div class="creator-card-body"><div class="creator-name-row"><span class="creator-name">${esc(c.name)}</span>${c.verified?'<span style="color:#1687ff;font-size:11px">✓</span>':''}</div><div class="creator-handle">${esc(c.handle)}</div><div class="creator-bio">${esc(c.bio)}</div><div class="creator-mini-stats"><div class="creator-mini-stat"><b>${fmt(c.followers)}</b><span>متابع</span></div><div class="creator-mini-stat"><b>${fmt(c.rooms)}</b><span>روم</span></div><div class="creator-mini-stat"><b>${fmt(c.tournaments)}</b><span>بطولة</span></div></div><div class="creator-card-actions"><button class="creator-view">عرض الصفحة</button><button class="creator-follow ${following?'following':''}" onclick="event.stopPropagation();toggleCreatorFollow('${esc(c.id)}')">${following?'✓ أتابعه':'＋ متابعة'}</button></div></div></article>`}).join(''):'<div class="creator-empty" style="grid-column:1/-1">🔎 لا يوجد صانع محتوى بهذه المواصفات.</div>'}
+function fmt(n){return Number(n||0).toLocaleString('ar')}
+function openCreatorDetail(id){selectedCreatorId=id;const c=creators.find(x=>x.id===id);if(!c)return;document.getElementById('creatorDetailAvatar').src=creatorAvatar(c,150);document.getElementById('creatorDetailName').textContent=c.name;document.getElementById('creatorDetailHandle').textContent=c.handle;const badgeEl=document.getElementById('creatorDetailBadge');const bt=c.badgeType||((c.verified)?'check':'none');badgeEl.textContent=bt==='check'?'✓ صانع موثّق':bt==='v'?'V صانع مميز':bt==='f'?'F صانع محترف':'';badgeEl.style.display=bt==='none'?'none':'inline-flex';document.getElementById('creatorDetailBio').textContent=c.bio;document.getElementById('cdFollowers').textContent=fmt(c.followers);document.getElementById('cdRooms').textContent=fmt(c.rooms);document.getElementById('cdTournaments').textContent=fmt(c.tournaments);document.getElementById('cdPoints').textContent=fmt(c.points);const fb=document.getElementById('creatorDetailFollow');fb.textContent=creatorFollowing(id)?'✓ أتابعه':'＋ متابعة';fb.classList.toggle('following',creatorFollowing(id));document.getElementById('creatorDetailRooms').innerHTML=c.rooms?.length?c.rooms.map(r=>`<div class="creator-room"><div class="creator-room-icon">🎮</div><div class="creator-room-main"><b>${esc(r.name)}</b><span>${esc(r.mode)} • ${getFlag(r.country)} ${esc(r.country)} • ${esc(r.server)}</span></div><button onclick="event.stopPropagation();notify('🚀 تم فتح روم '+esc(r.name))">انضم</button></div>`).join(''):'<div class="creator-empty">لا توجد رومات منشورة حاليًا.</div>';document.getElementById('creatorDetailTournaments').innerHTML=c.tournaments?`<div class="social-link"><span>🏆 ${fmt(c.tournaments)} بطولات</span><b>قريبًا</b></div>`:'<div class="creator-empty">لا توجد بطولات حاليًا.</div>';document.getElementById('creatorSocials').innerHTML=creatorSocialArray(c).length?'<div class="creator-social-icons">'+creatorSocialIconsHtml(c,false)+'</div>':'<div class="creator-empty">لم تتم إضافة قنوات حتى الآن.</div>';document.getElementById('creatorDetail').classList.add('show');document.body.style.overflow='hidden'}
+function closeCreatorDetail(){document.getElementById('creatorDetail').classList.remove('show');document.body.style.overflow='';selectedCreatorId=null}
+function toggleCreatorFollow(id=selectedCreatorId){if(!id)return;profile.creatorFollowing=Array.isArray(profile.creatorFollowing)?profile.creatorFollowing:[];const c=creators.find(x=>x.id===id);if(!c)return;const has=profile.creatorFollowing.includes(id);if(has){profile.creatorFollowing=profile.creatorFollowing.filter(x=>x!==id);notify('تم إلغاء متابعة '+c.name)}else{profile.creatorFollowing.push(id);notify('✓ تمت متابعة '+c.name);addNotification('متابعة صانع محتوى','أنت الآن تتابع '+c.name)}profile.following=profile.followingList.length;saveState();if(document.getElementById('creatorDetail').classList.contains('show'))openCreatorDetail(id);renderCreatorHub()}
+function shareCreator(){const c=creators.find(x=>x.id===selectedCreatorId);if(!c)return;const url=location.href.split('#')[0]+'#creator/'+c.id;copyText(url);notify('🔗 تم نسخ رابط صفحة '+c.name)}
+function openCreatorChallenge(){const list=[...creators].sort((a,b)=>b.followers-a.followers);document.getElementById('challengeList').innerHTML=list.map((c,i)=>`<div class="challenge-row"><span class="creator-rank">${i+1}</span><img class="challenge-avatar" src="${creatorAvatar(c,50)}"><div class="challenge-info"><b>${esc(c.name)} ${c.verified?'✓':''}</b><span>${fmt(c.followers)} متابع حاليًا</span></div><div class="challenge-points"><b>${fmt(c.points)}</b><span>نقطة</span></div></div>`).join('');openModal('creatorChallengeModal')}
 
+// ================= Creator application workflow =================
+const CREATOR_APPLICATIONS_KEY='ff_creator_application_v1';
+let creatorInviteToken=null;
+function getInviteToken(){
+  const h=location.hash||'';
+  const m=h.match(/(?:creator-apply|creator_apply)[?&]invite=([^&]+)/i);
+  return m?decodeURIComponent(m[1]):(new URLSearchParams(location.search).get('invite')||null);
+}
+async function openCreatorApply(token){
+  creatorInviteToken=token||getInviteToken();
+  const intro=document.getElementById('creatorApplyIntro');
+  if(!creatorInviteToken){intro.textContent='التقديم متاح من خلال رابط الدعوة الذي يرسله لك فريق الموقع.';document.getElementById('creatorApplyModal').classList.add('show');return}
+  intro.textContent='جاري التحقق من رابط الدعوة…';
+  try{
+    const snap=await database.ref('creatorInvites/'+creatorInviteToken).once('value');
+    if(!snap.exists()){intro.textContent='⚠️ رابط الدعوة غير صالح أو تم حذفه.';notify('❌ رابط الدعوة غير صالح');return}
+    const inv=snap.val();
+    if(inv.used){intro.textContent='⚠️ تم استخدام رابط الدعوة مسبقًا.';notify('❌ هذا الرابط مستخدم');return}
+    intro.textContent='هذه الدعوة مخصصة لـ '+(inv.label||'صانع محتوى')+'. أكمل بياناتك ثم أرسل الطلب للإدارة.';
+    if(inv.label&&inv.label!=='صانع محتوى')document.getElementById('applyName').value=inv.label;
+    if(inv.suggested)document.getElementById('applyUsername').value=String(inv.suggested).replace(/^@/,'');
+    document.getElementById('creatorApplyModal').classList.add('show');
+  }catch(e){intro.textContent='تعذر التحقق من رابط الدعوة. حاول مرة أخرى.';notify('⚠️ تعذر الاتصال بقاعدة البيانات')}
+}
+function saveCreatorApplicationLocal(app){localStorage.setItem(CREATOR_APPLICATIONS_KEY,JSON.stringify(app));}
+function getCreatorApplicationLocal(){try{return JSON.parse(localStorage.getItem(CREATOR_APPLICATIONS_KEY)||'null')}catch(e){return null}}
+function previewCreatorApplyImage(event){
+  const file=event.target.files?.[0];
+  if(!file)return;
+  if(file.size>8*1024*1024){notify('⚠️ الصورة يجب أن تكون أقل من 8MB');event.target.value='';return}
+  const reader=new FileReader();
+  reader.onload=()=>{
+    const img=new Image();
+    img.onload=()=>{
+      const max=700, scale=Math.min(1,max/Math.max(img.width,img.height));
+      const canvas=document.createElement('canvas'); canvas.width=Math.max(1,Math.round(img.width*scale)); canvas.height=Math.max(1,Math.round(img.height*scale));
+      canvas.getContext('2d').drawImage(img,0,0,canvas.width,canvas.height);
+      const data=canvas.toDataURL('image/jpeg',0.78);
+      document.getElementById('applyImage').value=data;
+      document.getElementById('applyImagePreviewImg').src=data;
+      document.getElementById('applyImagePreview').style.display='block';
+    };
+    img.src=reader.result;
+  };
+  reader.readAsDataURL(file);
+}
+function creatorBadgeInfo(type){
+  if(type==='check')return {icon:'✓',title:'صانع موثّق',desc:'تم توثيق حسابك من إدارة الموقع.'};
+  if(type==='v')return {icon:'V',title:'صانع مميز',desc:'تم منحك شارة صانع مميز من الإدارة.'};
+  if(type==='f')return {icon:'F',title:'صانع محترف',desc:'تم منحك شارة صانع محترف من الإدارة.'};
+  return null;
+}
+function creatorSocialInfo(url){
+  const u=String(url||'').trim(); if(!u)return null;
+  let host=''; try{host=new URL(/^https?:\/\//i.test(u)?u:'https://'+u).hostname.toLowerCase()}catch(e){}
+  if(host.includes('tiktok'))return {name:'TikTok',icon:'♪',url:u};
+  if(host.includes('youtube')||host.includes('youtu.be'))return {name:'YouTube',icon:'▶',url:u};
+  if(host.includes('instagram'))return {name:'Instagram',icon:'◎',url:u};
+  return {name:'رابط',icon:'🔗',url:u};
+}
+function creatorSocialArray(c){
+  if(Array.isArray(c.socials))return c.socials.map(x=>Array.isArray(x)?{name:x[0],url:x[1],icon:x[0]==='TikTok'?'♪':x[0]==='YouTube'?'▶':x[0]==='Instagram'?'◎':'🔗'}:creatorSocialInfo(x)).filter(Boolean);
+  if(Array.isArray(c.social))return c.social.map(creatorSocialInfo).filter(Boolean);
+  if(typeof c.social==='string'&&c.social)return [creatorSocialInfo(c.social)].filter(Boolean);
+  return [];
+}
+function approvedCreatorForUid(uid){return creators.find(c=>c.applicantUid===uid||c.uid===uid||c.ownerUid===uid||c.publisherId===uid)||null}
+function creatorBadgeHtml(c){const bt=c?.badgeType||((c?.verified)?'check':'none');if(bt==='none')return '';const x=creatorBadgeInfo(bt)||{icon:'✓',title:'صانع موثّق'};return '<span class="tick">'+x.icon+'</span>'}
+function creatorSocialIconsHtml(c,small=false){return creatorSocialArray(c).map(x=>'<a class="'+(small?'room-social-icon':'creator-social-icon')+'" href="'+esc(x.url)+'" target="_blank" rel="noopener noreferrer" title="'+esc(x.name)+'" onclick="event.stopPropagation()">'+x.icon+'</a>').join('')}
+async function submitCreatorApplication(){
+  const name=document.getElementById('applyName').value.trim(), username=document.getElementById('applyUsername').value.trim().replace(/^@/,''), image=document.getElementById('applyImage').value.trim(), country=document.getElementById('applyCountry').value.trim(), contact=document.getElementById('applyContact').value.trim(), tikTok=document.getElementById('applyTikTok').value.trim(), youTube=document.getElementById('applyYouTube').value.trim(), instagram=document.getElementById('applyInstagram').value.trim(), social=[tikTok,youTube,instagram].filter(Boolean), bio=document.getElementById('applyBio').value.trim();
+  if(!name||!username||!image||!country||!contact){notify('⚠️ أكمل الصورة والاسم واسم المستخدم والدولة وطريقة التواصل');return}
+  try{await waitForFirebaseAuth()}catch(e){notify('❌ لا يمكن إرسال الطلب: '+firebaseErrorText(e));return}
+   if(!firebaseUser){notify('❌ لم يتم تسجيل الدخول إلى Firebase');return}
+  const app={id:'app_'+Date.now()+'_'+Math.random().toString(36).slice(2,8),applicantUid:firebaseUser.uid,inviteToken:creatorInviteToken||getInviteToken()||'',name,username:'@'+username,image,country,contact,social,bio,status:'pending',badgeType:'none',createdAt:firebase.database.ServerValue.TIMESTAMP};
+  saveCreatorApplicationLocal(app);
+  try{await database.ref('creatorApplications/'+app.id).set(app);notify('✅ تم إرسال طلبك — بانتظار مراجعة الإدارة')}catch(e){notify('⚠️ تم حفظ الطلب على هذا الجهاز، لكن تعذر الاتصال بقاعدة البيانات')}
+  closeModal('creatorApplyModal'); openCreatorStatus();
+}
+async function openCreatorStatus(){
+  const box=document.getElementById('creatorStatusBox'); box.innerHTML='<div style="padding:18px;text-align:center">جاري البحث عن طلبك…</div>';
+  const local=getCreatorApplicationLocal();
+  if(!local){box.innerHTML='<div class="creator-empty">لا يوجد طلب محفوظ على هذا الجهاز.<br><br><button class="creator-view" onclick="openCreatorApply()">🎥 تقديم طلب</button></div>';openModal('creatorStatusModal');return}
+  let app=local; try{const snap=await database.ref('creatorApplications/'+local.id).once('value');if(snap.exists()){app=snap.val();saveCreatorApplicationLocal(app)}}catch(e){}
+  const badge=creatorBadgeInfo(app.badgeType);
+  if(app.status==='approved'){
+    box.innerHTML=`<div style="text-align:center;padding:10px"><div style="font-size:16px;font-weight:900">🎉 مبروك! تم قبول طلبك</div><div style="color:#778394;font-size:12px;margin:7px 0 15px">أصبحت الآن صانع محتوى في FreeFire Rooms.</div><div style="display:flex;align-items:center;justify-content:center;gap:14px;padding:15px;border-radius:18px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08)"><img src="${esc(app.image)}" style="width:70px;height:70px;border-radius:50%;object-fit:cover"><div style="text-align:right"><b style="font-size:18px">${esc(app.name)}</b><div style="color:#778394">${esc(app.username)}</div></div></div>${badge?`<div style="margin:18px auto 5px;width:92px;height:92px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#ffd84d,#ff8a00);color:#151515;font-size:42px;font-weight:1000;box-shadow:0 0 30px rgba(255,180,0,.28)">${badge.icon}</div><div style="font-weight:900;font-size:16px">${badge.title}</div><div style="font-size:11px;color:#778394;margin-top:5px">${badge.desc}</div>`:'<div class="creator-admin-note" style="margin-top:15px">تم قبول طلبك. الشارة تظهر هنا عندما تمنحك الإدارة إحدى الشارات.</div>'}<button class="creator-view" style="margin-top:16px" onclick="openApprovedCreatorFromStatus('${esc(app.username.replace('@',''))}')">🔗 فتح صفحتي</button></div>`;
+  }else if(app.status==='rejected'){box.innerHTML='<div style="text-align:center;padding:20px"><div style="font-size:32px">❌</div><h3>تم رفض الطلب</h3><div class="creator-admin-note">يمكنك التقديم مرة أخرى بعد تعديل بياناتك.</div></div>';}
+  else{box.innerHTML=`<div style="text-align:center;padding:20px"><div style="font-size:34px">⏳</div><h3 style="margin:8px 0">قيد المراجعة</h3><div style="color:#778394;font-size:12px">طلبك وصل للإدارة وبانتظار المراجعة.</div><div style="margin-top:16px;padding:12px;border-radius:14px;background:rgba(255,255,255,.04)"><b>${esc(app.name)}</b><br><span style="color:#778394">${esc(app.username)} • ${esc(app.country)}</span></div></div>`;}
+  openModal('creatorStatusModal');
+}
+function handleCreatorRoute(){
+  const token=getInviteToken();
+  if(token){setTimeout(()=>openCreatorApply(token),250);return}
+  const h=location.hash||'';
+  const m=h.match(/^#creator\/([^?]+)/);
+  if(m){const id=decodeURIComponent(m[1]);const c=creators.find(x=>x.id===id);if(c)setTimeout(()=>openCreatorDetail(id),250)}
+}
+window.addEventListener('hashchange',handleCreatorRoute);
+
+
+
+function loadApprovedCreators(){
+  creatorsRef.orderByChild('status').equalTo('approved').once('value').then(snap=>{
+    const data=snap.val()||{};
+    const remote=Object.keys(data).map(k=>({...data[k],id:data[k].id||k,handle:data[k].handle||data[k].username||'',socials:data[k].socials||data[k].social||[]})).filter(c=>c.status==='approved'||c.approved===true);
+    if(remote.length){creators=remote;renderCreatorHub()}
+  }).catch(()=>{});
+}
+
+const firebaseConfig = {
+  apiKey: "AIzaSyDrwLgV3VhX80MiJiXuuVv31wIsJBHAGmA",
+  authDomain: "freefire-romes.firebaseapp.com",
+  databaseURL: "https://freefire-romes-default-rtdb.firebaseio.com",
+  projectId: "freefire-romes",
+  storageBucket: "freefire-romes.firebasestorage.app",
+  messagingSenderId: "798987864557",
+  appId: "1:798987864557:web:51aa9a0b32e6214e81bfe4"
+};
 firebase.initializeApp(firebaseConfig);
 const database = firebase.database();
+const firebaseAuth = firebase.auth();
 const roomsRef = database.ref('rooms');
 const bannedRef = database.ref('bannedUsers');
+const creatorsRef = database.ref('creators');
+const creatorApplicationsRef = database.ref('creatorApplications');
+const announcementsRef = database.ref('announcements');
+const usersRef = database.ref('users');
+const followsRef = database.ref('follows');
 
-let roomsData = [];
-let favoriteCountry = null;
-let currentFilter = 'all';
-let currentGenderFilter = 'all';
+// ===== Firebase connection / authentication =====
+let firebaseUser = null;
+let firebaseAuthError = null;
+let firebaseAuthStarted = false;
+let firebaseLocalMode = false;
+let firebaseRetryTimer = null;
+let firebaseRetryCount = 0;
+function localPublisherId(){
+  let id=localStorage.getItem('ff_local_uid');
+  if(!id){id='local_'+Date.now().toString(36)+'_'+Math.random().toString(36).slice(2,9);localStorage.setItem('ff_local_uid',id)}
+  return id;
+}
+let firebaseAuthWaiters = [];
+function firebaseErrorText(e){ return (e && (e.code || e.message)) ? String(e.code || e.message) : 'خطأ غير معروف'; }
+function showFirebaseStatus(msg, ok=false){
+  console[ok?'log':'warn']('[FreeFire Rooms] Firebase:', msg);
+  const el=document.getElementById('firebaseStatus');
+  if(el){el.textContent=msg;el.style.color=ok?'#239c48':'#c2410c';el.title='النطاق: '+location.origin+' | البروتوكول: '+location.protocol;}
+}
+function resolveFirebaseWaiters(user){ const list=firebaseAuthWaiters.splice(0); list.forEach(fn=>fn(user)); }
+function waitForFirebaseAuth(timeout=15000){
+  if(firebaseUser) return Promise.resolve(firebaseUser);
+  if(firebaseAuthError && ['auth/operation-not-allowed','auth/invalid-api-key','auth/unauthorized-domain'].includes(firebaseAuthError.code)) return Promise.reject(firebaseAuthError);
+  startFirebaseAuth();
+  return new Promise((resolve,reject)=>{
+    let done=false;
+    const timer=setTimeout(()=>{ if(done)return; done=true; firebaseAuthWaiters=firebaseAuthWaiters.filter(fn=>fn!==finish); const e=new Error('Firebase لم يكتمل خلال المهلة');e.code='auth/timeout';reject(e); },timeout);
+    const finish=(user)=>{ if(done)return; done=true; clearTimeout(timer); user?resolve(user):reject(firebaseAuthError||Object.assign(new Error('Firebase غير متاح'),{code:'auth/unavailable'})); };
+    firebaseAuthWaiters.push(finish);
+  });
+}
+firebaseAuth.onAuthStateChanged(user=>{
+  firebaseUser=user||null;
+  if(user){
+    firebaseAuthError=null; firebaseRetryCount=0; firebaseLocalMode=false;
+    localStorage.setItem('firebaseUid',user.uid); localStorage.setItem('publisherId',user.uid);
+    showFirebaseStatus('متصل بـ Firebase ✓',true); resolveFirebaseWaiters(user); loadApprovedCreators(); startFirebaseListeners();
+  }
+});
+function startFirebaseListeners(){
+  if(window.__ffFirebaseListenersStarted || !firebaseUser)return;
+  window.__ffFirebaseListenersStarted=true;
+  roomsRef.on('value',snap=>{
+    const d=snap.val()||{}; const firebaseRooms=Object.keys(d).map(k=>({firebaseKey:k,...d[k]}));
+    roomsData=[...DEMO_ROOMS,...firebaseRooms].sort((a,b)=>(b.createdAt||0)-(a.createdAt||0)); applyFilter(); updateProfilePage();
+  },err=>showFirebaseStatus('Firebase Rooms: '+firebaseErrorText(err)));
+  announcementsRef.orderByChild('active').equalTo(true).limitToLast(30).on('value',snap=>{
+    const d=snap.val()||{}; globalAnnouncements=Object.keys(d).map(k=>({...d[k],id:k,source:'admin'})).sort((a,b)=>Number(b.createdAt||0)-Number(a.createdAt||0)); updateNotificationBadge(); if(document.getElementById('notificationsModal')?.classList.contains('show')) renderNotificationsOnly();
+  },err=>showFirebaseStatus('Firebase Notifications: '+firebaseErrorText(err)));
+  bannedRef.once('value').then(s=>{const d=s.val();if(d)localStorage.setItem('bannedUsers',JSON.stringify(Object.values(d)));}).catch(err=>showFirebaseStatus('Firebase Bans: '+firebaseErrorText(err)));
+}
+function scheduleFirebaseRetry(){
+  if(firebaseRetryTimer || !navigator.onLine) return;
+  firebaseRetryTimer=setTimeout(()=>{firebaseRetryTimer=null;startFirebaseAuth();},Math.min(15000,3000+firebaseRetryCount*2000));
+}
+window.addEventListener('online',()=>{ firebaseAuthError=null; firebaseAuthStarted=false; showFirebaseStatus('عاد الإنترنت — إعادة الاتصال بـ Firebase…'); startFirebaseAuth(); });
+window.addEventListener('offline',()=>showFirebaseStatus('لا يوجد اتصال بالإنترنت'));
+async function startFirebaseAuth(){
+  if(firebaseAuthStarted || firebaseUser) return;
+  firebaseAuthStarted=true;
+  try{
+    if(firebaseAuth.currentUser){
+      firebaseUser=firebaseAuth.currentUser; firebaseAuthError=null; firebaseLocalMode=false; showFirebaseStatus('متصل بـ Firebase ✓',true); resolveFirebaseWaiters(firebaseUser); loadApprovedCreators(); startFirebaseListeners(); return;
+    }
+    showFirebaseStatus('Firebase: جاري الاتصال…');
+    try{ await firebaseAuth.setPersistence(firebase.auth.Auth.Persistence.LOCAL); }catch(e){ console.warn('[FreeFire Rooms] persistence:',e); }
+    await firebaseAuth.signInAnonymously();
+    // onAuthStateChanged هو المرجع النهائي لحالة الاتصال.
+    if(!firebaseAuth.currentUser) throw Object.assign(new Error('لم يتم إنشاء جلسة Firebase'),{code:'auth/timeout'});
+  }catch(err){
+    firebaseAuthError=err; firebaseAuthStarted=false; firebaseRetryCount++;
+    console.error('[FreeFire Rooms] Firebase auth:',err);
+    let msg='Firebase غير متاح الآن';
+    if(err?.code==='auth/operation-not-allowed') msg='Firebase: فعّل Anonymous Authentication من Firebase Console';
+    else if(err?.code==='auth/invalid-api-key') msg='Firebase: مفتاح API غير صحيح';
+    else if(err?.code==='auth/unauthorized-domain') msg='Firebase: أضف نطاق الموقع إلى Authorized domains';
+    else if(err?.code==='auth/network-request-failed') msg='Firebase: مشكلة في الشبكة — ستتم إعادة المحاولة';
+    else if(err?.code==='auth/timeout') msg='Firebase: تأخر الاتصال — ستتم إعادة المحاولة';
+    showFirebaseStatus(msg); resolveFirebaseWaiters(null);
+    if(['auth/operation-not-allowed','auth/invalid-api-key','auth/unauthorized-domain'].includes(err?.code)) return;
+    scheduleFirebaseRetry();
+  }
+}
+setTimeout(startFirebaseAuth,0);
+setInterval(()=>{
+  if(!firebaseUser && !firebaseAuthStarted && navigator.onLine && !['auth/operation-not-allowed','auth/invalid-api-key','auth/unauthorized-domain'].includes(firebaseAuthError?.code)) startFirebaseAuth();
+},10000);
 const ROOM_LIFETIME = 15 * 60 * 1000;
-let shareRoomKey = null;
-const viewedRooms = JSON.parse(localStorage.getItem('viewedRooms') || '{}');
-
-function showToast(message, type = 'success', duration = 3500) {
-    const container = document.getElementById('toastContainer');
-    let icon = 'fa-check-circle';
-    if (type === 'error') icon = 'fa-times-circle';
-    if (type === 'info') icon = 'fa-info-circle';
-    
-    const toast = document.createElement('div');
-    toast.className = `toast ${type}`;
-    toast.innerHTML = `
-        <span class="toast-icon"><i class="fas ${icon}"></i></span>
-        <span>${message}</span>
-        <button class="toast-close" onclick="this.parentElement.remove()"><i class="fas fa-times"></i></button>
-    `;
-    container.appendChild(toast);
-    setTimeout(() => toast.classList.add('show'), 10);
-    const timeout = setTimeout(() => {
-        toast.classList.remove('show');
-        setTimeout(() => toast.remove(), 400);
-    }, duration);
-    toast._timeout = timeout;
-    toast.querySelector('.toast-close').addEventListener('click', () => {
-        clearTimeout(timeout);
-        toast.classList.remove('show');
-        setTimeout(() => toast.remove(), 400);
-    });
-}
-
-function getPublisherId() {
-    let id = localStorage.getItem('publisherId');
-    if (!id) {
-        id = 'pub_' + Date.now() + '_' + Math.random().toString(36).substr(2, 6);
-        localStorage.setItem('publisherId', id);
-    }
-    return id;
-}
-
-function getFlag(country) {
-    const map = {
-        'المغرب': '🇲🇦', 'مصر': '🇪🇬', 'السعودية': '🇸🇦', 'العراق': '🇮🇶',
-        'الأردن': '🇯🇴', 'تونس': '🇹🇳', 'الجزائر': '🇩🇿', 'ليبيا': '🇱🇾',
-        'سوريا': '🇸🇾', 'فلسطين': '🇵🇸', 'لبنان': '🇱🇧', 'الإمارات': '🇦🇪',
-        'قطر': '🇶🇦', 'الكويت': '🇰🇼', 'عُمان': '🇴🇲', 'البحرين': '🇧🇭', 'اليمن': '🇾🇪',
-        'جيبوتي': '🇩🇯', 'الصومال': '🇸🇴', 'جزر القمر': '🇰🇲', 'موريتانيا': '🇲🇷', 'السودان': '🇸🇩'
-    };
-    return map[country] || '🌍';
-}
-
-function getGenderIcon(gender) {
-    if (gender === 'male') return '👨';
-    if (gender === 'female') return '👩';
-    return '';
-}
-
-function getGenderClass(gender) {
-    if (gender === 'male') return 'male';
-    if (gender === 'female') return 'female';
-    return 'default';
-}
-
-function getTimeLeft(createdAt) {
-    const elapsed = Date.now() - createdAt;
-    const remaining = ROOM_LIFETIME - elapsed;
-    if (remaining <= 0) return 'انتهت';
-    const minutes = Math.floor(remaining / 60000);
-    const seconds = Math.floor((remaining % 60000) / 1000);
-    return `${minutes} min ${seconds.toString().padStart(2, '0')} s`;
-}
-
-document.querySelectorAll('.gender-filter .gf-btn').forEach(btn => {
-    btn.addEventListener('click', function() {
-        document.querySelectorAll('.gender-filter .gf-btn').forEach(b => {
-            b.className = 'gf-btn';
-        });
-        const gender = this.dataset.gender;
-        this.classList.add('active-' + gender);
-        currentGenderFilter = gender;
-        applyFilter();
-    });
-});
-
-const countryList = [
-    { value: 'all', label: '🌍 الكل' },
-    { value: 'المغرب', label: '🇲🇦 المغرب' },
-    { value: 'مصر', label: '🇪🇬 مصر' },
-    { value: 'السعودية', label: '🇸🇦 السعودية' },
-    { value: 'العراق', label: '🇮🇶 العراق' },
-    { value: 'الأردن', label: '🇯🇴 الأردن' },
-    { value: 'تونس', label: '🇹🇳 تونس' },
-    { value: 'الجزائر', label: '🇩🇿 الجزائر' },
-    { value: 'ليبيا', label: '🇱🇾 ليبيا' },
-    { value: 'سوريا', label: '🇸🇾 سوريا' },
-    { value: 'فلسطين', label: '🇵🇸 فلسطين' },
-    { value: 'لبنان', label: '🇱🇧 لبنان' },
-    { value: 'الإمارات', label: '🇦🇪 الإمارات' },
-    { value: 'قطر', label: '🇶🇦 قطر' },
-    { value: 'الكويت', label: '🇰🇼 الكويت' },
-    { value: 'عُمان', label: '🇴🇲 عُمان' },
-    { value: 'البحرين', label: '🇧🇭 البحرين' },
-    { value: 'اليمن', label: '🇾🇪 اليمن' },
-    { value: 'جيبوتي', label: '🇩🇯 جيبوتي' },
-    { value: 'الصومال', label: '🇸🇴 الصومال' },
-    { value: 'جزر القمر', label: '🇰🇲 جزر القمر' },
-    { value: 'موريتانيا', label: '🇲🇷 موريتانيا' },
-    { value: 'السودان', label: '🇸🇩 السودان' }
+let roomsData = [];
+const DEMO_ROOMS = [
+ {firebaseKey:'demo_1', demo:true, name:'روم موريتانيا 🎮', roomId:'587421', password:'1234', mode:'سكواد', country:'موريتانيا', gender:'male', server:'الشرق الأوسط', notes:'روم تجريبي — مرحباً بالجميع', createdAt:Date.now()-2*60*1000, publisherId:'demo_pub_1', views:24},
+ {firebaseKey:'demo_2', demo:true, name:'روم أوروبا 🔥', roomId:'741852', password:'2026', mode:'كلاسيك', country:'المغرب', gender:'female', server:'أوروبا', notes:'روم تجريبي للاختبار', createdAt:Date.now()-5*60*1000, publisherId:'demo_pub_2', views:17},
+ {firebaseKey:'demo_3', demo:true, name:'روم سكواد ⚡', roomId:'963258', password:'7777', mode:'باتل رويال', country:'الجزائر', gender:'male', server:'الشرق الأوسط', notes:'تجريبي • انضم والعب', createdAt:Date.now()-8*60*1000, publisherId:'demo_pub_3', views:31}
 ];
-
-function buildDropdown() {
-    const container = document.getElementById('optionsContainer');
-    container.innerHTML = '';
-    let sorted = [...countryList];
-    if (favoriteCountry && favoriteCountry !== 'all') {
-        sorted = sorted.filter(c => c.value !== 'all');
-        const favIndex = sorted.findIndex(c => c.value === favoriteCountry);
-        if (favIndex > -1) {
-            const [favItem] = sorted.splice(favIndex, 1);
-            sorted = [{ value: 'all', label: '🌍 الكل' }, favItem, ...sorted];
-        } else {
-            sorted = [{ value: 'all', label: '🌍 الكل' }, ...sorted];
-        }
-    } else {
-        sorted = [{ value: 'all', label: '🌍 الكل' }, ...sorted.filter(c => c.value !== 'all')];
-    }
-
-    sorted.forEach(item => {
-        const div = document.createElement('div');
-        div.className = 'option-item';
-        div.dataset.value = item.value;
-        const isFavorite = (favoriteCountry === item.value && item.value !== 'all');
-        const starClass = isFavorite ? 'star-icon favorite' : 'star-icon';
-        const starIcon = item.value !== 'all' 
-            ? `<span class="${starClass}" data-value="${item.value}"><i class="fas fa-star"></i></span>` 
-            : '';
-        div.innerHTML = `<span>${item.label}</span>${starIcon}`;
-        div.addEventListener('click', function(e) {
-            if (e.target.closest('.star-icon')) return;
-            const val = this.dataset.value;
-            currentFilter = val;
-            updateSelectedDisplay();
-            applyFilter();
-            closeDropdown();
-        });
-        const star = div.querySelector('.star-icon');
-        if (star) {
-            star.addEventListener('click', function(e) {
-                e.stopPropagation();
-                const val = this.dataset.value;
-                toggleFavorite(val);
-            });
-        }
-        container.appendChild(div);
-    });
-}
-
-function toggleFavorite(country) {
-    if (favoriteCountry === country) {
-        favoriteCountry = null;
-        localStorage.removeItem('favCountry');
-        showToast('تم إلغاء تحديد الدولة المفضلة', 'info');
-    } else {
-        favoriteCountry = country;
-        localStorage.setItem('favCountry', country);
-        showToast(`✅ تم تحديد ${country} كدولة مفضلة`, 'success');
-    }
-    buildDropdown();
-    if (favoriteCountry) currentFilter = favoriteCountry;
-    else currentFilter = 'all';
-    updateSelectedDisplay();
-    applyFilter();
-    closeDropdown();
-}
-
-function updateSelectedDisplay() {
-    const display = document.getElementById('selectedDisplay');
-    const label = countryList.find(c => c.value === currentFilter);
-    if (label) {
-        display.innerHTML = `<span>${label.label}</span><span class="arrow"><i class="fas fa-chevron-down"></i></span>`;
-    } else {
-        display.innerHTML = `<span>🌍 الكل</span><span class="arrow"><i class="fas fa-chevron-down"></i></span>`;
-    }
-}
-
-function toggleDropdown() {
-    const options = document.getElementById('optionsContainer');
-    const arrow = document.querySelector('.selected .arrow');
-    options.classList.toggle('show');
-    arrow.classList.toggle('open');
-}
-
-function closeDropdown() {
-    const options = document.getElementById('optionsContainer');
-    const arrow = document.querySelector('.selected .arrow');
-    options.classList.remove('show');
-    arrow.classList.remove('open');
-}
-
-function applyFilter() {
-    let filtered = roomsData;
-    if (currentFilter !== 'all') {
-        filtered = roomsData.filter(room => room.country === currentFilter);
-    }
-    if (currentGenderFilter !== 'all') {
-        filtered = filtered.filter(room => room.gender === currentGenderFilter);
-    }
-    renderRooms(filtered);
-}
-
-function isBanned(publisherId) {
-    const localBanned = JSON.parse(localStorage.getItem('bannedUsers') || '[]');
-    if (localBanned.includes(publisherId)) return true;
-    let banned = false;
-    bannedRef.once('value', (snapshot) => {
-        const data = snapshot.val();
-        if (data) {
-            const bannedList = Object.values(data);
-            if (bannedList.includes(publisherId)) {
-                banned = true;
-            }
-        }
-    });
-    return banned;
-}
-
-roomsRef.on('value', (snapshot) => {
-    const data = snapshot.val();
-    if (data) {
-        roomsData = Object.keys(data).map(key => ({
-            firebaseKey: key,
-            ...data[key]
-        }));
-        roomsData.sort((a, b) => b.createdAt - a.createdAt);
-    } else {
-        roomsData = [];
-    }
-    applyFilter();
-});
-
-function renderRooms(filteredRooms = null) {
-    const list = document.getElementById('roomsList');
-    const count = document.getElementById('roomsCount');
-    const publisherId = getPublisherId();
-    
-    let data = filteredRooms || roomsData;
-    const now = Date.now();
-    data = data.filter(r => (now - r.createdAt) < ROOM_LIFETIME);
-
-    if (data.length === 0) {
-        list.innerHTML = `<div style="grid-column:1/-1; text-align:center; padding:40px 0; color:#555; font-size:15px;">
-            <i class="fas fa-inbox" style="font-size:36px; display:block; margin-bottom:10px;"></i>
-            لا توجد غرف حالياً<br><span style="font-size:13px; color:#444;">انشر غرفتك الآن</span>
-        </div>`;
-        count.textContent = '0';
-        return;
-    }
-
-    count.textContent = data.length;
-
-    list.innerHTML = data.map(room => {
-        const flag = getFlag(room.country);
-        const notes = room.notes ? room.notes.trim() : '';
-        const timeLeft = getTimeLeft(room.createdAt);
-        const isOwner = room.publisherId === publisherId;
-        const views = room.views || 0;
-        const genderIcon = getGenderIcon(room.gender);
-        const genderClass = getGenderClass(room.gender);
-
-        if (isBanned(room.publisherId)) return '';
-
-        return `
-            <div class="room-card ${genderClass}" onclick="openDetails('${room.firebaseKey}')">
-                <div>
-                    <span class="badge-country">${flag} ${room.country}</span>
-                    <span class="badge-mode">${room.mode}</span>
-                    ${genderIcon ? `<span class="badge-gender">${genderIcon}</span>` : ''}
-                    ${isOwner ? '<span class="badge-owner">👑 مالك</span>' : ''}
-                    <span class="room-views"><i class="fas fa-eye"></i> ${views}</span>
-                </div>
-                <div class="room-meta">
-                    <span><i class="fas fa-server"></i> ${room.server}</span>
-                </div>
-                ${notes ? `<div class="room-notes"><i class="fas fa-pencil-alt"></i> ${notes}</div>` : ''}
-                <div class="room-footer">
-                    <span class="status"><i class="fas fa-circle"></i> نشطة</span>
-                    <span class="time-left"><i class="far fa-clock"></i> ${timeLeft}</span>
-                    <div>
-                        <button class="btn-details" onclick="event.stopPropagation(); openDetails('${room.firebaseKey}')">
-                            <i class="fas fa-eye"></i> عرض
-                        </button>
-                        <button class="btn-share" onclick="event.stopPropagation(); openShareModal('${room.firebaseKey}')">
-                            <i class="fas fa-share-alt"></i>
-                        </button>
-                        ${isOwner ? `<button class="btn-delete" onclick="event.stopPropagation(); deleteRoom('${room.firebaseKey}')">
-                            <i class="fas fa-trash"></i>
-                        </button>` : ''}
-                    </div>
-                </div>
-            </div>
-        `;
-    }).join('');
-}
-
-function openDetails(key) {
-    const room = roomsData.find(r => r.firebaseKey === key);
-    if (!room) return;
-    
-    const publisherId = getPublisherId();
-    const isOwner = room.publisherId === publisherId;
-    
-    if (!viewedRooms[key]) {
-        const newViews = (room.views || 0) + 1;
-        roomsRef.child(key).update({ views: newViews });
-        room.views = newViews;
-        viewedRooms[key] = true;
-        localStorage.setItem('viewedRooms', JSON.stringify(viewedRooms));
-    }
-    
-    const modal = document.getElementById('detailsModal');
-    const content = document.getElementById('detailsContent');
-    const flag = getFlag(room.country);
-    const timeLeft = getTimeLeft(room.createdAt);
-    const ownerText = isOwner ? 'أخر' : 'آخر';
-    const genderIcon = getGenderIcon(room.gender);
-    const genderName = room.gender === 'male' ? 'ذكر' : room.gender === 'female' ? 'أنثى' : '';
-
-    startTimer(room.createdAt);
-
-    content.innerHTML = `
-        <h2 class="modal-title"><i class="fa-solid fa-magnifying-glass"></i> تفاصيل الغرفة</h2>
-        
-        <div class="hero-details">
-            <div class="rank-details">
-                <div class="shield"><i class="fa-solid fa-shield-halved"></i></div>
-            </div>
-            <div class="hero-data-details">
-                <div class="id-label">🆔 Room ID <span class="mini-id">ID</span></div>
-                <div class="big-id">${room.roomId}</div>
-                <div class="hero-line"></div>
-                <div class="password-label"><i class="fa-solid fa-key"></i> كلمة السر</div>
-                <div class="password">${room.password}</div>
-            </div>
-            <div class="copy-stack-details">
-                <button class="copy-btn" onclick="copyText('${room.roomId}')">
-                    <i class="fa-regular fa-clipboard"></i>
-                </button>
-                <button class="copy-btn" onclick="copyText('${room.password}')">
-                    <i class="fa-regular fa-copy"></i>
-                </button>
-            </div>
-        </div>
-        
-        <div class="details-grid-details">
-            <div class="card blue">
-                <div class="card-icon"><i class="fa-solid fa-globe"></i></div>
-                <div class="card-content">
-                    <span class="label">السيرفر</span>
-                    <span class="value">${room.server}</span>
-                </div>
-            </div>
-            <div class="card purple">
-                <div class="card-icon"><i class="fa-solid fa-gamepad"></i></div>
-                <div class="card-content">
-                    <span class="label">نمط اللعب</span>
-                    <span class="value">${room.mode}</span>
-                </div>
-            </div>
-            <div class="card green">
-                <div class="card-icon"><i class="fa-solid fa-users"></i></div>
-                <div class="card-content">
-                    <span class="label">المشاهدات</span>
-                    <span class="value">${room.views || 0}</span>
-                </div>
-            </div>
-            <div class="card orange">
-                <div class="card-icon"><i class="fa-regular fa-clock"></i></div>
-                <div class="card-content">
-                    <span class="label">الوقت المتبقي</span>
-                    <span class="value" id="timeDisplay">${timeLeft}</span>
-                </div>
-            </div>
-            <div class="card wide yellow">
-                <div class="card-icon"><i class="fa-solid fa-crown"></i></div>
-                <div class="card-content">
-                    <span class="label">المالك</span>
-                    <span class="value" style="color:#ff9e0b">${ownerText}</span>
-                </div>
-            </div>
-            <div class="card wide gray country">
-                <div class="flag-icon">${flag}</div>
-                <div class="card-content">
-                    <span class="label">الدولة</span>
-                    <span class="value">${room.country}</span>
-                </div>
-            </div>
-            ${genderIcon ? `
-            <div class="card wide" style="border-color:rgba(255,193,7,0.3); color:#ff9800; grid-column:1/-1; min-height:50px;">
-                <div class="card-icon" style="font-size:20px;">${genderIcon}</div>
-                <div class="card-content">
-                    <span class="label">الجنس</span>
-                    <span class="value" style="color:${room.gender === 'male' ? '#2196F3' : '#E91E63'};">${genderName}</span>
-                </div>
-            </div>
-            ` : ''}
-        </div>
-        
-        <div class="actions-details">
-            <button class="action share" onclick="openShareModal('${room.firebaseKey}')">
-                <i class="fa-solid fa-share-nodes"></i> مشاركة الغرفة
-            </button>
-            ${isOwner ? `<button class="action delete" onclick="deleteRoom('${room.firebaseKey}')">
-                <i class="fa-solid fa-trash-can"></i> حذف الغرفة
-            </button>` : ''}
-        </div>
-    `;
-    modal.style.display = 'flex';
-}
-
+let gender = '', sortMode = 'all', favoriteCountry = localStorage.getItem('favCountry') || null;
+const viewedRooms = JSON.parse(localStorage.getItem('viewedRooms') || '{}');
 let timerInterval = null;
+const PROFILE_KEY='ffprofile';
+const NOTIFICATIONS_KEY='ffnotifications';
+let profile=JSON.parse(localStorage.getItem(PROFILE_KEY)||'null') || {name:'',username:'',bio:'لاعب في مجتمع FreeFire Rooms 🎮',image:'',posted:0,joined:0,followers:0,following:0,followingList:[],privacy:{hideFollowers:false,hideFollowing:false}};
+profile.username=profile.username||((profile.name||'player').toLowerCase().replace(/\s+/g,'_'));
+profile.privacy=profile.privacy||{hideFollowers:false,hideFollowing:false};
+profile.privacy.hideFollowers=!!profile.privacy.hideFollowers; profile.privacy.hideFollowing=!!profile.privacy.hideFollowing;
+profile.followingList=Array.isArray(profile.followingList)?profile.followingList:[];
+profile.following=profile.followingList.length;
+let notifications=JSON.parse(localStorage.getItem(NOTIFICATIONS_KEY)||'[]');
+let globalAnnouncements=[];
+let auth=!!localStorage.getItem('ff_auth');
 
-function startTimer(createdAt) {
-    if (timerInterval) clearInterval(timerInterval);
-    
-    timerInterval = setInterval(() => {
-        const timeDisplay = document.getElementById('timeDisplay');
-        if (!timeDisplay) {
-            clearInterval(timerInterval);
-            return;
-        }
-        const elapsed = Date.now() - createdAt;
-        const remaining = ROOM_LIFETIME - elapsed;
-        if (remaining <= 0) {
-            timeDisplay.textContent = 'انتهت';
-            clearInterval(timerInterval);
-            return;
-        }
-        const minutes = Math.floor(remaining / 60000);
-        const seconds = Math.floor((remaining % 60000) / 1000);
-        timeDisplay.textContent = `${minutes} min ${seconds.toString().padStart(2, '0')} s`;
-    }, 1000);
+
+function esc(s){return String(s ?? '').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]))}
+function getPublisherId(){
+  if(firebaseUser?.uid) return firebaseUser.uid;
+  return localStorage.getItem('publisherId') || '';
+}
+function getFlag(c){const m={'موريتانيا':'🇲🇷','مصر':'🇪🇬','الجزائر':'🇩🇿','المغرب':'🇲🇦','السعودية':'🇸🇦','تونس':'🇹🇳','العراق':'🇮🇶','الأردن':'🇯🇴','ليبيا':'🇱🇾','السودان':'🇸🇩','فلسطين':'🇵🇸','الإمارات':'🇦🇪','قطر':'🇶🇦','الكويت':'🇰🇼','عُمان':'🇴🇲','البحرين':'🇧🇭','اليمن':'🇾🇪','سوريا':'🇸🇾','لبنان':'🇱🇧','الصومال':'🇸🇴','جيبوتي':'🇩🇯','جزر القمر':'🇰🇲'};return m[c]||'🌍'}
+function getGenderClass(g){return g==='male'?'male':g==='female'?'female':'default'}
+function getGenderIcon(g){return g==='male'?'👨':g==='female'?'👩':''}
+function getGenderName(g){return g==='male'?'ذكر':g==='female'?'أنثى':''}
+function getTimeLeft(createdAt){const r=ROOM_LIFETIME-(Date.now()-createdAt);if(r<=0)return 'انتهت';return `${Math.floor(r/60000)} min ${String(Math.floor(r%60000/1000)).padStart(2,'0')} s`}
+function notify(msg){const t=document.getElementById('toast');if(!t)return;t.textContent=msg;t.classList.add('show');clearTimeout(window.tt);window.tt=setTimeout(()=>t.classList.remove('show'),2300)}
+function showToast(message,type='success'){notify(message)}
+
+function applyFilter(){
+ let list=roomsData.filter(r=>(!gender||r.gender===gender));
+ const country=document.getElementById('countryFilter')?.value||'';
+ if(country)list=list.filter(r=>r.country===country);
+ if(sortMode==='new')list=[...list].sort((a,b)=>(b.createdAt||0)-(a.createdAt||0));
+ if(sortMode==='fast')list=[...list].sort((a,b)=>(b.views||0)-(a.views||0));
+ if(sortMode==='fav')list=list.filter(r=>JSON.parse(localStorage.getItem('favRooms')||'[]').includes(r.firebaseKey));
+ list=[...list].sort((a,b)=>{const ac=!!(a.creator||approvedCreatorForUid(a.publisherId));const bc=!!(b.creator||approvedCreatorForUid(b.publisherId));if(ac!==bc)return bc-ac;return (b.createdAt||0)-(a.createdAt||0)});
+ renderRooms(list);
 }
 
-function openShareModal(key) {
-    const room = roomsData.find(r => r.firebaseKey === key);
-    if (!room) return;
-    shareRoomKey = key;
-    document.getElementById('shareModal').style.display = 'flex';
+function renderRooms(list=roomsData){
+ const el=document.getElementById('rooms'); const now=Date.now();
+ let data=list.filter(r=>r.createdAt && now-r.createdAt<ROOM_LIFETIME);
+ const favRooms=JSON.parse(localStorage.getItem('favRooms')||'[]');
+ if(!data.length){el.innerHTML='';document.getElementById('empty').style.display='block'}else{document.getElementById('empty').style.display='none';el.innerHTML=data.map(r=>{
+   const own=r.publisherId===getPublisherId(), gc=getGenderClass(r.gender), gi=getGenderIcon(r.gender), gn=getGenderName(r.gender), fav=favRooms.includes(r.firebaseKey); const rc=r.creator||approvedCreatorForUid(r.publisherId);
+   return `<article class="room" onclick="openDetails('${r.firebaseKey}')">
+    <button class="more" onclick="event.stopPropagation();favorite('${r.firebaseKey}')">${fav?'★':'☆'}</button>
+    <div class="room-top"><div><div class="room-name">${esc(r.name||('روم '+(r.mode||'فري فاير')))}</div><div class="owner-line"><div class="owner" onclick="event.stopPropagation();openPublicProfile('${esc(r.publisherId||'')}')" style="cursor:pointer">👑 ${esc(r.publisherName|| (own?'أنت':'لاعب'))} • ${gn||'لاعب'}</div><button class="mini-follow" onclick="event.stopPropagation();followFromRoom(event,'${esc(r.publisherId||'')}')">${own?'أنت':'＋ متابعة'}</button></div></div><span class="badge">● نشط</span></div>
+    <div class="room-owner-profile" onclick="event.stopPropagation();openPublicProfile('${esc(r.publisherId||'')}')"><img class="room-owner-avatar" src="${esc(r.publisherImage||'data:image/svg+xml;charset=UTF-8,'+encodeURIComponent('<svg xmlns=\"http://www.w3.org/2000/svg\" width=80 height=80><rect width=80 height=80 rx=40 fill=\"#e8edf3\"/><text x=40 y=52 text-anchor=\"middle\" font-size=32>👤</text></svg>'))}" alt=""><div class="room-owner-main"><div class="room-owner-name">${esc(r.publisherName|| (own?profile.name:'لاعب'))}</div><div class="room-owner-handle">@${esc((r.publisherUsername||'player').replace(/^@/,''))}</div></div>${own?'':`<button class="room-owner-follow" onclick="event.stopPropagation();followFromRoom(event,'${esc(r.publisherId||'')}')">＋ متابعة</button>`}</div>
+    ${rc?`<div class="room-creator"><img class="room-creator-avatar" src="${esc(rc.image||creatorAvatar(rc,80))}"><div class="room-creator-main"><div class="room-creator-name">${esc(rc.name||'صانع محتوى')} ${creatorBadgeHtml(rc)}</div><div class="room-creator-handle">${esc(rc.handle||rc.username||'')}</div><div class="room-creator-socials">${creatorSocialIconsHtml(rc,true)}</div></div></div>`:''}
+    <div class="room-meta"><span class="meta">${getFlag(r.country)} ${esc(r.country)}</span><span class="meta">🎮 ${esc(r.mode)}</span><span class="meta">👁 ${r.views||0}</span></div>
+    <div class="info-grid"><div class="info"><b>🆔 ${esc(r.roomId)}</b><span>Room ID</span></div><div class="info"><b>⏱ ${getTimeLeft(r.createdAt)}</b><span>الوقت المتبقي</span></div><div class="info"><b>🌐 ${esc(r.server)}</b><span>السيرفر</span></div></div>
+    ${r.notes?`<div class="room-notes">📝 ${esc(r.notes)}</div>`:''}
+    <div class="room-actions"><button class="join" onclick="event.stopPropagation();joinRoom('${r.firebaseKey}')">🚀 انضم الآن</button><button class="details" onclick="event.stopPropagation();openDetails('${r.firebaseKey}')">👁 عرض التفاصيل</button></div>
+   </article>`;
+ }).join('')}
+ const count=document.getElementById('activeCount');if(count)count.textContent=data.length;
+ const topRooms=document.getElementById('topRooms');if(topRooms)topRooms.textContent=data.length;
 }
 
-document.getElementById('shareWhatsAppBtn').addEventListener('click', () => {
-    const room = roomsData.find(r => r.firebaseKey === shareRoomKey);
-    if (!room) return;
-    const msg = `🎮 غرفة FreeFire\n🆔 ID: ${room.roomId}\n🔑 كلمة السر: ${room.password}\n🌍 الدولة: ${room.country}\n🎯 النمط: ${room.mode}`;
-    window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(msg)}`, '_blank');
-    document.getElementById('shareModal').style.display = 'none';
-});
 
-document.getElementById('shareFacebookBtn').addEventListener('click', () => {
-    const room = roomsData.find(r => r.firebaseKey === shareRoomKey);
-    if (!room) return;
-    const msg = `🎮 غرفة FreeFire ID: ${room.roomId} | كلمة السر: ${room.password}`;
-    window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent('https://freefire-romes.vercel.app')}&quote=${encodeURIComponent(msg)}`, '_blank');
-    document.getElementById('shareModal').style.display = 'none';
-});
-
-document.getElementById('shareCopyBtn').addEventListener('click', () => {
-    const room = roomsData.find(r => r.firebaseKey === shareRoomKey);
-    if (!room) return;
-    const msg = `🎮 غرفة FreeFire\n🆔 ID: ${room.roomId}\n🔑 كلمة السر: ${room.password}\n🌍 الدولة: ${room.country}\n🎯 النمط: ${room.mode}`;
-    navigator.clipboard.writeText(msg).then(() => {
-        showToast('✅ تم نسخ تفاصيل الغرفة', 'success');
-        document.getElementById('shareModal').style.display = 'none';
-    }).catch(() => {
-        prompt('انسخ التفاصيل:', msg);
-        document.getElementById('shareModal').style.display = 'none';
-    });
-});
-
-function copyText(text) {
-    navigator.clipboard.writeText(text).then(() => {
-        showToast('✅ تم النسخ', 'success');
-    }).catch(() => {
-        const input = document.createElement('textarea');
-        input.value = text;
-        input.style.position = 'fixed';
-        input.style.opacity = '0';
-        document.body.appendChild(input);
-        input.select();
-        document.execCommand('copy');
-        document.body.removeChild(input);
-        showToast('✅ تم النسخ', 'success');
-    });
+async function isBanned(id){
+ const local=JSON.parse(localStorage.getItem('bannedUsers')||'[]');if(local.includes(id))return true;
+ const snap=await bannedRef.child(id).once('value');return snap.exists() && snap.val()===true;
 }
 
-function deleteRoom(key) {
-    if (!confirm('هل أنت متأكد من حذف هذه الغرفة؟')) return;
-    roomsRef.child(key).remove().then(() => {
-        showToast('🗑️ تم حذف الغرفة بنجاح', 'success');
-    }).catch((error) => {
-        showToast('❌ حدث خطأ: ' + error.message, 'error');
-    });
-}
+let publishingRoom = false;
 
-document.getElementById('createRoomForm').addEventListener('submit', (e) => {
-    e.preventDefault();
+async function createRoom(){
+ if(!requireAccount())return;
+ if(publishingRoom) return;
+ const btn=document.querySelector('#createModal .submit');
+ let ref=null;
+ try{
+  if(!navigator.onLine){
+    notify('❌ لا يوجد اتصال بالإنترنت');
+    return;
+  }
+  // نشر الروم متاح حتى بدون حساب. الحساب اختياري لتحفظ اسمك وملفك الشخصي.
+  publishingRoom=true;
+  if(btn){btn.disabled=true;btn.dataset.oldText=btn.textContent;btn.textContent='⏳ جاري النشر...';}
 
-    const country = document.getElementById('roomCountry').value;
-    const gender = document.getElementById('roomGender').value;
-    const roomId = document.getElementById('roomId').value.trim();
-    const password = document.getElementById('roomPass').value.trim();
-    const mode = document.getElementById('roomMode').value;
-    const server = document.getElementById('roomServer').value;
-    const notes = document.getElementById('roomNotes').value.trim();
-    const publisherId = getPublisherId();
-
-    if (isBanned(publisherId)) {
-        showToast('⚠️ أنت محظور ولا يمكنك نشر غرف!', 'error');
-        return;
+  // إذا كان الملف محلياً أو تعذر Firebase، نستخدم وضعاً محلياً حتى لا يتوقف الموقع.
+  if(!firebaseUser && !firebaseLocalMode){
+    try{ await waitForFirebaseAuth(5000); }catch(e){
+      firebaseLocalMode=true;
+      showFirebaseStatus('Firebase غير متاح — النشر المحلي يعمل',false);
     }
+  }
+  const localOnly = !firebaseUser;
 
-    if (!country) { showToast('⚠️ اختر دولتك', 'error'); return; }
-    if (!gender) { showToast('⚠️ اختر جنسك', 'error'); return; }
-    if (!roomId) { showToast('⚠️ أدخل Room ID', 'error'); return; }
-    if (!password) { showToast('⚠️ أدخل كلمة السر', 'error'); return; }
+  const country=document.getElementById('roomCountry').value;
+  const g=document.getElementById('roomGender').value;
+  const mode=document.getElementById('roomMode').value;
+  const server=document.getElementById('roomServer').value;
+  const roomId=document.getElementById('roomId').value.trim();
+  const password=document.getElementById('roomPass').value.trim();
+  const notes=document.getElementById('roomNotes').value.trim();
+  const publisherId=firebaseUser?.uid || localPublisherId();
+  if(!country||!g||!mode||!server||!roomId||!password){notify('⚠️ أكمل جميع بيانات الروم');return}
+  if(!localOnly && await isBanned(publisherId)){notify('⚠️ أنت محظور ولا يمكنك نشر غرف!');return}
 
-    const userRooms = roomsData.filter(r => r.publisherId === publisherId);
-    userRooms.forEach(r => {
-        if (r.firebaseKey) {
-            roomsRef.child(r.firebaseKey).remove();
-        }
-    });
+  // لكل حساب روم واحد فقط: احذف الروم القديم قبل نشر الجديد لمنع السبام.
+  if(localOnly){
+    const oldLocal=JSON.parse(localStorage.getItem('ff_local_rooms')||'[]');
+    const kept=oldLocal.filter(r=>r.publisherId!==publisherId);
+    localStorage.setItem('ff_local_rooms',JSON.stringify(kept));
+    roomsData=roomsData.filter(r=>r.publisherId!==publisherId || r.demo);
+  }else{
+    const oldSnap=await roomsRef.orderByChild('publisherId').equalTo(publisherId).once('value');
+    const old=oldSnap.val()||{};
+    const removes=[];
+    Object.keys(old).forEach(k=>{removes.push(roomsRef.child(k).remove())});
+    if(removes.length) await Promise.all(removes);
+    roomsData=roomsData.filter(r=>r.publisherId!==publisherId || r.demo);
+  }
 
-    const newRoom = {
-        roomId: roomId,
-        password: password,
-        mode: mode,
-        country: country,
-        gender: gender,
-        server: server,
-        notes: notes || '',
-        createdAt: Date.now(),
-        publisherId: publisherId,
-        views: 0
-    };
+  // نضع الروم محليًا فورًا حتى يظهر للمستخدم بدون انتظار إعادة تحميل الصفحة،
+  // ثم نحفظه في Firebase ليظهر لحظيًا لجميع الزوار المتصلين.
+  const ref=roomsRef.push();
+  const localCreatedAt=Date.now();
+  const approvedCreator=approvedCreatorForUid(publisherId);
+  const creatorSnapshot=approvedCreator?{id:approvedCreator.id,name:approvedCreator.name,handle:approvedCreator.handle||approvedCreator.username,image:approvedCreator.image||'',badgeType:approvedCreator.badgeType||'check',verified:approvedCreator.verified!==false,socials:approvedCreator.socials||approvedCreator.social||[]}:null;
+  const optimisticRoom={
+    firebaseKey:ref.key,
+    name:`روم ${mode} - ${profile.name||'لاعب'}`,
+    roomId,password,mode,country,gender:g,server,notes,
+    createdAt:localCreatedAt,publisherId,publisherName:profile.name||'لاعب',publisherUsername:profile.username||'player',publisherImage:profile.image||'',views:0,creator:creatorSnapshot
+  };
+  roomsData=[optimisticRoom,...roomsData.filter(r=>r.firebaseKey!==ref.key)];
+  applyFilter();
 
-    roomsRef.push(newRoom).then(() => {
-        closeModals();
-        document.getElementById('createRoomForm').reset();
-        showToast('✅ تم النشر! الغرفة نشطة لمدة 15 دقيقة', 'success');
-    }).catch((error) => {
-        showToast('❌ حدث خطأ: ' + error.message, 'error');
-    });
-});
+  if(localOnly){
+    const localRooms=JSON.parse(localStorage.getItem('ff_local_rooms')||'[]');
+    localRooms.unshift(optimisticRoom); localStorage.setItem('ff_local_rooms',JSON.stringify(localRooms.slice(0,100)));
+    closeModal('createModal');
+    document.getElementById('roomId').value=''; document.getElementById('roomPass').value=''; document.getElementById('roomNotes').value='';
+    profile.posted=(profile.posted||0)+1; saveState(); updateProfilePage();
+    notify('🔥 تم نشر الروم محلياً. بعد رفع الموقع على HTTPS سيظهر للجميع عبر Firebase');
+    return;
+  }
+  // ServerValue.TIMESTAMP يعطي كل الأجهزة نفس وقت Firebase.
+  const newRoom={...optimisticRoom,createdAt:firebase.database.ServerValue.TIMESTAMP};
+  await ref.set(newRoom);
 
-function closeModals() {
-    document.querySelectorAll('.modal').forEach(m => m.style.display = 'none');
-    if (timerInterval) {
-        clearInterval(timerInterval);
-        timerInterval = null;
-    }
+  closeModal('createModal');
+  document.getElementById('roomId').value='';
+  document.getElementById('roomPass').value='';
+  document.getElementById('roomNotes').value='';
+  profile.posted=(profile.posted||0)+1;
+  saveState();
+  updateProfilePage();
+  notify('🔥 تم نشر الروم وظهر للجميع فورًا');
+ }catch(e){
+  console.error('createRoom Firebase error:',e);
+  // إذا فشل الحفظ، نحذف النسخة المحلية المؤقتة حتى لا يظهر روم غير موجود في Firebase.
+  if(typeof ref!=='undefined' && ref?.key){
+    roomsData=roomsData.filter(r=>r.firebaseKey!==ref.key);
+    applyFilter();
+  }
+  const msg=e?.code==='PERMISSION_DENIED' ? 'صلاحيات Firebase تمنع النشر. تأكد أن Rules منشورة.' : (e?.message||'تحقق من اتصال Firebase');
+  notify('❌ لم يتم النشر: '+msg,'error');
+ }finally{
+  publishingRoom=false;
+  if(btn){btn.disabled=false;btn.textContent=btn.dataset.oldText||'🚀 نشر الروم الآن';}
+ }
 }
 
-document.querySelectorAll('.close-btn').forEach(btn => {
-    btn.addEventListener('click', closeModals);
-});
-
-window.addEventListener('click', (e) => {
-    if (e.target.classList.contains('modal')) closeModals();
-});
-
-document.getElementById('openCreateModal').addEventListener('click', () => {
-    document.getElementById('createModal').style.display = 'flex';
-});
-
-document.getElementById('refreshBtn').addEventListener('click', () => {
-    roomsRef.once('value', (snapshot) => {
-        const data = snapshot.val();
-        if (data) {
-            roomsData = Object.keys(data).map(key => ({
-                firebaseKey: key,
-                ...data[key]
-            }));
-            roomsData.sort((a, b) => b.createdAt - a.createdAt);
-        } else {
-            roomsData = [];
-        }
-        applyFilter();
-        showToast('🔄 تم تحديث الغرف', 'info');
-        const btn = document.getElementById('refreshBtn');
-        btn.innerHTML = '<i class="fas fa-check"></i> تم';
-        setTimeout(() => {
-            btn.innerHTML = '<i class="fas fa-sync-alt"></i> تحديث';
-        }, 1500);
-    });
-});
-
-document.getElementById('customSelect').addEventListener('click', function(e) {
-    if (e.target.closest('.star-icon')) return;
-    toggleDropdown();
-});
-
-document.addEventListener('click', function(e) {
-    const select = document.getElementById('customSelect');
-    if (!select.contains(e.target)) closeDropdown();
-});
-
-const fav = localStorage.getItem('favCountry');
-if (fav) {
-    favoriteCountry = fav;
-    currentFilter = fav;
+async function openDetails(key){
+ const r=roomsData.find(x=>x.firebaseKey===key);if(!r)return;
+ if(!r.demo && !viewedRooms[key]){const v=(r.views||0)+1;roomsRef.child(key).update({views:v});r.views=v;viewedRooms[key]=true;localStorage.setItem('viewedRooms',JSON.stringify(viewedRooms))}
+ const own=r.publisherId===getPublisherId();
+ document.getElementById('detailsTitle').textContent='🎮 '+(r.name||'تفاصيل الروم');
+ document.getElementById('detailsBox').innerHTML=`<div class="detail-row"><span>الدولة</span><b>${getFlag(r.country)} ${esc(r.country)}</b></div><div class="detail-row"><span>السيرفر</span><b>${esc(r.server)}</b></div><div class="detail-row"><span>النوع</span><b>${esc(r.mode)}</b></div><div class="detail-row"><span>الجنس</span><b>${getGenderIcon(r.gender)} ${getGenderName(r.gender)}</b></div><div class="detail-row"><span>Room ID</span><b>${esc(r.roomId)} <button class="copy" onclick="copyText('${esc(r.roomId)}')">نسخ</button></b></div><div class="detail-row"><span>كلمة السر</span><b>${esc(r.password)} <button class="copy" onclick="copyText('${esc(r.password)}')">نسخ</button></b></div><div class="detail-row"><span>المشاهدات</span><b>${r.views||0}</b></div>${r.notes?`<div class="detail-row"><span>ملاحظات</span><b>${esc(r.notes)}</b></div>`:''}<div class="detail-row"><span>المالك</span><b>${own?'أنت':'لاعب'}</b></div>`;
+ openModal('detailsModal');startTimer(r.createdAt);
 }
-buildDropdown();
-updateSelectedDisplay();
-
-bannedRef.once('value', (snapshot) => {
-    const data = snapshot.val();
-    if (data) {
-        const list = Object.values(data);
-        localStorage.setItem('bannedUsers', JSON.stringify(list));
+function startTimer(createdAt){if(timerInterval)clearInterval(timerInterval);timerInterval=setInterval(()=>{const r=roomsData.find(x=>x.createdAt===createdAt);if(!r){clearInterval(timerInterval);return}const rows=document.querySelectorAll('#detailsBox .detail-row');if(rows[rows.length-1]){}},1000)}
+function joinRoom(key){openDetails(key);const r=roomsData.find(x=>x.firebaseKey===key);if(r){profile.joined=(profile.joined||0)+1;saveState();updateProfilePage();notify('🚀 تم فتح بيانات الروم '+(r.name||r.mode))}}
+function favorite(key){let a=JSON.parse(localStorage.getItem('favRooms')||'[]');a=a.includes(key)?a.filter(x=>x!==key):[...a,key];localStorage.setItem('favRooms',JSON.stringify(a));applyFilter();notify(a.includes(key)?'⭐ أضيفت للمفضلة':'تمت الإزالة من المفضلة')}
+function deleteRoom(key){const r=roomsData.find(x=>x.firebaseKey===key);if(r?.demo){notify('ℹ️ هذه غرفة تجريبية ولا يمكن حذفها');return}if(!confirm('هل أنت متأكد من حذف هذه الغرفة؟'))return;roomsRef.child(key).remove().then(()=>notify('🗑️ تم حذف الغرفة')).catch(e=>notify('❌ '+e.message))}
+function copyText(t){navigator.clipboard?.writeText(t).then(()=>notify('📋 تم النسخ')).catch(()=>{const x=document.createElement('textarea');x.value=t;document.body.appendChild(x);x.select();document.execCommand('copy');x.remove();notify('📋 تم النسخ')})}
+function refreshRooms(){ if(!firebaseUser){ notify('ℹ️ Firebase غير متصل حالياً — الرومات التجريبية ما زالت متاحة'); startFirebaseAuth(); return; } roomsRef.once('value').then(()=>notify('🔄 تم تحديث الرومات')).catch(e=>notify('❌ تعذر تحديث الرومات: '+firebaseErrorText(e))) }
+function setGender(btn,g){const mapped=g==='ذكر'?'male':g==='أنثى'?'female':g;gender=gender===mapped?'':mapped;document.querySelectorAll('.filter-btn').forEach(x=>x.classList.remove('active'));if(gender)btn.classList.add('active');applyFilter()}
+function sortRooms(s,btn){sortMode=s;document.querySelectorAll('.quick button').forEach(x=>x.classList.remove('on'));if(btn)btn.classList.add('on');applyFilter()}
+function openModal(id){document.getElementById(id).classList.add('show')}
+function closeModal(id){document.getElementById(id).classList.remove('show');if(timerInterval){clearInterval(timerInterval);timerInterval=null}}
+function backdropClose(e,id){if(e.target.id===id)closeModal(id)}
+function setNav(active){
+  document.querySelectorAll('#bottomNav .nav').forEach(x=>x.classList.remove('active'));
+  document.getElementById(active)?.classList.add('active');
+}
+function goHome(){
+  setNav('navHome');
+  document.getElementById('profilePage')?.classList.remove('show');
+  document.getElementById('creatorPage')?.classList.remove('show');
+  document.getElementById('creatorDetail')?.classList.remove('show');
+  document.body.style.overflow='';
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function openProfile(){
+  updateProfilePage();
+  document.getElementById('profilePage')?.classList.add('show');
+  document.body.style.overflow='auto';
+  setNav(null);
+}
+function closeProfilePage(){
+  document.getElementById('profilePage')?.classList.remove('show');
+  document.body.style.overflow='';
+  setNav('navHome');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function openProfileEditor(){
+  if(!auth || !profile.name){openModal('loginModal');return;}
+  const nameEl=document.getElementById('profileNameInput');
+  const userEl=document.getElementById('profileUsernameInput');
+  const bioEl=document.getElementById('profileBioInput');
+  if(nameEl)nameEl.value=profile.name||'';
+  if(userEl)userEl.value=profile.username||profile.name.toLowerCase().replace(/\s+/g,'_');
+  if(bioEl)bioEl.value=profile.bio||'لاعب في مجتمع FreeFire Rooms 🎮';
+  updateProfileUI();
+  closeModal('profileSettingsModal');
+  openModal('profileModal');
+}
+function openProfileSettings(){
+  if(!auth || !profile.name){openModal('loginModal');return;}
+  profile.privacy=profile.privacy||{};
+  const hf=document.getElementById('hideFollowers'), hg=document.getElementById('hideFollowing');
+  if(hf)hf.checked=!!profile.privacy.hideFollowers;
+  if(hg)hg.checked=!!profile.privacy.hideFollowing;
+  updateProfilePage();
+  if(document.getElementById('settingsPosted'))document.getElementById('settingsPosted').textContent=profile.posted||0;
+  if(document.getElementById('settingsJoined'))document.getElementById('settingsJoined').textContent=profile.joined||0;
+  if(document.getElementById('settingsFollowers'))document.getElementById('settingsFollowers').textContent=profile.followers||0;
+  if(document.getElementById('settingsFollowing'))document.getElementById('settingsFollowing').textContent=(profile.followingList||[]).length;
+  if(document.getElementById('settingsFav'))document.getElementById('settingsFav').textContent=JSON.parse(localStorage.getItem('favRooms')||'[]').length;
+  closeModal('profileModal');
+  openModal('profileSettingsModal');
+}
+function saveProfileSettings(){
+  profile.privacy=profile.privacy||{};
+  profile.privacy.hideFollowers=!!document.getElementById('hideFollowers')?.checked;
+  profile.privacy.hideFollowing=!!document.getElementById('hideFollowing')?.checked;
+  saveState(); updateProfilePage();
+  syncPublicProfile();
+  closeModal('profileSettingsModal');
+  notify('✅ تم حفظ الإعدادات — الخصوصية ستظهر للناس في ملفك العام');
+}
+function updateProfilePage(){
+  const name=profile.name||'لاعب جديد';
+  const username=profile.username||name.toLowerCase().replace(/\s+/g,'_');
+  const el=(id)=>document.getElementById(id);
+  if(el('profilePageName'))el('profilePageName').textContent=name;
+  if(el('profilePageUser'))el('profilePageUser').textContent='@'+username.replace(/^@/,'');
+  if(el('profileBio'))el('profileBio').textContent=profile.bio||'لاعب في مجتمع FreeFire Rooms 🎮';
+  if(el('pagePosted'))el('pagePosted').textContent=profile.posted||0;
+  if(el('pageJoined'))el('pageJoined').textContent=profile.joined||0;
+  profile.privacy=profile.privacy||{hideFollowers:false,hideFollowing:false};
+  if(el('pageFollowers'))el('pageFollowers').textContent=profile.followers||0;
+  if(el('pageFollowing'))el('pageFollowing').textContent=(profile.followingList||[]).length;
+  if(el('pageFav'))el('pageFav').textContent=JSON.parse(localStorage.getItem('favRooms')||'[]').length;
+  const activity=(profile.posted||0)+(profile.joined||0);
+  if(el('activityLevel'))el('activityLevel').textContent=activity>=20?'محترف':activity>=5?'نشيط':'مبتدئ';
+  if(el('memberStatus'))el('memberStatus').textContent=activity>=5?'نشيط':'جديد';
+  const img=el('profileBigImg');
+  if(img)img.src=profile.image||'data:image/svg+xml;charset=UTF-8,'+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="120" height="120"><rect width="120" height="120" rx="60" fill="#e8edf3"/><text x="60" y="76" text-anchor="middle" font-size="52">👤</text></svg>');
+}
+function syncPublicProfile(){
+  try{
+    if(firebaseUser && typeof usersRef!=='undefined'){
+      usersRef.child(firebaseUser.uid).set({
+        uid:firebaseUser.uid,name:profile.name||'',username:profile.username||'',bio:profile.bio||'',image:profile.image||'',
+        posted:profile.posted||0,joined:profile.joined||0,followers:profile.followers||0,following:profile.followingList?.length||0,
+        privacy:{hideFollowers:!!profile.privacy?.hideFollowers,hideFollowing:!!profile.privacy?.hideFollowing},updatedAt:firebase.database.ServerValue.TIMESTAMP
+      }).catch(()=>{});
     }
-});
+  }catch(e){}
+}
+
+function saveState(){
+  localStorage.setItem('ffprofile',JSON.stringify(profile));
+  localStorage.setItem('ffnotifications',JSON.stringify(notifications));
+}
+function addNotification(title,text){
+  notifications.unshift({title,text,time:new Date().toLocaleTimeString('ar',{hour:'2-digit',minute:'2-digit'}),createdAt:Date.now(),read:false});
+  notifications=notifications.slice(0,30);
+  saveState();
+  updateNotificationBadge();
+}
+function updateNotificationBadge(){
+  const unread=notifications.some(n=>!n.read) || globalAnnouncements.some(n=>{
+    const seen=JSON.parse(localStorage.getItem('ff_seen_admin_announcements')||'{}');
+    return !seen[n.id];
+  });
+  const b=document.getElementById('notificationBadge');
+  if(b)b.classList.toggle('show',unread);
+}
+function openCreate(){if(!requireAccount())return;openModal('createModal')}
+function requireAccount(){
+  if(auth && profile.name) return true;
+  openModal('loginModal');
+  return false;
+}
+function login(){
+  const name=document.getElementById('username').value.trim();
+  const pass=document.getElementById('password').value;
+  if(name.length<2){notify('⚠️ اكتب اسم مستخدم صحيح');return;}
+  if(pass.length<4){notify('⚠️ كلمة المرور 4 أحرف على الأقل');return;}
+  profile.name=name;
+  profile.username=profile.username||name.toLowerCase().replace(/\s+/g,'_');
+  profile.password=pass;
+  auth=true;
+  localStorage.setItem('ff_auth','1');
+  saveState();
+  syncPublicProfile();
+  closeModal('loginModal');
+  updateProfileUI(); updateProfilePage();
+  notify('✅ تم إنشاء حسابك بنجاح');
+}
+function showAccount(){if(requireAccount())openProfile()}
+function renderNotificationsOnly(){
+  const box=document.getElementById('notificationsList');
+  if(!box)return;
+  const adminItems=globalAnnouncements.map(n=>({title:n.title,text:n.text,time:n.createdAt?new Date(Number(n.createdAt)).toLocaleString('ar',{hour:'2-digit',minute:'2-digit',day:'2-digit',month:'2-digit'}):'',icon:n.icon||'📢',id:n.id,pinned:!!n.pinned,source:'admin'}));
+  const localItems=notifications.map(n=>({...n,icon:n.icon||'🔥',source:'local'}));
+  const all=[...adminItems,...localItems].sort((a,b)=>{if(!!a.pinned!==!!b.pinned)return a.pinned?-1:1;return Number(b.id?b.createdAt||0:0)-Number(a.createdAt||0)});
+  if(!all.length)box.innerHTML='<div class="no-notifications">🔕 لا توجد إشعارات حالياً<br><small>ستظهر هنا رسائل الإدارة والتحديثات الجديدة.</small></div>';
+  else box.innerHTML=all.slice(0,50).map(n=>`<div class="notification-item"><div class="notification-icon">${esc(n.icon||'🔥')}</div><div><b>${esc(n.title)}</b>${n.pinned?'<span style="font-size:8px;color:#ff6900;margin-right:5px">مثبت</span>':''}<p>${esc(n.text)}</p><time>${esc(n.time||'')}</time></div></div>`).join('');
+}
+function openNotifications(){
+  renderNotificationsOnly();
+  notifications.forEach(n=>n.read=true);
+  const seen=JSON.parse(localStorage.getItem('ff_seen_admin_announcements')||'{}');
+  globalAnnouncements.forEach(n=>seen[n.id]=true);
+  localStorage.setItem('ff_seen_admin_announcements',JSON.stringify(seen));
+  saveState(); updateNotificationBadge(); openModal('notificationsModal');
+}
+
+let publicProfileUid='';
+let publicProfileData=null;
+function defaultAvatar(){return 'data:image/svg+xml;charset=UTF-8,'+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="120" height="120"><rect width="120" height="120" rx="60" fill="#e8edf3"/><text x="60" y="77" text-anchor="middle" font-size="52">👤</text></svg>')}
+async function openPublicProfile(uid){
+  if(!uid){notify('تعذر فتح ملف اللاعب');return}
+  if(uid===getPublisherId()){openProfile();return}
+  publicProfileUid=uid;
+  let d=null;
+  try{ if(firebaseUser) { const snap=await usersRef.child(uid).once('value'); d=snap.val()||null; } }catch(e){}
+  if(!d){
+    const rr=roomsData.find(r=>r.publisherId===uid);
+    d=rr?{uid,name:rr.publisherName||'لاعب',username:rr.publisherUsername||'player',image:rr.publisherImage||'',bio:'لاعب في مجتمع FreeFire Rooms 🎮',posted:roomsData.filter(r=>r.publisherId===uid).length,followers:0,following:0,privacy:{}}:{uid,name:'لاعب',username:'player',image:'',bio:'لاعب في مجتمع FreeFire Rooms 🎮',posted:0,followers:0,following:0,privacy:{}};
+  }
+  publicProfileData=d;
+  const img=document.getElementById('publicProfileImg'); if(img)img.src=d.image||defaultAvatar();
+  const name=document.getElementById('publicProfileName'); if(name)name.textContent=d.name||'لاعب';
+  const user=document.getElementById('publicProfileUsername'); if(user)user.textContent='@'+String(d.username||'player').replace(/^@/,'');
+  const bio=document.getElementById('publicProfileBio'); if(bio)bio.textContent=d.bio||'لاعب في مجتمع FreeFire Rooms 🎮';
+  const f=document.getElementById('publicFollowers'); if(f)f.textContent=d.privacy?.hideFollowers?'مخفي':(d.followers||0);
+  const fg=document.getElementById('publicFollowing'); if(fg)fg.textContent=d.privacy?.hideFollowing?'مخفي':(d.following||0);
+  const po=document.getElementById('publicPosted'); if(po)po.textContent=d.posted??roomsData.filter(r=>r.publisherId===uid).length;
+  document.getElementById('publicFollowersStat')?.style.setProperty('display',d.privacy?.hideFollowers?'none':'block');
+  document.getElementById('publicFollowingStat')?.style.setProperty('display',d.privacy?.hideFollowing?'none':'block');
+  const btn=document.getElementById('publicFollowBtn'); if(btn){btn.style.display='block';btn.classList.remove('following');btn.textContent='＋ متابعة'; await refreshFollowButton();}
+  openModal('publicProfileModal');
+}
+async function refreshFollowButton(){
+  const btn=document.getElementById('publicFollowBtn'); if(!btn||!publicProfileUid)return;
+  let following=false;
+  if(firebaseUser){try{following=!!(await followsRef.child(publicProfileUid).child(firebaseUser.uid).once('value')).val()}catch(e){}}
+  if(!following)following=(profile.followingList||[]).includes(publicProfileUid);
+  btn.classList.toggle('following',following);btn.textContent=following?'✓ تتابعه':'＋ متابعة';
+}
+async function togglePublicFollow(){
+  if(!requireAccount())return;
+  if(!publicProfileUid||publicProfileUid===getPublisherId())return;
+  const was=(profile.followingList||[]).includes(publicProfileUid);
+  if(was){profile.followingList=profile.followingList.filter(x=>x!==publicProfileUid);profile.following=profile.followingList.length;saveState();try{if(firebaseUser)await followsRef.child(publicProfileUid).child(firebaseUser.uid).remove();}catch(e){} }
+  else{profile.followingList=[...(profile.followingList||[]),publicProfileUid];profile.following=profile.followingList.length;saveState();try{if(firebaseUser)await followsRef.child(publicProfileUid).child(firebaseUser.uid).set(true);}catch(e){} }
+  updateProfilePage(); await refreshFollowButton();
+  if(publicProfileData){publicProfileData.followers=Math.max(0,(publicProfileData.followers||0)+(was?-1:1));try{if(firebaseUser)await usersRef.child(publicProfileUid).update({followers:publicProfileData.followers});}catch(e){}}
+  notify(was?'تم إلغاء المتابعة':'✓ تمت المتابعة');
+}
+function sharePublicProfile(){
+  const u='@'+String(publicProfileData?.username||'player').replace(/^@/,'');
+  const text=(publicProfileData?.name||'لاعب')+' '+u+' — FreeFire Rooms';
+  if(navigator.share)navigator.share({title:publicProfileData?.name||'FreeFire Rooms',text}).catch(()=>{});else copyText(text);
+}
+function toggleFollow(){
+  notify('هذه صفحتك الشخصية — المتابعة تكون من صفحات اللاعبين الآخرين');
+}
+function followFromRoom(e,owner){
+  e.stopPropagation();
+  if(!owner){notify('لا يمكن متابعة هذا اللاعب');return}
+  if(owner===getPublisherId()){notify('هذا حسابك');return}
+  openPublicProfile(owner);
+}
+
+function notifyFollowersOnRoom(room){
+ // In the real Firebase version this should write to each follower's notification feed.
+ // For this standalone build we add a local notification explaining the event.
+ if(profile.followers>0){
+   addNotification('روم جديد من حساب تتابعه', 'تم نشر: '+room.name+' • '+room.country);
+ }
+}
+function updateProfileUI(){
+ document.getElementById('profilePreviewName').textContent=profile.name||"لاعب جديد";
+ document.getElementById('postedScore').textContent=profile.posted||0;
+ document.getElementById('joinedScore').textContent=profile.joined||0;
+ document.getElementById('totalScore').textContent=(profile.posted||0)+(profile.joined||0);
+ const img=document.getElementById('profilePreviewImg');
+ img.src=profile.image||'data:image/svg+xml;charset=UTF-8,'+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100"><rect width="100" height="100" rx="50" fill="#e8edf3"/><text x="50" y="62" text-anchor="middle" font-size="42">👤</text></svg>');
+}
+function previewProfileImage(e){
+ const file=e.target.files?.[0]; if(!file)return;
+ const reader=new FileReader();
+ reader.onload=()=>{profile.image=reader.result;document.getElementById('profilePreviewImg').src=reader.result;document.getElementById('profileBigImg').src=reader.result;saveState();syncPublicProfile()};
+ reader.readAsDataURL(file);
+}
+function saveProfile(){
+ const name=document.getElementById('profileNameInput').value.trim();
+ let username=document.getElementById('profileUsernameInput').value.trim().replace(/^@/,'').replace(/\s+/g,'_');
+ if(!name){notify('اكتب اسمك أولاً');return}
+ if(username.length<2){notify('اكتب اسم مستخدم صحيح');return}
+ if(!/^[A-Za-z0-9_\u0600-\u06FF.\-]+$/.test(username)){notify('اسم المستخدم يحتوي على رموز غير مسموحة');return}
+ profile.name=name; profile.username=username; profile.bio=(document.getElementById('profileBioInput')?.value.trim()||profile.bio||'لاعب في مجتمع FreeFire Rooms 🎮');
+ localStorage.setItem('ffprofile',JSON.stringify(profile)); updateProfileUI(); updateProfilePage(); syncPublicProfile(); closeModal('profileModal'); notify('✅ تم حفظ الملف الشخصي');
+}
+
+const savedLocalRooms=JSON.parse(localStorage.getItem('ff_local_rooms')||'[]');
+roomsData=[...savedLocalRooms,...DEMO_ROOMS];
+renderRooms();updateProfileUI();updateProfilePage();updateNotificationBadge();
+// التصفح متاح للجميع، لكن إنشاء روم وفتح الحساب يتطلبان حساباً مثل التصميم القديم.
+handleCreatorRoute();
 </script>
-
 </body>
 </html>
