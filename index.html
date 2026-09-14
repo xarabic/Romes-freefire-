@@ -5,12 +5,13 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>FreeFire Rooms | غرف فريفاير</title>
 <meta name="theme-color" content="#ff6a00">
+<meta name="color-scheme" content="light">
+<meta name="format-detection" content="telephone=no">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 :root{
@@ -331,6 +332,10 @@ button{cursor:pointer;border:0}
 @media(max-width:560px){.creator-grid{grid-template-columns:1fr}.creator-hero-copy h1{font-size:23px}.creator-detail-head{align-items:center;flex-wrap:wrap}.creator-detail-avatar{width:82px;height:82px}.creator-detail-name{font-size:19px}.creator-detail-actions{width:100%;margin-right:0;display:grid;grid-template-columns:1fr 1fr}.creator-detail-stats{grid-template-columns:repeat(2,1fr)}}
 
 
+#publicProfileModal{display:none!important}.creator-room-profile{cursor:pointer}
+
+/* وضع اللاعب فقط: إخفاء الحساب والملفات الشخصية نهائياً */
+.profile-page,.profile-modal,#profileSettingsModal,#loginModal,#publicProfileModal,.account-panel,.profile-avatar-edit{display:none!important}
 </style>
 
 <style>
@@ -352,7 +357,7 @@ button{cursor:pointer;border:0}
         <div class="top-stat"><b id="online">8,742</b><span>👥 متصل</span></div>
         <div class="top-stat"><b id="activeCount">4</b><span>🔥 نشط</span></div>
       </div>
-      <div style="display:flex;align-items:center;gap:5px;margin-right:8px"><div id="firebaseStatus" style="font-size:8px;color:#9ca3af;white-space:nowrap">Firebase: يعمل في الخلفية…</div><button onclick="openFirebaseDiagnostics()" style="border:0;background:#f3f4f6;border-radius:8px;padding:3px 6px;font-size:9px;cursor:pointer">🔍 تشخيص</button></div>
+
     </div>
     <div class="hero-title hero-copy">
       <h1>اجتمعوا في مكان واحد 🎮</h1>
@@ -397,22 +402,8 @@ button{cursor:pointer;border:0}
   <button class="nav" id="navCreators" onclick="openCreatorHub()"><i>🎥</i>صنّاع المحتوى</button>
   <button class="nav create" onclick="openCreate()"><i>+</i><span>إنشاء</span></button>
   <button class="nav notification-bell" id="navNotifications" onclick="openNotifications()"><i>🔔</i><span class="notification-badge" id="notificationBadge"></span>الإشعارات</button>
-  <button class="nav" onclick="showAccount()"><i>♙</i>حسابي</button>
+  <button class="nav" id="navCreatorProfile" style="display:none" onclick="openMyCreatorProfile()"><i>👤</i>بروفايل</button>
 </nav>
-
-<div class="modal-bg" id="loginModal" onclick="backdropClose(event,'loginModal')">
-  <div class="modal">
-    <div class="modal-head"><h3>مرحباً بك في FreeFire Rooms 👋</h3><button class="close" onclick="closeModal('loginModal')">✕</button></div>
-    <p style="font-size:12px;color:#718096;margin-bottom:14px">سجّل باسمك وكلمة مرور فقط. حسابك سيبقى محفوظًا على هذا الجهاز.</p>
-    <div class="form">
-      <label>اسم المستخدم</label>
-      <input id="username" maxlength="24" placeholder="اكتب اسمك">
-      <label>كلمة المرور</label>
-      <input type="password" id="password" minlength="4" placeholder="اكتب كلمة المرور">
-      <button class="submit" onclick="login()" id="loginSubmit">إنشاء الحساب</button>
-    </div>
-  </div>
-</div>
 
 <div class="modal-bg" id="createModal" onclick="backdropClose(event,'createModal')">
   <div class="modal">
@@ -458,7 +449,7 @@ button{cursor:pointer;border:0}
   <button class="profile-close" onclick="closeCreatorDetail()">×</button>
   <div class="creator-detail-cover"></div>
   <div class="creator-detail-inner"><div class="creator-detail-card">
-    <div class="creator-detail-head"><img id="creatorDetailAvatar" class="creator-detail-avatar"><div><div id="creatorDetailName" class="creator-detail-name"></div><div id="creatorDetailHandle" class="creator-detail-handle"></div><span id="creatorDetailBadge" class="verified-badge"></span></div><div class="creator-detail-actions"><button id="creatorDetailFollow" class="creator-follow-main" onclick="toggleCreatorFollow()">＋ متابعة</button><button class="creator-share" onclick="shareCreator()">↗ مشاركة</button></div></div>
+    <div class="creator-detail-head"><img id="creatorDetailAvatar" class="creator-detail-avatar"><div><div id="creatorDetailName" class="creator-detail-name"></div><div id="creatorDetailHandle" class="creator-detail-handle"></div><span id="creatorDetailBadge" class="verified-badge"></span></div><div class="creator-detail-actions"><button id="creatorDetailFollow" class="creator-follow-main" onclick="toggleCreatorFollow()">＋ متابعة</button><button class="creator-share" onclick="shareCreator()">↗ مشاركة</button><button id="creatorEditBtn" class="creator-share" style="display:none" onclick="openCreatorEdit()">✏️ تعديل</button></div></div>
     <div id="creatorDetailBio" class="creator-detail-bio"></div>
     <div class="creator-detail-stats"><div class="creator-detail-stat"><b id="cdFollowers">0</b><span>متابع</span></div><div class="creator-detail-stat"><b id="cdRooms">0</b><span>روم</span></div><div class="creator-detail-stat"><b id="cdTournaments">0</b><span>بطولة</span></div><div class="creator-detail-stat"><b id="cdPoints">0</b><span>نقاط</span></div></div>
     <div class="creator-detail-grid"><div class="creator-panel"><h3>🔥 رومات الصانع</h3><div id="creatorDetailRooms"></div></div><div><div class="creator-panel"><h3>🏆 البطولات</h3><div id="creatorDetailTournaments"></div></div><div class="creator-panel" style="margin-top:10px"><h3>🌐 روابط الصانع</h3><div class="social-list" id="creatorSocials"></div></div></div></div>
@@ -470,7 +461,7 @@ button{cursor:pointer;border:0}
 
 
 
-<div class="modal-bg" id="creatorApplyModal" onclick="backdropClose(event,'creatorApplyModal')"><div class="modal" style="max-width:650px"><div class="modal-head"><h3>🎥 طلب صانع محتوى</h3><button class="close" onclick="closeModal('creatorApplyModal')">✕</button></div><p id="creatorApplyIntro" style="font-size:12px;color:#778394;margin-bottom:12px"></p><div class="form"><label>صورة صفحتك على TikTok أو Instagram أو YouTube</label><input id="applyImageFile" type="file" accept="image/*" onchange="previewCreatorApplyImage(event)"><div id="applyImagePreview" style="display:none;margin:8px 0;text-align:center"><img id="applyImagePreviewImg" style="width:90px;height:90px;border-radius:18px;object-fit:cover;border:2px solid rgba(255,255,255,.12)"></div><input id="applyImage" type="hidden"><label>اسمك</label><input id="applyName" maxlength="40" placeholder="مثال: غيث"><label>اسم المستخدم</label><input id="applyUsername" maxlength="30" placeholder="@ghith_ff"><label>الدولة</label><input id="applyCountry" maxlength="30" placeholder="مثال: المغرب"><label>طريقة التواصل</label><input id="applyContact" maxlength="100" placeholder="مثال: Discord: Ghith#1234 أو Telegram: @ghith"><label>رابط TikTok (اختياري)</label><input id="applyTikTok" type="url" placeholder="https://www.tiktok.com/@username"><label>رابط YouTube (اختياري)</label><input id="applyYouTube" type="url" placeholder="https://youtube.com/@username"><label>رابط Instagram (اختياري)</label><input id="applyInstagram" type="url" placeholder="https://instagram.com/username"><label>شيء تحب تكتبه (اختياري)</label><textarea id="applyBio" maxlength="300" placeholder="اكتب أي شيء تحب نعرفه عنك أو عن محتواك..."></textarea><button class="submit" onclick="submitCreatorApplication()">🚀 إرسال طلب صانع محتوى</button></div></div></div>
+<div class="modal-bg" id="creatorApplyModal" onclick="backdropClose(event,'creatorApplyModal')"><div class="modal" style="max-width:650px"><div class="modal-head"><h3>🎥 طلب صانع محتوى</h3><button class="close" onclick="closeModal('creatorApplyModal')">✕</button></div><p id="creatorApplyIntro" style="font-size:12px;color:#778394;margin-bottom:12px"></p><div class="form"><label>الصورة الشخصية <span style="color:#8a95a3">(اختيارية — تضيفها بعد قبول الطلب أيضًا)</span></label><input id="applyImageFile" type="file" accept="image/*" onchange="previewCreatorApplyImage(event)"><div id="applyImagePreview" style="display:none;margin:8px 0;text-align:center"><img id="applyImagePreviewImg" style="width:90px;height:90px;border-radius:18px;object-fit:cover;border:2px solid rgba(255,255,255,.12)"></div><input id="applyImage" type="hidden"><label>اسمك</label><input id="applyName" maxlength="40" placeholder="مثال: غيث"><label>اسم المستخدم</label><input id="applyUsername" maxlength="30" placeholder="@ghith_ff"><label>الدولة</label><input id="applyCountry" maxlength="30" placeholder="مثال: المغرب"><label>طريقة التواصل</label><input id="applyContact" maxlength="100" placeholder="مثال: Discord: Ghith#1234 أو Telegram: @ghith"><label>رابط TikTok (اختياري)</label><input id="applyTikTok" type="url" placeholder="https://www.tiktok.com/@username"><label>رابط YouTube (اختياري)</label><input id="applyYouTube" type="url" placeholder="https://youtube.com/@username"><label>رابط Instagram (اختياري)</label><input id="applyInstagram" type="url" placeholder="https://instagram.com/username"><label>شيء تحب تكتبه (اختياري)</label><textarea id="applyBio" maxlength="300" placeholder="اكتب أي شيء تحب نعرفه عنك أو عن محتواك..."></textarea><button class="submit" onclick="submitCreatorApplication()">🚀 إرسال طلب صانع محتوى</button></div></div></div>
 
 <div class="modal-bg" id="creatorChallengeModal" onclick="backdropClose(event,'creatorChallengeModal')"><div class="modal" style="max-width:600px"><div class="modal-head"><h3>🏆 Creator Challenge</h3><button class="close" onclick="closeModal('creatorChallengeModal')">✕</button></div><p style="font-size:10px;color:#778394;margin-bottom:10px">الترتيب يعتمد على المتابعين الحقيقيين القادمين من روابط الصنّاع.</p><div id="challengeList" class="creator-challenge-list"></div><div class="creator-admin-note">مهم: قبل إطلاق الجوائز المالية أو الماسية فعليًا، يجب نقل احتساب النقاط والتحقق من المستخدمين إلى Firebase Auth + Security Rules + Cloud Functions وعدم الاعتماد على localStorage.</div></div></div>
 
@@ -480,7 +471,7 @@ button{cursor:pointer;border:0}
 
 
 
-<div class="modal-bg" id="publicProfileModal" onclick="backdropClose(event,'publicProfileModal')">
+<div class="modal-bg" id="publicProfileModal" style="display:none!important" onclick="backdropClose(event,'publicProfileModal')">
   <div class="modal" style="max-width:560px">
     <div class="modal-head"><h3>👤 ملف اللاعب</h3><button class="close" onclick="closeModal('publicProfileModal')">✕</button></div>
     <div style="text-align:center;padding:5px 0">
@@ -606,39 +597,24 @@ button{cursor:pointer;border:0}
     <div id="notificationsList" class="notifications-list"></div>
   </div>
 </div>
-<div class="modal-bg" id="firebaseDiagModal" onclick="backdropClose(event,'firebaseDiagModal')">
-  <div class="modal" style="max-width:520px">
-    <div class="modal-head"><h3>🔍 تشخيص اتصال Firebase</h3><button class="close" onclick="closeModal('firebaseDiagModal')">✕</button></div>
-    <div style="padding:16px;direction:rtl">
-      <div id="firebaseDiagText" style="font-size:13px;line-height:1.9;word-break:break-word"></div>
-      <button class="submit" onclick="retryFirebaseDiagnostics()" style="margin-top:12px">🔄 إعادة المحاولة</button>
+
+<div class="modal-bg" id="creatorEditModal" onclick="backdropClose(event,'creatorEditModal')">
+  <div class="modal" style="max-width:560px">
+    <div class="modal-head"><h3>✏️ تعديل ملف صانع المحتوى</h3><button class="close" onclick="closeModal('creatorEditModal')">✕</button></div>
+    <div class="form">
+      <label>الصورة الشخصية</label>
+      <input id="creatorEditImageFile" type="file" accept="image/*" onchange="previewCreatorEditImage(event)">
+      <div id="creatorEditImagePreview" style="display:none;margin:8px 0;text-align:center"><img id="creatorEditImagePreviewImg" style="width:100px;height:100px;border-radius:50%;object-fit:cover;border:3px solid #ff6900"></div>
+      <label>الاسم</label><input id="creatorEditName" maxlength="40">
+      <label>النبذة</label><textarea id="creatorEditBio" maxlength="300" placeholder="اكتب نبذة عن محتواك..."></textarea>
+      <label>رابط TikTok</label><input id="creatorEditTikTok" type="url">
+      <label>رابط YouTube</label><input id="creatorEditYouTube" type="url">
+      <label>رابط Instagram</label><input id="creatorEditInstagram" type="url">
+      <button class="submit" onclick="saveCreatorProfile()">💾 حفظ الملف</button>
     </div>
   </div>
 </div>
-<script>
-function openFirebaseDiagnostics(){
-  const cfg=window.firebase?.apps?.[0]?.options||{};
-  const lines=[
-    'البروتوكول: '+location.protocol,
-    'النطاق: '+(location.host||'(لا يوجد — ملف محلي)'),
-    'الاتصال بالإنترنت: '+(navigator.onLine?'متصل ✓':'غير متصل ✕'),
-    'Firebase SDK: '+(window.firebase?'تم التحميل ✓':'غير محمل ✕'),
-    'المشروع: '+(cfg.projectId||'غير معروف'),
-    'Auth domain: '+(cfg.authDomain||'غير معروف'),
-    'Firebase Auth: '+(firebaseAuth?.currentUser?'متصل ✓':'غير متصل'),
-    'آخر خطأ: '+(firebaseAuthError?(firebaseAuthError.code+' — '+(firebaseAuthError.message||'')):'لا يوجد خطأ مسجل')
-  ];
-  const el=document.getElementById('firebaseDiagText');
-  if(el)el.innerHTML=lines.map(x=>'<div>• '+esc(x)+'</div>').join('');
-  document.getElementById('firebaseDiagModal')?.classList.add('show');
-}
-async function retryFirebaseDiagnostics(){
-  firebaseAuthStarted=false; firebaseAuthError=null; firebaseLocalMode=false;
-  showFirebaseStatus('Firebase: إعادة المحاولة…');
-  try{ await startFirebaseAuth(); }catch(e){}
-  openFirebaseDiagnostics();
-}
-</script>
+
 <script>
 // ============================================================
 // 🔥 Firebase — مأخوذ من موقعك الأصلي، مع إبقاء تصميم الصفحة كما هو
@@ -646,13 +622,8 @@ async function retryFirebaseDiagnostics(){
 // ===== Creator Hub data / UI =====
 const CREATOR_KEY='ff_creators_demo_v1';
 let creatorFilter='all', selectedCreatorId=null;
-const DEFAULT_CREATORS=[
- {id:'ghith',name:'غيث',handle:'@ghith_ff',followers:12840,rooms:34,tournaments:8,points:9840,verified:true,joinedAt:1,bio:'صانع محتوى Free Fire 🎮 | رومات وتحديات أسبوعية 🔥',image:'',socials:[['TikTok','@ghith_ff'],['YouTube','Ghith FF']],rooms:[{name:'روم المتابعين 🔥',mode:'سكواد',country:'السعودية',server:'الشرق الأوسط',roomId:'587421',status:'نشط'}],tournaments:['بطولة غيث الأسبوعية 🏆']},
- {id:'ninja',name:'Ninja FF',handle:'@ninjaff',followers:9650,rooms:21,tournaments:5,points:7210,verified:true,joinedAt:2,bio:'رومات يومية + تحديات للمتابعين ⚡',image:'',socials:[['TikTok','@ninjaff'],['YouTube','Ninja FF']],rooms:[{name:'Squad Night ⚡',mode:'كلاسيك',country:'المغرب',server:'أوروبا',roomId:'741852',status:'نشط'}],tournaments:['Ninja Night Cup']},
- {id:'rayan',name:'Rayan Gaming',handle:'@rayan_g',followers:7340,rooms:17,tournaments:3,points:5980,verified:true,joinedAt:3,bio:'ألعب مع المتابعين وأصنع تحديات مجنونة 🔥',image:'',socials:[['TikTok','@rayan_g'],['YouTube','Rayan Gaming']],rooms:[{name:'روم التحدي 🎯',mode:'باتل رويال',country:'الجزائر',server:'الشرق الأوسط',roomId:'963258',status:'نشط'}],tournaments:['Rayan Challenge']},
- {id:'simo',name:'Simo FF',handle:'@simo_freefire',followers:5210,rooms:12,tournaments:2,points:4010,verified:false,joinedAt:4,bio:'مجتمع Free Fire صغير لكن نار 🔥',image:'',socials:[['TikTok','@simo_freefire']],rooms:[],tournaments:[]}
-];
-let creators=(()=>{try{return JSON.parse(localStorage.getItem(CREATOR_KEY))||DEFAULT_CREATORS}catch(e){return DEFAULT_CREATORS}})();
+const DEFAULT_CREATORS=[];
+let creators=(()=>{try{const x=JSON.parse(localStorage.getItem('ff_approved_creators_v1')||'[]');return Array.isArray(x)?x:[]}catch(e){return []}})();
 function creatorAvatar(c,size=120){if(c.image)return c.image; const initials=encodeURIComponent((c.name||'FF').slice(0,2));return 'data:image/svg+xml;charset=UTF-8,'+encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}"><defs><linearGradient id="g" x1="0" x2="1"><stop stop-color="#ff6900"/><stop offset="1" stop-color="#ff9b45"/></linearGradient></defs><rect width="100%" height="100%" rx="50%" fill="url(#g)"/><text x="50%" y="57%" text-anchor="middle" fill="white" font-size="42" font-family="Arial" font-weight="900">${initials}</text></svg>`)}
 function creatorFollowing(id){return Array.isArray(profile.creatorFollowing)&&profile.creatorFollowing.includes(id)}
 function setCreatorTab(btn){document.querySelectorAll('.creator-tab').forEach(x=>x.classList.remove('active'));btn.classList.add('active')}
@@ -660,9 +631,30 @@ function openCreatorHub(){document.getElementById('creatorPage').classList.add('
 function closeCreatorHub(){document.getElementById('creatorPage').classList.remove('show');document.body.style.overflow='';setNav('navHome')}
 function renderCreatorHub(){const q=(document.getElementById('creatorSearch')?.value||'').trim().toLowerCase();let list=creators.filter(c=>(!q||(c.name+c.handle).toLowerCase().includes(q)));if(creatorFilter==='verified')list=list.filter(c=>c.verified);if(creatorFilter==='top')list=[...list].sort((a,b)=>b.followers-a.followers);if(creatorFilter==='new')list=[...list].sort((a,b)=>b.joinedAt-a.joinedAt);const el=document.getElementById('creatorGrid');if(!el)return;document.getElementById('creatorCount').textContent=list.length+' صانع';el.innerHTML=list.length?list.map(c=>{const following=creatorFollowing(c.id);return `<article class="creator-card" onclick="openCreatorDetail('${esc(c.id)}')"><div class="creator-cover"><img class="creator-avatar" src="${creatorAvatar(c)}"><span class="creator-verified" style="display:${(c.badgeType&&c.badgeType!=='none')||c.verified?'grid':'none'}">${creatorBadgeHtml(c)||'✓'}</span></div><div class="creator-card-body"><div class="creator-name-row"><span class="creator-name">${esc(c.name)}</span>${c.verified?'<span style="color:#1687ff;font-size:11px">✓</span>':''}</div><div class="creator-handle">${esc(c.handle)}</div><div class="creator-bio">${esc(c.bio)}</div><div class="creator-mini-stats"><div class="creator-mini-stat"><b>${fmt(c.followers)}</b><span>متابع</span></div><div class="creator-mini-stat"><b>${fmt(c.rooms)}</b><span>روم</span></div><div class="creator-mini-stat"><b>${fmt(c.tournaments)}</b><span>بطولة</span></div></div><div class="creator-card-actions"><button class="creator-view">عرض الصفحة</button><button class="creator-follow ${following?'following':''}" onclick="event.stopPropagation();toggleCreatorFollow('${esc(c.id)}')">${following?'✓ أتابعه':'＋ متابعة'}</button></div></div></article>`}).join(''):'<div class="creator-empty" style="grid-column:1/-1">🔎 لا يوجد صانع محتوى بهذه المواصفات.</div>'}
 function fmt(n){return Number(n||0).toLocaleString('ar')}
-function openCreatorDetail(id){selectedCreatorId=id;const c=creators.find(x=>x.id===id);if(!c)return;document.getElementById('creatorDetailAvatar').src=creatorAvatar(c,150);document.getElementById('creatorDetailName').textContent=c.name;document.getElementById('creatorDetailHandle').textContent=c.handle;const badgeEl=document.getElementById('creatorDetailBadge');const bt=c.badgeType||((c.verified)?'check':'none');badgeEl.textContent=bt==='check'?'✓ صانع موثّق':bt==='v'?'V صانع مميز':bt==='f'?'F صانع محترف':'';badgeEl.style.display=bt==='none'?'none':'inline-flex';document.getElementById('creatorDetailBio').textContent=c.bio;document.getElementById('cdFollowers').textContent=fmt(c.followers);document.getElementById('cdRooms').textContent=fmt(c.rooms);document.getElementById('cdTournaments').textContent=fmt(c.tournaments);document.getElementById('cdPoints').textContent=fmt(c.points);const fb=document.getElementById('creatorDetailFollow');fb.textContent=creatorFollowing(id)?'✓ أتابعه':'＋ متابعة';fb.classList.toggle('following',creatorFollowing(id));document.getElementById('creatorDetailRooms').innerHTML=c.rooms?.length?c.rooms.map(r=>`<div class="creator-room"><div class="creator-room-icon">🎮</div><div class="creator-room-main"><b>${esc(r.name)}</b><span>${esc(r.mode)} • ${getFlag(r.country)} ${esc(r.country)} • ${esc(r.server)}</span></div><button onclick="event.stopPropagation();notify('🚀 تم فتح روم '+esc(r.name))">انضم</button></div>`).join(''):'<div class="creator-empty">لا توجد رومات منشورة حاليًا.</div>';document.getElementById('creatorDetailTournaments').innerHTML=c.tournaments?`<div class="social-link"><span>🏆 ${fmt(c.tournaments)} بطولات</span><b>قريبًا</b></div>`:'<div class="creator-empty">لا توجد بطولات حاليًا.</div>';document.getElementById('creatorSocials').innerHTML=creatorSocialArray(c).length?'<div class="creator-social-icons">'+creatorSocialIconsHtml(c,false)+'</div>':'<div class="creator-empty">لم تتم إضافة قنوات حتى الآن.</div>';document.getElementById('creatorDetail').classList.add('show');document.body.style.overflow='hidden'}
+function openCreatorDetail(id){
+  selectedCreatorId=id;const c=creators.find(x=>x.id===id);if(!c)return;
+  document.getElementById('creatorDetailAvatar').src=creatorAvatar(c,150);
+  document.getElementById('creatorDetailName').textContent=c.name||'صانع محتوى';
+  document.getElementById('creatorDetailHandle').textContent=c.handle||c.username||'';
+  const badgeEl=document.getElementById('creatorDetailBadge');const bt=c.badgeType||((c.verified)?'check':'none');
+  badgeEl.textContent=bt==='check'?'✓ صانع موثّق':bt==='v'?'V صانع مميز':bt==='f'?'F صانع محترف':'';badgeEl.style.display=bt==='none'?'none':'inline-flex';
+  document.getElementById('creatorDetailBio').textContent=c.bio||'';
+  document.getElementById('cdFollowers').textContent=fmt(c.followers);
+  document.getElementById('cdRooms').textContent=fmt(c.rooms);
+  document.getElementById('cdTournaments').textContent=fmt(c.tournaments);
+  document.getElementById('cdPoints').textContent=fmt(c.points);
+  const fb=document.getElementById('creatorDetailFollow');fb.textContent=creatorFollowing(id)?'✓ أتابعه':'＋ متابعة';fb.classList.toggle('following',creatorFollowing(id));
+  const local=getCreatorApplicationLocal();
+  const canEdit=!!(local&&local.status==='approved'&&(c.applicantUid===local.applicantUid||c.ownerUid===local.applicantUid||c.uid===local.applicantUid||c.publisherId===local.applicantUid));
+  const editBtn=document.getElementById('creatorEditBtn');if(editBtn)editBtn.style.display=canEdit?'inline-flex':'none';
+  document.getElementById('creatorDetailRooms').innerHTML=c.rooms?.length?c.rooms.map(r=>`<div class="creator-room"><div class="creator-room-icon">🎮</div><div class="creator-room-main"><b>${esc(r.name)}</b><span>${esc(r.mode)} • ${getFlag(r.country)} ${esc(r.country)} • ${esc(r.server)}</span></div><button onclick="event.stopPropagation();notify('🚀 تم فتح روم '+esc(r.name))">انضم</button></div>`).join(''):'<div class="creator-empty">لا توجد رومات منشورة حاليًا.</div>';
+  document.getElementById('creatorDetailTournaments').innerHTML=c.tournaments?`<div class="social-link"><span>🏆 ${fmt(c.tournaments)} بطولات</span><b>قريبًا</b></div>`:'<div class="creator-empty">لا توجد بطولات حاليًا.</div>';
+  document.getElementById('creatorSocials').innerHTML=creatorSocialArray(c).length?'<div class="creator-social-icons">'+creatorSocialIconsHtml(c,false)+'</div>':'<div class="creator-empty">لم تتم إضافة قنوات حتى الآن.</div>';
+  document.getElementById('creatorDetail').classList.add('show');document.body.style.overflow='hidden';
+}
+
 function closeCreatorDetail(){document.getElementById('creatorDetail').classList.remove('show');document.body.style.overflow='';selectedCreatorId=null}
-function toggleCreatorFollow(id=selectedCreatorId){if(!id)return;profile.creatorFollowing=Array.isArray(profile.creatorFollowing)?profile.creatorFollowing:[];const c=creators.find(x=>x.id===id);if(!c)return;const has=profile.creatorFollowing.includes(id);if(has){profile.creatorFollowing=profile.creatorFollowing.filter(x=>x!==id);notify('تم إلغاء متابعة '+c.name)}else{profile.creatorFollowing.push(id);notify('✓ تمت متابعة '+c.name);addNotification('متابعة صانع محتوى','أنت الآن تتابع '+c.name)}profile.following=profile.followingList.length;saveState();if(document.getElementById('creatorDetail').classList.contains('show'))openCreatorDetail(id);renderCreatorHub()}
+function toggleCreatorFollow(id=selectedCreatorId){if(!id)return;profile.creatorFollowing=Array.isArray(profile.creatorFollowing)?profile.creatorFollowing:[];const c=creators.find(x=>x.id===id);if(!c)return;const has=profile.creatorFollowing.includes(id);if(has){profile.creatorFollowing=profile.creatorFollowing.filter(x=>x!==id);notify('تم إلغاء متابعة '+c.name)}else{profile.creatorFollowing.push(id);notify('✓ تمت متابعة '+c.name);addNotification('متابعة صانع محتوى','أنت الآن تتابع '+c.name)}profile.following=(profile.followingList||[]).length;saveState();if(document.getElementById('creatorDetail').classList.contains('show'))openCreatorDetail(id);renderCreatorHub()}
 function shareCreator(){const c=creators.find(x=>x.id===selectedCreatorId);if(!c)return;const url=location.href.split('#')[0]+'#creator/'+c.id;copyText(url);notify('🔗 تم نسخ رابط صفحة '+c.name)}
 function openCreatorChallenge(){const list=[...creators].sort((a,b)=>b.followers-a.followers);document.getElementById('challengeList').innerHTML=list.map((c,i)=>`<div class="challenge-row"><span class="creator-rank">${i+1}</span><img class="challenge-avatar" src="${creatorAvatar(c,50)}"><div class="challenge-info"><b>${esc(c.name)} ${c.verified?'✓':''}</b><span>${fmt(c.followers)} متابع حاليًا</span></div><div class="challenge-points"><b>${fmt(c.points)}</b><span>نقطة</span></div></div>`).join('');openModal('creatorChallengeModal')}
 
@@ -675,6 +667,10 @@ function getInviteToken(){
   return m?decodeURIComponent(m[1]):(new URLSearchParams(location.search).get('invite')||null);
 }
 async function openCreatorApply(token){
+  const mine=localPublisherId();
+  const existing=getCreatorApplicationLocal();
+  if(approvedCreatorForUid(mine) || existing?.status==='approved'){ syncCreatorProfileButton(); openCreatorStatus(); notify('ℹ️ أنت صانع محتوى بالفعل'); return; }
+  if(existing?.status==='pending'){ openCreatorStatus(); notify('⏳ لديك طلب قيد المراجعة بالفعل'); return; }
   creatorInviteToken=token||getInviteToken();
   const intro=document.getElementById('creatorApplyIntro');
   if(!creatorInviteToken){intro.textContent='التقديم متاح من خلال رابط الدعوة الذي يرسله لك فريق الموقع.';document.getElementById('creatorApplyModal').classList.add('show');return}
@@ -732,30 +728,77 @@ function creatorSocialArray(c){
   if(typeof c.social==='string'&&c.social)return [creatorSocialInfo(c.social)].filter(Boolean);
   return [];
 }
-function approvedCreatorForUid(uid){return creators.find(c=>c.applicantUid===uid||c.uid===uid||c.ownerUid===uid||c.publisherId===uid)||null}
+function approvedCreatorForUid(uid){return creators.find(c=>(c.status==='approved'||c.approved===true)&&(c.applicantUid===uid||c.uid===uid||c.ownerUid===uid||c.publisherId===uid))||null}
+function isApprovedCreator(uid){return !!(uid && approvedCreatorForUid(uid));}
+function syncCreatorProfileButton(){
+  const btn=document.getElementById('navCreatorProfile'); if(!btn)return;
+  const c=approvedCreatorForUid(localPublisherId());
+  btn.style.display=c?'flex':'none';
+}
+function openMyCreatorProfile(){
+  const c=approvedCreatorForUid(localPublisherId());
+  if(c) openCreatorDetail(c.id); else { syncCreatorProfileButton(); notify('ℹ️ لا يوجد بروفايل صانع محتوى حاليًا'); }
+}
 function creatorBadgeHtml(c){const bt=c?.badgeType||((c?.verified)?'check':'none');if(bt==='none')return '';const x=creatorBadgeInfo(bt)||{icon:'✓',title:'صانع موثّق'};return '<span class="tick">'+x.icon+'</span>'}
 function creatorSocialIconsHtml(c,small=false){return creatorSocialArray(c).map(x=>'<a class="'+(small?'room-social-icon':'creator-social-icon')+'" href="'+esc(x.url)+'" target="_blank" rel="noopener noreferrer" title="'+esc(x.name)+'" onclick="event.stopPropagation()">'+x.icon+'</a>').join('')}
 async function submitCreatorApplication(){
+  const applicantUid=localPublisherId();
+  const existing=getCreatorApplicationLocal();
+  if(approvedCreatorForUid(applicantUid) || existing?.status==='approved'){ syncCreatorProfileButton(); closeModal('creatorApplyModal'); openCreatorStatus(); notify('ℹ️ أنت صانع محتوى بالفعل ولا يمكنك تقديم طلب آخر'); return; }
+  if(existing?.status==='pending'){ closeModal('creatorApplyModal'); openCreatorStatus(); notify('⏳ لديك طلب قيد المراجعة بالفعل'); return; }
   const name=document.getElementById('applyName').value.trim(), username=document.getElementById('applyUsername').value.trim().replace(/^@/,''), image=document.getElementById('applyImage').value.trim(), country=document.getElementById('applyCountry').value.trim(), contact=document.getElementById('applyContact').value.trim(), tikTok=document.getElementById('applyTikTok').value.trim(), youTube=document.getElementById('applyYouTube').value.trim(), instagram=document.getElementById('applyInstagram').value.trim(), social=[tikTok,youTube,instagram].filter(Boolean), bio=document.getElementById('applyBio').value.trim();
-  if(!name||!username||!image||!country||!contact){notify('⚠️ أكمل الصورة والاسم واسم المستخدم والدولة وطريقة التواصل');return}
-  try{await waitForFirebaseAuth()}catch(e){notify('❌ لا يمكن إرسال الطلب: '+firebaseErrorText(e));return}
-   if(!firebaseUser){notify('❌ لم يتم تسجيل الدخول إلى Firebase');return}
-  const app={id:'app_'+Date.now()+'_'+Math.random().toString(36).slice(2,8),applicantUid:firebaseUser.uid,inviteToken:creatorInviteToken||getInviteToken()||'',name,username:'@'+username,image,country,contact,social,bio,status:'pending',badgeType:'none',createdAt:firebase.database.ServerValue.TIMESTAMP};
+  if(!name||!username||!country||!contact){notify('⚠️ أكمل الاسم واسم المستخدم والدولة وطريقة التواصل');return}
+  const app={id:'app_'+Date.now().toString(36)+'_'+Math.random().toString(36).slice(2,8),applicantUid,inviteToken:creatorInviteToken||getInviteToken()||'',name,username:'@'+username,image:image||'',country,contact,social,bio,status:'pending',badgeType:'none',createdAt:Date.now()};
   saveCreatorApplicationLocal(app);
   try{await database.ref('creatorApplications/'+app.id).set(app);notify('✅ تم إرسال طلبك — بانتظار مراجعة الإدارة')}catch(e){notify('⚠️ تم حفظ الطلب على هذا الجهاز، لكن تعذر الاتصال بقاعدة البيانات')}
   closeModal('creatorApplyModal'); openCreatorStatus();
 }
+
 async function openCreatorStatus(){
   const box=document.getElementById('creatorStatusBox'); box.innerHTML='<div style="padding:18px;text-align:center">جاري البحث عن طلبك…</div>';
   const local=getCreatorApplicationLocal();
   if(!local){box.innerHTML='<div class="creator-empty">لا يوجد طلب محفوظ على هذا الجهاز.<br><br><button class="creator-view" onclick="openCreatorApply()">🎥 تقديم طلب</button></div>';openModal('creatorStatusModal');return}
-  let app=local; try{const snap=await database.ref('creatorApplications/'+local.id).once('value');if(snap.exists()){app=snap.val();saveCreatorApplicationLocal(app)}}catch(e){}
+  let app=local;
+  try{
+    const snap=await database.ref('creatorApplications/'+local.id).once('value');
+    if(snap.exists()){app=snap.val();saveCreatorApplicationLocal(app);}
+    else if(approvedCreatorForUid(localPublisherId())){
+      app={...local,status:'approved'}; saveCreatorApplicationLocal(app);
+    } else if(local.status==='approved'){
+      app={...local,status:'removed'}; saveCreatorApplicationLocal(app); syncCreatorProfileButton();
+    }
+  }catch(e){}
+  syncCreatorProfileButton();
   const badge=creatorBadgeInfo(app.badgeType);
   if(app.status==='approved'){
     box.innerHTML=`<div style="text-align:center;padding:10px"><div style="font-size:16px;font-weight:900">🎉 مبروك! تم قبول طلبك</div><div style="color:#778394;font-size:12px;margin:7px 0 15px">أصبحت الآن صانع محتوى في FreeFire Rooms.</div><div style="display:flex;align-items:center;justify-content:center;gap:14px;padding:15px;border-radius:18px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08)"><img src="${esc(app.image)}" style="width:70px;height:70px;border-radius:50%;object-fit:cover"><div style="text-align:right"><b style="font-size:18px">${esc(app.name)}</b><div style="color:#778394">${esc(app.username)}</div></div></div>${badge?`<div style="margin:18px auto 5px;width:92px;height:92px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#ffd84d,#ff8a00);color:#151515;font-size:42px;font-weight:1000;box-shadow:0 0 30px rgba(255,180,0,.28)">${badge.icon}</div><div style="font-weight:900;font-size:16px">${badge.title}</div><div style="font-size:11px;color:#778394;margin-top:5px">${badge.desc}</div>`:'<div class="creator-admin-note" style="margin-top:15px">تم قبول طلبك. الشارة تظهر هنا عندما تمنحك الإدارة إحدى الشارات.</div>'}<button class="creator-view" style="margin-top:16px" onclick="openApprovedCreatorFromStatus('${esc(app.username.replace('@',''))}')">🔗 فتح صفحتي</button></div>`;
   }else if(app.status==='rejected'){box.innerHTML='<div style="text-align:center;padding:20px"><div style="font-size:32px">❌</div><h3>تم رفض الطلب</h3><div class="creator-admin-note">يمكنك التقديم مرة أخرى بعد تعديل بياناتك.</div></div>';}
+  else if(app.status==='removed'){box.innerHTML='<div style="text-align:center;padding:20px"><div style="font-size:32px">🗑️</div><h3>تمت إزالة صفة صانع المحتوى</h3><div class="creator-admin-note">لم يعد هذا الحساب صانع محتوى، ويمكنك التقديم من جديد إذا رغبت.</div><button class="creator-view" style="margin-top:15px" onclick="openCreatorApply()">🎥 تقديم طلب جديد</button></div>';}
   else{box.innerHTML=`<div style="text-align:center;padding:20px"><div style="font-size:34px">⏳</div><h3 style="margin:8px 0">قيد المراجعة</h3><div style="color:#778394;font-size:12px">طلبك وصل للإدارة وبانتظار المراجعة.</div><div style="margin-top:16px;padding:12px;border-radius:14px;background:rgba(255,255,255,.04)"><b>${esc(app.name)}</b><br><span style="color:#778394">${esc(app.username)} • ${esc(app.country)}</span></div></div>`;}
   openModal('creatorStatusModal');
+}
+function openCreatorEdit(){
+  const local=getCreatorApplicationLocal();const c=creators.find(x=>x.id===selectedCreatorId);if(!local||!c)return;
+  const mine=c.applicantUid===local.applicantUid||c.ownerUid===local.applicantUid||c.uid===local.applicantUid||c.publisherId===local.applicantUid;if(local.status!=='approved'||!mine){notify('⚠️ هذه الصفحة ليست صفحتك');return}
+  document.getElementById('creatorEditName').value=c.name||'';document.getElementById('creatorEditBio').value=c.bio||'';
+  const ss=creatorSocialArray(c);const by=n=>(ss.find(x=>x.name===n)||{}).url||'';
+  document.getElementById('creatorEditTikTok').value=by('TikTok');document.getElementById('creatorEditYouTube').value=by('YouTube');document.getElementById('creatorEditInstagram').value=by('Instagram');
+  document.getElementById('creatorEditImagePreview').style.display='none';document.getElementById('creatorEditModal').classList.add('show');
+}
+function previewCreatorEditImage(event){
+  const file=event.target.files?.[0];if(!file)return;if(file.size>8*1024*1024){notify('⚠️ الصورة يجب أن تكون أقل من 8MB');event.target.value='';return}
+  const reader=new FileReader();reader.onload=()=>{const img=new Image();img.onload=()=>{const max=700,scale=Math.min(1,max/Math.max(img.width,img.height));const canvas=document.createElement('canvas');canvas.width=Math.max(1,Math.round(img.width*scale));canvas.height=Math.max(1,Math.round(img.height*scale));canvas.getContext('2d').drawImage(img,0,0,canvas.width,canvas.height);const data=canvas.toDataURL('image/jpeg',0.78);document.getElementById('creatorEditImagePreviewImg').src=data;document.getElementById('creatorEditImagePreview').style.display='block';document.getElementById('creatorEditImageFile').dataset.data=data};img.src=reader.result};reader.readAsDataURL(file);
+}
+async function saveCreatorProfile(){
+  const local=getCreatorApplicationLocal();const c=creators.find(x=>x.id===selectedCreatorId);if(!local||!c)return;
+  const mine=c.applicantUid===local.applicantUid||c.ownerUid===local.applicantUid||c.uid===local.applicantUid||c.publisherId===local.applicantUid;if(local.status!=='approved'||!mine){notify('⚠️ غير مسموح');return}
+  const name=document.getElementById('creatorEditName').value.trim();if(!name){notify('⚠️ اكتب الاسم');return}
+  const image=document.getElementById('creatorEditImageFile').dataset.data||c.image||'';
+  const social=[document.getElementById('creatorEditTikTok').value.trim(),document.getElementById('creatorEditYouTube').value.trim(),document.getElementById('creatorEditInstagram').value.trim()].filter(Boolean);
+  const patch={...c,name,handle:c.handle||c.username||local.username||'',image,bio:document.getElementById('creatorEditBio').value.trim(),socials:social,updatedAt:Date.now()};
+  Object.assign(c,patch);creators=creators.map(x=>x.id===c.id?c:x);try{localStorage.setItem('ff_approved_creators_v1',JSON.stringify(creators));}catch(e){}
+  try{await database.ref('creators/'+c.id).update(patch);notify('✅ تم حفظ ملفك')}catch(e){notify('⚠️ تم حفظ الملف على هذا الجهاز، لكن تعذر تحديث Firebase')}
+  closeModal('creatorEditModal');openCreatorDetail(c.id);renderCreatorHub();
 }
 function handleCreatorRoute(){
   const token=getInviteToken();
@@ -768,137 +811,102 @@ window.addEventListener('hashchange',handleCreatorRoute);
 
 
 
+let creatorsLoadStarted=false;
 function loadApprovedCreators(){
+  try{
+    const cached=JSON.parse(localStorage.getItem('ff_approved_creators_v1')||'[]');
+    if(Array.isArray(cached) && cached.length){
+      creators=cached;
+      renderCreatorHub();
+    }
+  }catch(e){}
+  if(creatorsLoadStarted)return;
+  creatorsLoadStarted=true;
   creatorsRef.orderByChild('status').equalTo('approved').once('value').then(snap=>{
     const data=snap.val()||{};
     const remote=Object.keys(data).map(k=>({...data[k],id:data[k].id||k,handle:data[k].handle||data[k].username||'',socials:data[k].socials||data[k].social||[]})).filter(c=>c.status==='approved'||c.approved===true);
-    if(remote.length){creators=remote;renderCreatorHub()}
+    creators=remote;
+    try{localStorage.setItem('ff_approved_creators_v1',JSON.stringify(remote));}catch(e){}
+    renderCreatorHub();
   }).catch(()=>{});
 }
 
 const firebaseConfig = {
-  apiKey: "AIzaSyDrwLgV3VhX80MiJiXuuVv31wIsJBHAGmA",
-  authDomain: "freefire-romes.firebaseapp.com",
-  databaseURL: "https://freefire-romes-default-rtdb.firebaseio.com",
-  projectId: "freefire-romes",
-  storageBucket: "freefire-romes.firebasestorage.app",
-  messagingSenderId: "798987864557",
-  appId: "1:798987864557:web:51aa9a0b32e6214e81bfe4"
+  apiKey: "AIzaSyB2Hf_5AyhDUzbw8I2hk5hDatSj2J7Ly_Y",
+  authDomain: "freefire-community-efb6c.firebaseapp.com",
+  databaseURL: "https://freefire-community-efb6c-default-rtdb.firebaseio.com",
+  projectId: "freefire-community-efb6c",
+  storageBucket: "freefire-community-efb6c.firebasestorage.app",
+  messagingSenderId: "69980561331",
+  appId: "1:69980561331:web:88fdc24bcb63e04fa3f5c6"
 };
 firebase.initializeApp(firebaseConfig);
 const database = firebase.database();
-const firebaseAuth = firebase.auth();
 const roomsRef = database.ref('rooms');
 const bannedRef = database.ref('bannedUsers');
 const creatorsRef = database.ref('creators');
 const creatorApplicationsRef = database.ref('creatorApplications');
 const announcementsRef = database.ref('announcements');
 const usersRef = database.ref('users');
-const followsRef = database.ref('follows');
 
-// ===== Firebase connection / authentication =====
+// ===== Firebase بدون تسجيل دخول =====
+// اللاعب لا يحتاج حساباً ولا تسجيل دخول. نستخدم معرفاً محلياً للجهاز فقط.
 let firebaseUser = null;
-let firebaseAuthError = null;
-let firebaseAuthStarted = false;
-let firebaseLocalMode = false;
-let firebaseRetryTimer = null;
-let firebaseRetryCount = 0;
+let firebaseLocalMode = true;
 function localPublisherId(){
   let id=localStorage.getItem('ff_local_uid');
   if(!id){id='local_'+Date.now().toString(36)+'_'+Math.random().toString(36).slice(2,9);localStorage.setItem('ff_local_uid',id)}
   return id;
 }
-let firebaseAuthWaiters = [];
-function firebaseErrorText(e){ return (e && (e.code || e.message)) ? String(e.code || e.message) : 'خطأ غير معروف'; }
-function showFirebaseStatus(msg, ok=false){
-  console[ok?'log':'warn']('[FreeFire Rooms] Firebase:', msg);
+function firebaseErrorText(e){return (e&&(e.code||e.message))?String(e.code||e.message):'خطأ غير معروف'}
+function showFirebaseStatus(msg,ok=false){
+  console[ok?'log':'warn']('[FreeFire Rooms] Firebase:',msg);
   const el=document.getElementById('firebaseStatus');
-  if(el){el.textContent=msg;el.style.color=ok?'#239c48':'#c2410c';el.title='النطاق: '+location.origin+' | البروتوكول: '+location.protocol;}
+  if(el){el.textContent=msg;el.style.color=ok?'#239c48':'#c2410c';}
 }
-function resolveFirebaseWaiters(user){ const list=firebaseAuthWaiters.splice(0); list.forEach(fn=>fn(user)); }
-function waitForFirebaseAuth(timeout=15000){
-  if(firebaseUser) return Promise.resolve(firebaseUser);
-  if(firebaseAuthError && ['auth/operation-not-allowed','auth/invalid-api-key','auth/unauthorized-domain'].includes(firebaseAuthError.code)) return Promise.reject(firebaseAuthError);
-  startFirebaseAuth();
-  return new Promise((resolve,reject)=>{
-    let done=false;
-    const timer=setTimeout(()=>{ if(done)return; done=true; firebaseAuthWaiters=firebaseAuthWaiters.filter(fn=>fn!==finish); const e=new Error('Firebase لم يكتمل خلال المهلة');e.code='auth/timeout';reject(e); },timeout);
-    const finish=(user)=>{ if(done)return; done=true; clearTimeout(timer); user?resolve(user):reject(firebaseAuthError||Object.assign(new Error('Firebase غير متاح'),{code:'auth/unavailable'})); };
-    firebaseAuthWaiters.push(finish);
-  });
-}
-firebaseAuth.onAuthStateChanged(user=>{
-  firebaseUser=user||null;
-  if(user){
-    firebaseAuthError=null; firebaseRetryCount=0; firebaseLocalMode=false;
-    localStorage.setItem('firebaseUid',user.uid); localStorage.setItem('publisherId',user.uid);
-    showFirebaseStatus('متصل بـ Firebase ✓',true); resolveFirebaseWaiters(user); loadApprovedCreators(); startFirebaseListeners();
-  }
-});
+function getPublisherId(){return localPublisherId()}
+function retryPendingRooms(){return Promise.resolve()}
+
 function startFirebaseListeners(){
-  if(window.__ffFirebaseListenersStarted || !firebaseUser)return;
+  if(window.__ffFirebaseListenersStarted)return;
   window.__ffFirebaseListenersStarted=true;
   const normalizeRooms=(list)=>{
-    const now=Date.now(), cutoff=now-ROOM_LIFETIME;
-    const seen=new Set();
-    return list.filter(r=>r&&r.createdAt&&r.createdAt>=cutoff)
-      .sort((a,b)=>(b.createdAt||0)-(a.createdAt||0))
-      .filter(r=>{if(r.demo)return true; const id=r.publisherId||r.firebaseKey; if(seen.has(id))return false; seen.add(id); return true;});
+    const now=Date.now(),cutoff=now-ROOM_LIFETIME,seen=new Set();
+    return list.filter(r=>r&&r.createdAt&&r.createdAt>=cutoff).sort((a,b)=>(b.createdAt||0)-(a.createdAt||0)).filter(r=>{
+      if(r.demo)return true;
+      const id=r.firebaseKey||r.publisherId;
+      if(seen.has(id))return false; seen.add(id); return true;
+    });
   };
-  // اعرض الكاش فوراً، ثم حدّثه من Firebase بدون انتظار أي طلب آخر.
-  try{
-    const cached=JSON.parse(localStorage.getItem('ff_rooms_cache_v2')||'[]');
-    if(Array.isArray(cached)&&cached.length){ roomsData=[...DEMO_ROOMS,...normalizeRooms(cached)]; applyFilter(); }
-  }catch(e){}
-  roomsRef.orderByChild('createdAt').limitToLast(100).on('value',snap=>{
+  const activeByKey={};
+  roomsRef.orderByChild('createdAt').limitToLast(50).once('value').then(snap=>{
     const d=snap.val()||{};
-    const firebaseRooms=Object.keys(d).map(k=>({firebaseKey:k,...d[k]}));
-    const active=normalizeRooms(firebaseRooms);
-    roomsData=[...DEMO_ROOMS,...active];
-    try{localStorage.setItem('ff_rooms_cache_v2',JSON.stringify(active));}catch(e){}
-    applyFilter(); updateProfilePage();
-  },err=>showFirebaseStatus('Firebase Rooms: '+firebaseErrorText(err)));
-  announcementsRef.orderByChild('active').equalTo(true).limitToLast(30).on('value',snap=>{
-    const d=snap.val()||{}; globalAnnouncements=Object.keys(d).map(k=>({...d[k],id:k,source:'admin'})).sort((a,b)=>Number(b.createdAt||0)-Number(a.createdAt||0)); updateNotificationBadge(); if(document.getElementById('notificationsModal')?.classList.contains('show')) renderNotificationsOnly();
-  },err=>showFirebaseStatus('Firebase Notifications: '+firebaseErrorText(err)));
-  bannedRef.once('value').then(s=>{const d=s.val();if(d)localStorage.setItem('bannedUsers',JSON.stringify(Object.values(d)));}).catch(err=>showFirebaseStatus('Firebase Bans: '+firebaseErrorText(err)));
+    Object.keys(d).forEach(k=>activeByKey[k]={firebaseKey:k,...d[k]});
+    roomsData=[...DEMO_ROOMS,...normalizeRooms(Object.values(activeByKey))];
+    applyFilter();
+    const q=roomsRef.orderByChild('createdAt').limitToLast(50);
+    q.on('child_added',snap=>{activeByKey[snap.key]={firebaseKey:snap.key,...(snap.val()||{})};roomsData=[...DEMO_ROOMS,...normalizeRooms(Object.values(activeByKey))];applyFilter()});
+    q.on('child_changed',snap=>{activeByKey[snap.key]={firebaseKey:snap.key,...(snap.val()||{})};roomsData=[...DEMO_ROOMS,...normalizeRooms(Object.values(activeByKey))];applyFilter()});
+    q.on('child_removed',snap=>{delete activeByKey[snap.key];roomsData=[...DEMO_ROOMS,...normalizeRooms(Object.values(activeByKey))];applyFilter()});
+    showFirebaseStatus('متصل بـ Firebase ✓',true);
+  }).catch(err=>{window.__ffFirebaseListenersStarted=false;showFirebaseStatus('تعذر تحميل الرومات: '+firebaseErrorText(err));});
 }
-function scheduleFirebaseRetry(){
-  if(firebaseRetryTimer || !navigator.onLine) return;
-  firebaseRetryTimer=setTimeout(()=>{firebaseRetryTimer=null;startFirebaseAuth();},Math.min(15000,3000+firebaseRetryCount*2000));
-}
-window.addEventListener('online',()=>{ firebaseAuthError=null; firebaseAuthStarted=false; showFirebaseStatus('عاد الإنترنت — إعادة الاتصال بـ Firebase…'); startFirebaseAuth(); });
-window.addEventListener('offline',()=>showFirebaseStatus('لا يوجد اتصال بالإنترنت'));
-async function startFirebaseAuth(){
-  if(firebaseAuthStarted || firebaseUser) return;
-  firebaseAuthStarted=true;
-  try{
-    if(firebaseAuth.currentUser){
-      firebaseUser=firebaseAuth.currentUser; firebaseAuthError=null; firebaseLocalMode=false; showFirebaseStatus('متصل بـ Firebase ✓',true); resolveFirebaseWaiters(firebaseUser); loadApprovedCreators(); startFirebaseListeners(); return;
-    }
-    showFirebaseStatus('Firebase: جاري الاتصال…');
-    try{ await firebaseAuth.setPersistence(firebase.auth.Auth.Persistence.LOCAL); }catch(e){ console.warn('[FreeFire Rooms] persistence:',e); }
-    await firebaseAuth.signInAnonymously();
-    // onAuthStateChanged هو المرجع النهائي لحالة الاتصال.
-    if(!firebaseAuth.currentUser) throw Object.assign(new Error('لم يتم إنشاء جلسة Firebase'),{code:'auth/timeout'});
-  }catch(err){
-    firebaseAuthError=err; firebaseAuthStarted=false; firebaseRetryCount++;
-    console.error('[FreeFire Rooms] Firebase auth:',err);
-    let msg='Firebase غير متاح الآن';
-    if(err?.code==='auth/operation-not-allowed') msg='Firebase: فعّل Anonymous Authentication من Firebase Console';
-    else if(err?.code==='auth/invalid-api-key') msg='Firebase: مفتاح API غير صحيح';
-    else if(err?.code==='auth/unauthorized-domain') msg='Firebase: أضف نطاق الموقع إلى Authorized domains';
-    else if(err?.code==='auth/network-request-failed') msg='Firebase: مشكلة في الشبكة — ستتم إعادة المحاولة';
-    else if(err?.code==='auth/timeout') msg='Firebase: تأخر الاتصال — ستتم إعادة المحاولة';
-    showFirebaseStatus(msg); resolveFirebaseWaiters(null);
-    if(['auth/operation-not-allowed','auth/invalid-api-key','auth/unauthorized-domain'].includes(err?.code)) return;
-    scheduleFirebaseRetry();
-  }
-}
-setTimeout(startFirebaseAuth,0);
-setInterval(()=>{
-  if(!firebaseUser && !firebaseAuthStarted && navigator.onLine && !['auth/operation-not-allowed','auth/invalid-api-key','auth/unauthorized-domain'].includes(firebaseAuthError?.code)) startFirebaseAuth();
-},10000);
+loadApprovedCreators();
+try{
+  database.ref('creators').orderByChild('status').equalTo('approved').on('value', snap=>{
+    const list=[]; snap.forEach(x=>{ const c=x.val(); if(c && c.status==='approved') list.push({...c,id:c.id||x.key}); });
+    window.approvedCreatorsLive=list;
+    creators=list;
+    try{localStorage.setItem('ff_approved_creators_v1',JSON.stringify(list));}catch(e){}
+    syncCreatorProfileButton();
+    if(typeof renderCreatorHub==='function') renderCreatorHub();
+    if(selectedCreatorId && creators.some(c=>c.id===selectedCreatorId) && document.getElementById('creatorDetail')?.classList.contains('show')) openCreatorDetail(selectedCreatorId);
+    else if(selectedCreatorId && document.getElementById('creatorDetail')?.classList.contains('show')) closeCreatorDetail();
+  });
+}catch(e){console.warn('creator realtime listener failed',e)}
+startFirebaseListeners();
+syncCreatorProfileButton();
+
 const ROOM_LIFETIME = 15 * 60 * 1000;
 let roomsData = [];
 const DEMO_ROOMS = [
@@ -916,17 +924,14 @@ profile.username=profile.username||((profile.name||'player').toLowerCase().repla
 profile.privacy=profile.privacy||{hideFollowers:false,hideFollowing:false};
 profile.privacy.hideFollowers=!!profile.privacy.hideFollowers; profile.privacy.hideFollowing=!!profile.privacy.hideFollowing;
 profile.followingList=Array.isArray(profile.followingList)?profile.followingList:[];
-profile.following=profile.followingList.length;
+profile.following=(profile.followingList||[]).length;
 let notifications=JSON.parse(localStorage.getItem(NOTIFICATIONS_KEY)||'[]');
 let globalAnnouncements=[];
-let auth=!!localStorage.getItem('ff_auth');
+let auth=false;
 
 
 function esc(s){return String(s ?? '').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]))}
-function getPublisherId(){
-  if(firebaseUser?.uid) return firebaseUser.uid;
-  return localStorage.getItem('publisherId') || '';
-}
+function getPublisherId(){ return localPublisherId(); }
 function getFlag(c){const m={'موريتانيا':'🇲🇷','مصر':'🇪🇬','الجزائر':'🇩🇿','المغرب':'🇲🇦','السعودية':'🇸🇦','تونس':'🇹🇳','العراق':'🇮🇶','الأردن':'🇯🇴','ليبيا':'🇱🇾','السودان':'🇸🇩','فلسطين':'🇵🇸','الإمارات':'🇦🇪','قطر':'🇶🇦','الكويت':'🇰🇼','عُمان':'🇴🇲','البحرين':'🇧🇭','اليمن':'🇾🇪','سوريا':'🇸🇾','لبنان':'🇱🇧','الصومال':'🇸🇴','جيبوتي':'🇩🇯','جزر القمر':'🇰🇲'};return m[c]||'🌍'}
 function getGenderClass(g){return g==='male'?'male':g==='female'?'female':'default'}
 function getGenderIcon(g){return g==='male'?'👨':g==='female'?'👩':''}
@@ -954,8 +959,8 @@ function renderRooms(list=roomsData){
    const own=r.publisherId===getPublisherId(), gc=getGenderClass(r.gender), gi=getGenderIcon(r.gender), gn=getGenderName(r.gender), fav=favRooms.includes(r.firebaseKey); const rc=r.creator||approvedCreatorForUid(r.publisherId);
    return `<article class="room" onclick="openDetails('${r.firebaseKey}')">
     <button class="more" onclick="event.stopPropagation();favorite('${r.firebaseKey}')">${fav?'★':'☆'}</button>
-    <div class="room-top"><div><div class="room-name">${esc(r.name||('روم '+(r.mode||'فري فاير')))}</div><div class="owner-line"><div class="owner" onclick="event.stopPropagation();openPublicProfile('${esc(r.publisherId||'')}')" style="cursor:pointer">👑 ${esc(r.publisherName|| (own?'أنت':'لاعب'))} • ${gn||'لاعب'}</div><button class="mini-follow" onclick="event.stopPropagation();followFromRoom(event,'${esc(r.publisherId||'')}')">${own?'أنت':'＋ متابعة'}</button></div></div><span class="badge">● نشط</span></div>
-    <div class="room-owner-profile" onclick="event.stopPropagation();openPublicProfile('${esc(r.publisherId||'')}')"><img class="room-owner-avatar" src="${esc(r.publisherImage||'data:image/svg+xml;charset=UTF-8,'+encodeURIComponent('<svg xmlns=\"http://www.w3.org/2000/svg\" width=80 height=80><rect width=80 height=80 rx=40 fill=\"#e8edf3\"/><text x=40 y=52 text-anchor=\"middle\" font-size=32>👤</text></svg>'))}" alt=""><div class="room-owner-main"><div class="room-owner-name">${esc(r.publisherName|| (own?profile.name:'لاعب'))}</div><div class="room-owner-handle">@${esc((r.publisherUsername||'player').replace(/^@/,''))}</div></div>${own?'':`<button class="room-owner-follow" onclick="event.stopPropagation();followFromRoom(event,'${esc(r.publisherId||'')}')">＋ متابعة</button>`}</div>
+    <div class="room-top"><div><div class="room-name">${esc(r.name||('روم '+(r.mode||'فري فاير')))}</div><div class="owner-line"><div class="owner">👑 ${esc(r.publisherName|| (own?'أنت':'لاعب'))} • ${gn||'لاعب'}</div></div></div><span class="badge">● نشط</span></div>
+    ${rc?`<div class="room-owner-profile creator-room-profile" onclick="event.stopPropagation();openCreatorDetail('${esc(rc.id||r.publisherId||'')}')"><img class="room-owner-avatar" src="${esc(rc.image||creatorAvatar(rc,80))}" alt=""><div class="room-owner-main"><div class="room-owner-name">${esc(rc.name||'صانع محتوى')} ${creatorBadgeHtml(rc)}</div><div class="room-owner-handle">${esc(rc.handle||rc.username||'')}</div></div><button class="room-owner-follow" onclick="event.stopPropagation();openCreatorDetail('${esc(rc.id||r.publisherId||'')}')">👤 الملف</button></div>`:''}
     ${rc?`<div class="room-creator"><img class="room-creator-avatar" src="${esc(rc.image||creatorAvatar(rc,80))}"><div class="room-creator-main"><div class="room-creator-name">${esc(rc.name||'صانع محتوى')} ${creatorBadgeHtml(rc)}</div><div class="room-creator-handle">${esc(rc.handle||rc.username||'')}</div><div class="room-creator-socials">${creatorSocialIconsHtml(rc,true)}</div></div></div>`:''}
     <div class="room-meta"><span class="meta">${getFlag(r.country)} ${esc(r.country)}</span><span class="meta">🎮 ${esc(r.mode)}</span><span class="meta">👁 ${r.views||0}</span></div>
     <div class="info-grid"><div class="info"><b>🆔 ${esc(r.roomId)}</b><span>Room ID</span></div><div class="info"><b>⏱ ${getTimeLeft(r.createdAt)}</b><span>الوقت المتبقي</span></div><div class="info"><b>🌐 ${esc(r.server)}</b><span>السيرفر</span></div></div>
@@ -976,69 +981,38 @@ async function isBanned(id){
 let publishingRoom = false;
 
 async function createRoom(){
- if(!requireAccount())return;
- if(publishingRoom) return;
+ if(publishingRoom)return;
  const btn=document.querySelector('#createModal .submit');
- let ref=null;
+ const country=document.getElementById('roomCountry')?.value||'';
+ const g=document.getElementById('roomGender')?.value||'';
+ const mode=document.getElementById('roomMode')?.value||'';
+ const server=document.getElementById('roomServer')?.value||'';
+ const roomId=(document.getElementById('roomId')?.value||'').trim();
+ const password=(document.getElementById('roomPass')?.value||'').trim();
+ const notes=(document.getElementById('roomNotes')?.value||'').trim();
+ if(!country||!g||!mode||!server||!roomId||!password){notify('⚠️ أكمل جميع بيانات الروم');return}
+ publishingRoom=true;
+ if(btn){btn.disabled=true;btn.textContent='🚀 نشر الروم الآن';}
+ const publisherId=localPublisherId();
+ const room={firebaseKey:'local_'+Date.now().toString(36),name:`روم ${mode} - لاعب`,roomId,password,mode,country,gender:g,server,notes,createdAt:Date.now(),publisherId,publisherName:'لاعب',views:0};
+ // يظهر فوراً بدون انتظار Firebase.
+ roomsData=[room,...roomsData.filter(r=>r.publisherId!==publisherId||r.demo)];
+ applyFilter(); closeModal('createModal');
+ ['roomId','roomPass','roomNotes'].forEach(id=>{const el=document.getElementById(id);if(el)el.value=''});
+ try{localStorage.setItem('ff_pending_rooms',JSON.stringify([...JSON.parse(localStorage.getItem('ff_pending_rooms')||'[]'),room].slice(-20)))}catch(e){}
+ notify('🔥 تم نشر الروم');
+ publishingRoom=false;
+ if(btn){btn.disabled=false;btn.textContent='🚀 نشر الروم الآن';}
+ // الحفظ الحقيقي في الخلفية، بدون Auth.
  try{
-  if(!navigator.onLine){notify('❌ لا يوجد اتصال بالإنترنت');return}
-  publishingRoom=true;
-  // لا ننتظر طلبات إضافية قبل إظهار الروم للمستخدم.
-  if(btn){btn.disabled=true;btn.dataset.oldText=btn.textContent;btn.textContent='🚀 نشر سريع…';}
-  if(!firebaseUser){
-    // لا ننتظر 5-15 ثانية. إذا كانت جلسة Firebase لم تجهز بعد نخبر المستخدم بسرعة.
-    try{ await waitForFirebaseAuth(1200); }catch(e){}
-  }
-  if(!firebaseUser){notify('⚠️ الاتصال بـ Firebase لم يجهز بعد، حاول مرة ثانية بعد لحظة');return}
-
-  const country=document.getElementById('roomCountry').value;
-  const g=document.getElementById('roomGender').value;
-  const mode=document.getElementById('roomMode').value;
-  const server=document.getElementById('roomServer').value;
-  const roomId=document.getElementById('roomId').value.trim();
-  const password=document.getElementById('roomPass').value.trim();
-  const notes=document.getElementById('roomNotes').value.trim();
-  const publisherId=firebaseUser.uid;
-  if(!country||!g||!mode||!server||!roomId||!password){notify('⚠️ أكمل جميع بيانات الروم');return}
-  if(await isBanned(publisherId)){notify('⚠️ أنت محظور ولا يمكنك نشر غرف!');return}
-
-  // مفتاح ثابت لكل لاعب: نشر الروم يصبح كتابة واحدة بلا قراءة مسبقة ولا حذف قديم.
-  // هذا يحافظ على قاعدة: لكل لاعب روم واحد فقط.
-  ref=roomsRef.child(publisherId);
-  const localCreatedAt=Date.now();
-  const approvedCreator=approvedCreatorForUid(publisherId);
-  const creatorSnapshot=approvedCreator?{id:approvedCreator.id,name:approvedCreator.name,handle:approvedCreator.handle||approvedCreator.username,image:approvedCreator.image||'',badgeType:approvedCreator.badgeType||'check',verified:approvedCreator.verified!==false,socials:approvedCreator.socials||approvedCreator.social||[]}:null;
-  const optimisticRoom={
-    firebaseKey:ref.key,name:`روم ${mode} - ${profile.name||'لاعب'}`,roomId,password,mode,country,gender:g,server,notes,
-    createdAt:localCreatedAt,publisherId,publisherName:profile.name||'لاعب',publisherUsername:profile.username||'player',publisherImage:profile.image||'',views:0,creator:creatorSnapshot
-  };
-  roomsData=[optimisticRoom,...roomsData.filter(r=>r.publisherId!==publisherId || r.demo)];
-  applyFilter();
-  closeModal('createModal');
-  document.getElementById('roomId').value='';document.getElementById('roomPass').value='';document.getElementById('roomNotes').value='';
-  profile.posted=(profile.posted||0)+1; saveState(); updateProfilePage();
-  notify('🔥 تم نشر الروم');
-
-  // كتابة واحدة فقط — لا يوجد lookup للروم القديم، لذلك النشر أسرع بكثير.
-  const newRoom={...optimisticRoom,createdAt:firebase.database.ServerValue.TIMESTAMP};
-  await ref.set(newRoom);
-  try{
-    const cached=roomsData.filter(r=>!r.demo&&r.createdAt&&Date.now()-r.createdAt<ROOM_LIFETIME).slice(0,100);
-    localStorage.setItem('ff_rooms_cache_v2',JSON.stringify(cached));
-  }catch(e){}
- }catch(e){
-  console.error('createRoom Firebase error:',e);
-  // لا نرجع برسالة طويلة؛ الروم ظهر فوراً، وإذا فشل الحفظ نزيله حتى لا يبقى وهمياً.
-  if(ref?.key){roomsData=roomsData.filter(r=>r.firebaseKey!==ref.key);applyFilter();}
-  profile.posted=Math.max(0,(profile.posted||0)-1);saveState();updateProfilePage();
-  const msg=e?.code==='PERMISSION_DENIED'?'صلاحيات Firebase تمنع النشر. تأكد أن Rules منشورة.':(e?.message||'تحقق من اتصال Firebase');
-  notify('❌ لم يتم حفظ الروم: '+msg,'error');
- }finally{
-  publishingRoom=false;
-  if(btn){btn.disabled=false;btn.textContent=btn.dataset.oldText||'🚀 نشر الروم الآن';}
- }
+   const ref=roomsRef.push();
+   await ref.set({name:room.name,roomId,password,mode,country,gender:g,server,notes,createdAt:firebase.database.ServerValue.TIMESTAMP,publisherId,publisherName:'لاعب',publisherUsername:'player',publisherImage:'',views:0});
+   roomsData=roomsData.filter(r=>r.firebaseKey!==room.firebaseKey);
+   const pending=JSON.parse(localStorage.getItem('ff_pending_rooms')||'[]').filter(r=>r.firebaseKey!==room.firebaseKey);
+   localStorage.setItem('ff_pending_rooms',JSON.stringify(pending));
+   applyFilter();
+ }catch(e){console.warn('[FreeFire Rooms] background save failed:',e);}
 }
-
 async function openDetails(key){
  const r=roomsData.find(x=>x.firebaseKey===key);if(!r)return;
  if(!r.demo && !viewedRooms[key]){const v=(r.views||0)+1;roomsRef.child(key).update({views:firebase.database.ServerValue.increment(1)});r.views=v;viewedRooms[key]=true;localStorage.setItem('viewedRooms',JSON.stringify(viewedRooms))}
@@ -1052,7 +1026,10 @@ function joinRoom(key){openDetails(key);const r=roomsData.find(x=>x.firebaseKey=
 function favorite(key){let a=JSON.parse(localStorage.getItem('favRooms')||'[]');a=a.includes(key)?a.filter(x=>x!==key):[...a,key];localStorage.setItem('favRooms',JSON.stringify(a));applyFilter();notify(a.includes(key)?'⭐ أضيفت للمفضلة':'تمت الإزالة من المفضلة')}
 function deleteRoom(key){const r=roomsData.find(x=>x.firebaseKey===key);if(r?.demo){notify('ℹ️ هذه غرفة تجريبية ولا يمكن حذفها');return}if(!confirm('هل أنت متأكد من حذف هذه الغرفة؟'))return;roomsRef.child(key).remove().then(()=>notify('🗑️ تم حذف الغرفة')).catch(e=>notify('❌ '+e.message))}
 function copyText(t){navigator.clipboard?.writeText(t).then(()=>notify('📋 تم النسخ')).catch(()=>{const x=document.createElement('textarea');x.value=t;document.body.appendChild(x);x.select();document.execCommand('copy');x.remove();notify('📋 تم النسخ')})}
-function refreshRooms(){ if(!firebaseUser){ notify('ℹ️ Firebase غير متصل حالياً — الرومات التجريبية ما زالت متاحة'); startFirebaseAuth(); return; } roomsRef.once('value').then(()=>notify('🔄 تم تحديث الرومات')).catch(e=>notify('❌ تعذر تحديث الرومات: '+firebaseErrorText(e))) }
+function refreshRooms(){
+  if(window.__ffFirebaseListenersStarted){notify('🔄 الرومات تتحدث تلقائياً');return}
+  startFirebaseListeners();
+}
 function setGender(btn,g){const mapped=g==='ذكر'?'male':g==='أنثى'?'female':g;gender=gender===mapped?'':mapped;document.querySelectorAll('.filter-btn').forEach(x=>x.classList.remove('active'));if(gender)btn.classList.add('active');applyFilter()}
 function sortRooms(s,btn){sortMode=s;document.querySelectorAll('.quick button').forEach(x=>x.classList.remove('on'));if(btn)btn.classList.add('on');applyFilter()}
 function openModal(id){document.getElementById(id).classList.add('show')}
@@ -1139,6 +1116,7 @@ function updateProfilePage(){
 }
 function syncPublicProfile(){
   try{
+    if(!isApprovedCreator(getPublisherId())) return;
     if(firebaseUser && typeof usersRef!=='undefined'){
       // لا نستخدم set حتى لا نمسح عدادات المتابعين أثناء تحديث الملف.
       usersRef.child(firebaseUser.uid).update({
@@ -1168,29 +1146,10 @@ function updateNotificationBadge(){
   const b=document.getElementById('notificationBadge');
   if(b)b.classList.toggle('show',unread);
 }
-function openCreate(){if(!requireAccount())return;openModal('createModal')}
-function requireAccount(){
-  if(auth && profile.name) return true;
-  openModal('loginModal');
-  return false;
-}
-function login(){
-  const name=document.getElementById('username').value.trim();
-  const pass=document.getElementById('password').value;
-  if(name.length<2){notify('⚠️ اكتب اسم مستخدم صحيح');return;}
-  if(pass.length<4){notify('⚠️ كلمة المرور 4 أحرف على الأقل');return;}
-  profile.name=name;
-  profile.username=profile.username||name.toLowerCase().replace(/\s+/g,'_');
-  profile.password=pass;
-  auth=true;
-  localStorage.setItem('ff_auth','1');
-  saveState();
-  syncPublicProfile();
-  closeModal('loginModal');
-  updateProfileUI(); updateProfilePage();
-  notify('✅ تم إنشاء حسابك بنجاح');
-}
-function showAccount(){if(requireAccount())openProfile()}
+function openCreate(){openModal('createModal')}
+function requireAccount(){return true}
+function login(){}
+function showAccount(){notify('ℹ️ لا يوجد حساب شخصي — أنت لاعب فقط')}
 function renderNotificationsOnly(){
   const box=document.getElementById('notificationsList');
   if(!box)return;
@@ -1201,6 +1160,15 @@ function renderNotificationsOnly(){
   else box.innerHTML=all.slice(0,50).map(n=>`<div class="notification-item"><div class="notification-icon">${esc(n.icon||'🔥')}</div><div><b>${esc(n.title)}</b>${n.pinned?'<span style="font-size:8px;color:#ff6900;margin-right:5px">مثبت</span>':''}<p>${esc(n.text)}</p><time>${esc(n.time||'')}</time></div></div>`).join('');
 }
 function openNotifications(){
+  // تحميل إشعارات الإدارة عند الطلب فقط، بدل الاستماع لها طوال الوقت.
+  if(firebaseUser){
+    announcementsRef.orderByChild('active').equalTo(true).limitToLast(30).once('value').then(snap=>{
+      const d=snap.val()||{};
+      globalAnnouncements=Object.keys(d).map(k=>({...d[k],id:k,source:'admin'})).sort((a,b)=>Number(b.createdAt||0)-Number(a.createdAt||0));
+      renderNotificationsOnly();
+      updateNotificationBadge();
+    }).catch(()=>{});
+  }
   renderNotificationsOnly();
   notifications.forEach(n=>n.read=true);
   const seen=JSON.parse(localStorage.getItem('ff_seen_admin_announcements')||'{}');
@@ -1213,7 +1181,9 @@ let publicProfileUid='';
 let publicProfileData=null;
 function defaultAvatar(){return 'data:image/svg+xml;charset=UTF-8,'+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="120" height="120"><rect width="120" height="120" rx="60" fill="#e8edf3"/><text x="60" y="77" text-anchor="middle" font-size="52">👤</text></svg>')}
 async function openPublicProfile(uid){
-  if(!uid){notify('تعذر فتح ملف اللاعب');return}
+  if(!uid || !isApprovedCreator(uid)) return;
+  const creator=approvedCreatorForUid(uid);
+  if(creator){openCreatorDetail(creator.id||uid);return;}
   if(uid===getPublisherId()){openProfile();return}
   publicProfileUid=uid;
   let d=null;
@@ -1236,13 +1206,14 @@ async function openPublicProfile(uid){
   openModal('publicProfileModal');
 }
 async function refreshFollowButton(){
-  const btn=document.getElementById('publicFollowBtn'); if(!btn||!publicProfileUid)return;
+  const btn=document.getElementById('publicFollowBtn'); if(!btn||!publicProfileUid||!isApprovedCreator(publicProfileUid))return;
   let following=false;
   if(firebaseUser){try{following=!!(await followsRef.child(publicProfileUid).child(firebaseUser.uid).once('value')).val()}catch(e){}}
   if(!following)following=(profile.followingList||[]).includes(publicProfileUid);
   btn.classList.toggle('following',following);btn.textContent=following?'✓ تتابعه':'＋ متابعة';
 }
 async function togglePublicFollow(){
+  if(!isApprovedCreator(publicProfileUid))return;
   if(!requireAccount())return;
   if(!publicProfileUid||publicProfileUid===getPublisherId())return;
   const targetUid=publicProfileUid, me=getPublisherId();
@@ -1250,11 +1221,11 @@ async function togglePublicFollow(){
   // تحديث الواجهة فوراً؛ Firebase يكمل في الخلفية.
   if(was){
     profile.followingList=profile.followingList.filter(x=>x!==targetUid);
-    profile.following=profile.followingList.length;
+    profile.following=(profile.followingList||[]).length;
     if(publicProfileData)publicProfileData.followers=Math.max(0,(publicProfileData.followers||0)-1);
   }else{
     profile.followingList=[...(profile.followingList||[]),targetUid];
-    profile.following=profile.followingList.length;
+    profile.following=(profile.followingList||[]).length;
     if(publicProfileData)publicProfileData.followers=(publicProfileData.followers||0)+1;
   }
   saveState(); updateProfilePage(); await refreshFollowButton();
@@ -1271,7 +1242,7 @@ async function togglePublicFollow(){
     // نعيد الحالة محلياً إذا فشل الحفظ.
     if(was)profile.followingList=[...(profile.followingList||[]),targetUid];
     else profile.followingList=profile.followingList.filter(x=>x!==targetUid);
-    profile.following=profile.followingList.length;saveState();updateProfilePage();await refreshFollowButton();
+    profile.following=(profile.followingList||[]).length;saveState();updateProfilePage();await refreshFollowButton();
     notify('⚠️ تعذر حفظ المتابعة، تحقق من Firebase Rules');
   }
 }
@@ -1285,9 +1256,9 @@ function toggleFollow(){
 }
 function followFromRoom(e,owner){
   e.stopPropagation();
-  if(!owner){notify('لا يمكن متابعة هذا اللاعب');return}
-  if(owner===getPublisherId()){notify('هذا حسابك');return}
-  openPublicProfile(owner);
+  if(!owner || !isApprovedCreator(owner)) return;
+  const creator=approvedCreatorForUid(owner);
+  if(creator) openCreatorDetail(creator.id||owner);
 }
 
 function notifyFollowersOnRoom(room){
@@ -1331,11 +1302,21 @@ function saveProfile(){
  localStorage.setItem('ffprofile',JSON.stringify(profile)); updateProfileUI(); updateProfilePage(); syncPublicProfile(); closeModal('profileModal'); notify('✅ تم حفظ الملف الشخصي');
 }
 
-const savedLocalRooms=JSON.parse(localStorage.getItem('ff_local_rooms')||'[]');
-roomsData=[...savedLocalRooms,...DEMO_ROOMS];
-renderRooms();updateProfileUI();updateProfilePage();updateNotificationBadge();
-// التصفح متاح للجميع، لكن إنشاء روم وفتح الحساب يتطلبان حساباً مثل التصميم القديم.
+// ===== First paint: لا تنتظر Firebase حتى تظهر الصفحة =====
+try{
+  roomsData=[...DEMO_ROOMS];
+}catch(e){
+  roomsData=[...DEMO_ROOMS];
+}
+renderRooms();
+updateProfileUI();
+updateProfilePage();
+updateNotificationBadge();
+
+// أول رسم للواجهة ثم يبدأ اتصال Firebase فوراً.
 handleCreatorRoute();
+startFirebaseAuth();
 </script>
+
 </body>
 </html>
