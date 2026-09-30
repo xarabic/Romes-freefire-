@@ -12,6 +12,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 :root{
@@ -410,6 +411,84 @@ button{cursor:pointer;border:0}
 .creator-social-icon img,.room-social-icon img{width:100%;height:100%;object-fit:contain;border-radius:9px}.creator-announcement{margin:12px 0;background:#fff;border:1px solid #e7ebf1;border-radius:18px;padding:12px;display:flex;gap:10px;align-items:center}.creator-announcement img{width:54px;height:54px;border-radius:14px;object-fit:cover}.creator-announcement b{font-size:12px}.creator-announcement p{font-size:9px;color:#6f7b8a;margin-top:3px}.admin-logo-card{display:flex;gap:10px;align-items:center}
 </style>
 <meta name="google-site-verification" content="4ZRoSNJXkxgBrZqk-pyOOZWD2ehvUvEZORUEGfzc9Z0" />
+
+<style id="professional-ui-v2">
+/* ===== Professional navigation + pages polish ===== */
+:root{--gold:#ffd34d;--gold2:#ffad00;--goldDark:#8b5b00}
+.bottom{height:72px;background:rgba(12,15,20,.96);border-top:1px solid rgba(255,255,255,.09);box-shadow:0 -12px 35px rgba(0,0,0,.18);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);grid-template-columns:repeat(5,1fr);padding:5px 8px env(safe-area-inset-bottom);gap:5px}
+.nav{position:relative;min-width:0;height:60px;border-radius:15px;color:#8d98a6;font-size:9px;font-weight:900;gap:2px;transition:transform .2s ease,background .2s ease,color .2s ease,box-shadow .2s ease}
+.nav i{font-style:normal;font-size:20px;line-height:22px;transition:transform .2s ease}
+.nav span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
+.nav:hover{transform:translateY(-2px);color:#fff;background:rgba(255,255,255,.055)}
+.nav:active{transform:scale(.95)}
+.nav.active{color:#ff8a32;background:linear-gradient(180deg,rgba(255,106,0,.15),rgba(255,106,0,.035));box-shadow:inset 0 0 0 1px rgba(255,106,0,.13)}
+.nav.active i{filter:drop-shadow(0 0 7px rgba(255,106,0,.45))}
+.nav.create{height:62px;align-self:-16px;margin:0 5px;padding:0;justify-content:center;border-radius:19px;background:linear-gradient(145deg,#ff8b24,#ff4d00);color:#fff;box-shadow:0 8px 22px rgba(255,92,0,.34),0 0 0 5px #0c0f14}
+.nav.create i{opacity:1;font-size:31px;line-height:31px;font-weight:400}
+.nav.create span{font-size:8px;margin-top:-1px}
+.soon-tag{top:2px;left:50%;transform:translateX(-50%);background:linear-gradient(135deg,#ffb300,#ff6a00);box-shadow:0 3px 10px rgba(255,132,0,.25);font-size:6px;padding:2px 6px;z-index:3}
+.vip-nav{color:#c6a75b}
+.vip-nav i{color:#ffd34d;text-shadow:0 0 12px rgba(255,205,60,.28)}
+.vip-nav:hover,.vip-nav:focus{color:#ffe59a;background:rgba(255,198,53,.07)}
+.profile-nav{color:#e4c45d;animation:profileNavFloat 2.8s ease-in-out infinite}
+.profile-nav i{width:27px;height:27px;display:grid;place-items:center;border-radius:50%;font-size:15px;background:linear-gradient(145deg,#fff1a3,#ffc52f,#a96a00);color:#3b2800;box-shadow:0 0 0 2px rgba(255,213,77,.16),0 0 16px rgba(255,185,0,.3)}
+.profile-nav:hover{color:#fff0ad;background:rgba(255,198,53,.08)}
+@keyframes profileNavFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
+.notification-bell i{position:relative}
+.notification-badge{top:4px;right:calc(50% - 21px);width:10px;height:10px;background:#ff3b30;border:2px solid #0c0f14;box-shadow:0 0 0 3px rgba(255,59,48,.12);animation:notificationPulse 1.8s ease-in-out infinite}
+@keyframes notificationPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.22)}}
+
+/* Header: cleaner professional identity */
+.hero{padding:14px 24px 18px;border-bottom:1px solid rgba(255,105,0,.45);box-shadow:0 12px 35px rgba(0,0,0,.16)}
+.brand{font-size:26px}.brand small{font-size:10px;color:#aeb7c2;margin-top:2px}
+.top-stats{gap:6px}.top-stat{background:rgba(255,255,255,.055);border-color:rgba(255,255,255,.09);backdrop-filter:blur(8px)}
+.hero-title{margin-top:11px}.hero-title h1{font-size:21px;font-weight:900}.hero-title p{font-size:11px;color:#b8c0ca;max-width:580px}
+.hero-copy{background:linear-gradient(180deg,#0d0d0d 65%,rgba(13,13,13,.92));padding:10px 0 12px}
+
+/* Home content hierarchy */
+.controls{padding:14px 24px 3px;background:var(--bg)}
+.filters{gap:8px}.select,.filter-btn{height:43px;border-radius:12px;box-shadow:0 3px 12px rgba(18,28,40,.035)}
+.actions{margin-top:8px}.action{height:40px;border-radius:12px}.action.orange{box-shadow:0 7px 16px rgba(255,105,0,.18)}
+.section-head{padding:18px 24px 9px}.section-head h2{font-size:16px}.live{font-size:9px;background:#effaf2;border:1px solid #d8f1df;padding:5px 9px;border-radius:99px}
+.quick{padding:0 24px 5px}.quick button{border-radius:11px;padding:8px 12px;font-size:10px;transition:.2s}.quick button:hover{transform:translateY(-1px)}
+.rooms{padding:8px 24px 112px;gap:13px}.room{border-radius:18px;box-shadow:0 10px 28px rgba(20,28,40,.07);transition:transform .2s,box-shadow .2s,border-color .2s}.room:hover{transform:translateY(-2px);box-shadow:0 16px 34px rgba(20,28,40,.1);border-color:#dfe5ec}
+
+/* Notifications */
+.notification-modal{max-width:610px;background:#f8fafc;padding:0 0 18px;border-radius:26px 26px 0 0}
+.notification-modal .modal-head{position:sticky;top:0;z-index:2;margin:0;padding:16px 18px;background:rgba(255,255,255,.94);backdrop-filter:blur(14px);border-bottom:1px solid #e9edf2}
+.notification-modal .modal-head h3{font-size:17px;display:flex;align-items:center;gap:7px}
+.notification-modal .modal-head h3:before{content:'جديد';font-size:7px;color:#fff;background:#ff6900;border-radius:99px;padding:3px 7px;font-weight:900}
+.notifications-list{padding:13px 16px 4px;gap:9px}
+.notification-item{position:relative;align-items:center;min-height:68px;padding:10px 11px;border-radius:16px;background:#fff;border:1px solid #e9edf2;box-shadow:0 5px 18px rgba(20,28,40,.045);transition:.2s}
+.notification-item:hover{transform:translateY(-1px);border-color:#ffd1b2;box-shadow:0 9px 22px rgba(20,28,40,.07)}
+.notification-icon{width:40px;height:40px;border-radius:13px;background:linear-gradient(135deg,#fff2e7,#ffe2cc);border:1px solid #ffd7bc;font-size:17px}
+.notification-item b{font-size:11px;color:#202b39}.notification-item p{font-size:9px;line-height:1.65;margin-top:3px}.notification-item time{font-size:7px;display:block;margin-top:4px}
+.no-notifications{margin:18px 14px;background:#fff;border:1px dashed #dfe5ed;border-radius:18px;padding:42px 12px;line-height:1.9}
+
+/* VIP page: clearer hero and cards */
+.creator-page{background:#f4f6fa}.vip-page .creator-hero{min-height:370px;padding-bottom:36px;box-shadow:0 18px 50px rgba(20,18,5,.12)}
+.vip-page .creator-top{padding:14px 18px}.vip-page .creator-top-title{font-weight:1000;letter-spacing:.2px}.vip-page .creator-top-title small{opacity:.7}
+.vip-hero-copy{max-width:850px;margin:35px auto 0;padding:0 22px;text-align:center}.vip-hero-copy h1{font-size:30px;line-height:1.35}.vip-hero-copy p{max-width:650px;margin:10px auto 0;line-height:1.9;color:#d2c9ae}
+.vip-price{margin-top:16px}.vip-price b{font-size:50px}.vip-subscribe-btn{min-width:230px;border-radius:16px;box-shadow:0 10px 30px rgba(255,174,0,.25);transform:translateZ(0)}
+.vip-subscribe-btn:hover{transform:translateY(-2px);filter:saturate(1.08)}
+.vip-page .creator-content{max-width:980px;margin:auto;padding:25px 22px 45px}.vip-page .creator-section-title h2{font-size:19px}.vip-feature{box-shadow:0 8px 24px rgba(55,43,10,.06);transition:.2s}.vip-feature:hover{transform:translateY(-2px);box-shadow:0 13px 28px rgba(55,43,10,.09)}
+.vip-showcase-card{box-shadow:0 9px 28px rgba(55,43,10,.06);transition:.2s}.vip-showcase-card:hover{transform:translateY(-1px)}
+
+/* Profile unavailable modal */
+.profile-soon-modal{position:relative;overflow:hidden}
+.profile-soon-modal:after{content:'';position:absolute;inset:-45%;background:linear-gradient(110deg,transparent 42%,rgba(255,255,255,.13) 49%,transparent 56%);transform:rotate(12deg);animation:profileGoldSweep 4s linear infinite;pointer-events:none}
+@keyframes profileGoldSweep{0%{transform:translateX(-45%) rotate(12deg)}55%,100%{transform:translateX(45%) rotate(12deg)}}
+
+@media(max-width:760px){
+  .bottom{height:70px;padding-left:5px;padding-right:5px}.nav{height:59px}.nav i{font-size:19px}.nav span{font-size:8px}.nav.create{height:60px;margin:0 3px}.nav.create i{font-size:29px}
+  .hero{padding:12px 16px 16px}.brand{font-size:22px}.hero-title h1{font-size:18px}.hero-title p{font-size:10px}
+  .controls{padding-left:16px;padding-right:16px}.section-head{padding-left:16px;padding-right:16px}.quick{padding-left:16px;padding-right:16px}.rooms{padding-left:16px;padding-right:16px;grid-template-columns:1fr 1fr;gap:9px}
+  .vip-hero-copy{margin-top:25px;padding:0 15px}.vip-hero-copy h1{font-size:24px}.vip-hero-copy p{font-size:10px}.vip-price b{font-size:43px}.vip-page .creator-content{padding-left:14px;padding-right:14px}
+}
+@media(max-width:430px){
+  .rooms{grid-template-columns:1fr}.room{padding:12px}.nav.create{width:auto}.soon-tag{font-size:5px;padding:2px 5px}
+}
+</style>
 </head>
 <body>
 <div class="app">
@@ -461,11 +540,11 @@ button{cursor:pointer;border:0}
 <div class="fab-label">إنشاء روم</div>
 
 <nav class="bottom" id="bottomNav">
-  <button class="nav active" id="navHome" onclick="goHome()"><i>⌂</i>الرئيسية</button>
-  <button class="nav" id="navCreators" onclick="openCreatorHub()"><i>🎥</i>صنّاع المحتوى</button>
+  <button class="nav active" id="navHome" onclick="goHome()"><i>⌂</i><span>الرئيسية</span></button>
+  <button class="nav vip-nav" id="navCreators" onclick="openVipHub()"><i>⭐</i><span>اللاعب المميز</span><em class="soon-tag">قريبًا</em></button>
   <button class="nav create" onclick="openCreate()"><i>+</i><span>إنشاء</span></button>
-  <button class="nav notification-bell" id="navNotifications" onclick="openNotifications()"><i>🔔</i><span class="notification-badge" id="notificationBadge"></span>الإشعارات</button>
-  <button class="nav" id="navCreatorProfile" style="display:none" onclick="openMyCreatorProfile()"><i>👤</i>بروفايل</button>
+  <button class="nav notification-bell" id="navNotifications" onclick="openNotifications()"><i>🔔</i><span class="notification-badge" id="notificationBadge"></span><span>الإشعارات</span></button>
+  <button class="nav profile-nav" id="navProfileSoon" onclick="openProfileSoon()"><i>👤</i><span>البروفايل</span></button>
 </nav>
 
 <div class="modal-bg" id="createModal" onclick="backdropClose(event,'createModal')">
@@ -490,53 +569,6 @@ button{cursor:pointer;border:0}
     <div class="detail-box" id="detailsBox"></div>
   </div>
 </div>
-
-<div class="creator-page" id="creatorPage">
-  <div class="creator-shell">
-    <section class="creator-hero">
-      <div class="creator-top"><button class="creator-back" onclick="closeCreatorHub()">←</button><div class="creator-top-title">صنّاع المحتوى 🎥<small>اكتشف مجتمعك المفضل</small></div></div>
-      <div class="creator-hero-copy"><span class="eyebrow">🔥 CREATOR HUB</span><h1>اكتشف صنّاع Free Fire</h1><p>تابع صناع المحتوى المفضلين لديك، ادخل روماتهم وشارك في تحدياتهم وبطولاتهم.</p>
-        <div class="creator-search"><span>⌕</span><input id="creatorSearch" oninput="renderCreatorHub()" placeholder="ابحث عن صانع محتوى أو اسم مستخدم..."></div><div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px"><button class="creator-view" style="padding:11px 16px;border:0" onclick="openCreatorApply()">🎥 قدّم كصانع محتوى</button><button class="creator-follow" style="padding:11px 16px" onclick="openCreatorStatus()">📋 متابعة طلبي</button></div>
-      </div>
-      <div class="creator-tabs"><button class="creator-tab active" onclick="creatorFilter='all';setCreatorTab(this);renderCreatorHub()">⭐ الكل</button><button class="creator-tab" onclick="creatorFilter='verified';setCreatorTab(this);renderCreatorHub()">✓ موثّقون</button><button class="creator-tab" onclick="creatorFilter='top';setCreatorTab(this);renderCreatorHub()">🏆 الأكثر متابعة</button><button class="creator-tab" onclick="creatorFilter='new';setCreatorTab(this);renderCreatorHub()">🆕 جديد</button></div>
-    </section>
-    <main class="creator-content">
-      <div class="creator-section-title"><h2>صنّاع المحتوى المميزون</h2><span id="creatorCount">0 صانع</span></div>
-      <div class="creator-grid" id="creatorGrid"></div>
-      <div class="challenge-banner"><div class="challenge-icon">🏆</div><div><h3>Creator Challenge</h3><p>اجمع متابعين حقيقيين عبر رابطك الخاص واربح جائزة Free Fire.</p></div><button onclick="openCreatorChallenge()">عرض الترتيب</button></div>
-    </main>
-  </div>
-</div>
-
-<div class="creator-detail" id="creatorDetail">
-  <button class="profile-close" onclick="closeCreatorDetail()">×</button>
-  <div class="creator-detail-cover"></div>
-  <div class="creator-detail-inner"><div class="creator-detail-card">
-    <div class="creator-detail-head"><img id="creatorDetailAvatar" class="creator-detail-avatar"><div class="creator-detail-identity"><div class="creator-detail-name-row"><div id="creatorDetailName" class="creator-detail-name"></div><span id="creatorDetailBadge" class="verified-badge"></span></div><div id="creatorDetailHandle" class="creator-detail-handle"></div></div><div class="creator-detail-actions"><button id="creatorDetailFollow" class="creator-follow-main" onclick="toggleCreatorFollow()">＋ متابعة</button><button class="creator-share" onclick="shareCreator()">↗ مشاركة</button><button id="creatorEditBtn" class="creator-share" style="display:none" onclick="openCreatorEdit()">✏️ تعديل</button></div></div>
-    <div id="creatorDetailBio" class="creator-detail-bio"></div>
-    <div class="creator-detail-stats"><div class="creator-detail-stat"><b id="cdFollowers">0</b><span>متابع</span></div><div class="creator-detail-stat"><b id="cdRooms">0</b><span>روم</span></div></div>
-    <div class="creator-detail-grid"><div class="creator-panel"><h3>🔥 رومات الصانع</h3><div id="creatorDetailRooms"></div></div><div><div class="creator-panel"><h3>🌐 روابط الصانع</h3><div class="social-list" id="creatorSocials"></div></div></div></div>
-    <div class="creator-admin-note">صفحة عامة لصانع المحتوى — يمكن لاحقًا ربط الرومات والبطولات والجوائز مباشرة ببيانات Firebase الحقيقية.</div>
-  </div></div>
-</div>
-
-<div class="modal-bg" id="creatorRoomCreateModal" onclick="backdropClose(event,'creatorRoomCreateModal')"><div class="modal"><div class="modal-head"><h3>🎥 نشر روم للصانع</h3><button class="close" onclick="closeModal('creatorRoomCreateModal')">✕</button></div><p style="font-size:11px;color:#778394;margin-bottom:12px">هذا الزر يظهر لصنّاع المحتوى فقط.</p><div class="form"><label>اسم الروم</label><input id="creatorRoomName" placeholder="مثال: روم المتابعين 🔥"><label>كود الروم</label><input id="creatorRoomCode" placeholder="أدخل كود الروم"><button class="submit" onclick="publishCreatorRoom()">نشر الروم 🚀</button></div></div></div>
-
-
-
-<div class="modal-bg" id="creatorApplyModal" onclick="backdropClose(event,'creatorApplyModal')"><div class="modal" style="max-width:650px"><div class="modal-head"><h3>🎥 طلب صانع محتوى</h3><button class="close" onclick="closeModal('creatorApplyModal')">✕</button></div><p id="creatorApplyIntro" style="font-size:12px;color:#778394;margin-bottom:12px"></p><div class="form">
-<label>🖼️ صورة قناتك / حسابك أو صورة مجموعة واتساب</label><input id="applyImageFile" type="file" accept="image/*" onchange="previewCreatorApplyImage(event)"><div id="applyImagePreview" style="display:none;margin:8px 0;text-align:center"><img id="applyImagePreviewImg" style="width:110px;height:110px;border-radius:22px;object-fit:cover;border:2px solid #ff6900"></div><input id="applyImage" type="hidden">
-<label>👤 الاسم</label><input id="applyName" maxlength="40" placeholder="مثال: غيث">
-<label>🏷️ اسم المستخدم</label><input id="applyUsername" maxlength="30" placeholder="@ghith_ff">
-<label>🌍 الدولة</label><select id="applyCountry"><option value="">اختر دولتك</option><option>🇩🇿 الجزائر</option><option>🇧🇭 البحرين</option><option>🇰🇲 جزر القمر</option><option>🇩🇯 جيبوتي</option><option>🇪🇬 مصر</option><option>🇮🇶 العراق</option><option>🇯🇴 الأردن</option><option>🇰🇼 الكويت</option><option>🇱🇧 لبنان</option><option>🇱🇾 ليبيا</option><option>🇲🇷 موريتانيا</option><option>🇲🇦 المغرب</option><option>🇴🇲 عُمان</option><option>🇵🇸 فلسطين</option><option>🇶🇦 قطر</option><option>🇸🇦 السعودية</option><option>🇸🇴 الصومال</option><option>🇸🇩 السودان</option><option>🇸🇾 سوريا</option><option>🇹🇳 تونس</option><option>🇦🇪 الإمارات</option><option>🇾🇪 اليمن</option></select>
-<label>📱 طريقة التواصل الأساسية</label><div class="contact-methods"><button type="button" class="contact-choice active" data-contact="WhatsApp" onclick="selectCreatorContact('WhatsApp',this)"><span class="contact-logo whatsapp-logo">⌕</span><b>واتساب</b></button><button type="button" class="contact-choice" data-contact="Instagram" onclick="selectCreatorContact('Instagram',this)"><span class="contact-logo instagram-logo">◎</span><b>إنستغرام</b></button><button type="button" class="contact-choice" data-contact="Telegram" onclick="selectCreatorContact('Telegram',this)"><span class="contact-logo telegram-logo">➤</span><b>تلغرام</b></button></div><input id="applyContactType" type="hidden" value="WhatsApp"><input id="applyContact" maxlength="100" placeholder="مثال: رقم واتساب أو @اسم_المستخدم">
-<label>🔗 رابط حسابك أو مجموعتك</label><input id="applySocialUrl" type="url" placeholder="رابط Instagram أو WhatsApp أو Telegram"><div class="form-note">يمكنك وضع رابط واحد فقط في الطلب، وسيظهر لاحقًا كشعار التطبيق فقط في بروفايلك.</div>
-<label>📝 نوع محتواك</label><textarea id="applyBio" maxlength="300" placeholder="مثال: محتوى Free Fire، رومات، تحديات وبطولات..."></textarea>
-<button class="submit" onclick="submitCreatorApplication()">🚀 إرسال الطلب للإدارة</button></div></div></div>
-
-<div class="modal-bg" id="creatorChallengeModal" onclick="backdropClose(event,'creatorChallengeModal')"><div class="modal" style="max-width:600px"><div class="modal-head"><h3>🏆 Creator Challenge</h3><button class="close" onclick="closeModal('creatorChallengeModal')">✕</button></div><p style="font-size:10px;color:#778394;margin-bottom:10px">الترتيب يعتمد على المتابعين الحقيقيين القادمين من روابط الصنّاع.</p><div id="challengeList" class="creator-challenge-list"></div><div class="creator-admin-note">مهم: قبل إطلاق الجوائز المالية أو الماسية فعليًا، يجب نقل احتساب النقاط والتحقق من المستخدمين إلى Firebase Auth + Security Rules + Cloud Functions وعدم الاعتماد على localStorage.</div></div></div>
-
-<div class="modal-bg" id="creatorStatusModal" onclick="backdropClose(event,'creatorStatusModal')"><div class="modal" style="max-width:600px"><div class="modal-head"><h3>📋 حالة طلب صانع المحتوى</h3><button class="close" onclick="closeModal('creatorStatusModal')">✕</button></div><div id="creatorStatusBox" class="creator-empty">أدخلت طلبك؟ سيتم عرض حالته هنا.</div></div></div>
 
 <div class="toast" id="toast"></div>
 
@@ -581,7 +613,7 @@ button{cursor:pointer;border:0}
         <div style="flex:1">
           <div class="profile-page-name" id="profilePageName">لاعب جديد</div>
           <div class="profile-page-user" id="profilePageUser">@player</div>
-          <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:9px"><button type="button" onclick="openProfileEditor()" style="border:0;border-radius:10px;padding:8px 13px;background:#ff6900;color:#fff;font-weight:900;font-size:10px;cursor:pointer">✏️ تعديل الملف</button><button type="button" onclick="openProfileSettings()" style="border:1px solid #e5e9ef;border-radius:10px;padding:8px 13px;background:#fff;color:#344052;font-weight:900;font-size:10px;cursor:pointer">⚙️ الإعدادات</button></div>
+          <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:9px"><button type="button" onclick="openProfileEditor()" style="border:0;border-radius:10px;padding:8px 13px;background:#ff6900;color:#fff;font-weight:900;font-size:10px;cursor:pointer">✏️ تعديل الملف</button><button type="button" onclick="openProfileSettings()" style="border:1px solid #e5e9ef;border-radius:10px;padding:8px 13px;background:#fff;color:#344052;font-weight:900;font-size:10px;cursor:pointer">⚙️ الإعدادات</button><button type="button" onclick="logoutAccount()" style="border:1px solid #ffd0c4;border-radius:10px;padding:8px 13px;background:#fff7f4;color:#c2410c;font-weight:900;font-size:10px;cursor:pointer">خروج</button></div>
         </div>
       </div>
 
@@ -607,6 +639,24 @@ button{cursor:pointer;border:0}
         <div class="profile-activity"><span>👥 عضو نشيط في المجتمع</span><b id="memberStatus">جديد</b></div>
       </div>
     </div>
+  </div>
+</div>
+
+<div class="modal-bg" id="loginModal" onclick="backdropClose(event,'loginModal')">
+  <div class="modal account-modal">
+    <div class="modal-head"><h3 id="accountModalTitle">👤 إنشاء حساب</h3><button class="close" onclick="closeModal('loginModal')">✕</button></div>
+    <p id="accountModalHint" style="font-size:10px;color:#687586;line-height:1.8;margin-bottom:12px">أنشئ حسابك مرة واحدة. سيبقى حسابك وID والرومات والمتابعون محفوظين حتى عند تغيير الهاتف.</p>
+    <div class="form">
+      <label id="accountNameLabel">اسمك</label>
+      <input id="accountNameInput" maxlength="24" placeholder="مثال: صحراوي">
+      <label id="accountIdLabel" style="display:none">ID اللاعب</label>
+      <input id="accountIdInput" maxlength="10" placeholder="FF-482731" style="display:none;text-transform:uppercase">
+      <label>كلمة المرور</label>
+      <input id="accountPasswordInput" type="password" minlength="6" maxlength="72" placeholder="6 أحرف أو أكثر">
+      <button class="submit" id="accountSubmitBtn" onclick="submitAccount()">🚀 إنشاء الحساب</button>
+      <button type="button" id="accountSwitchBtn" onclick="switchAccountMode()" style="border:0;background:none;color:#ff6900;font-weight:900;font-size:10px;cursor:pointer;margin-top:2px">لدي حساب بالفعل — تسجيل الدخول</button>
+    </div>
+    <div id="accountMessage" style="min-height:18px;text-align:center;font-size:9px;color:#c2410c;margin-top:8px"></div>
   </div>
 </div>
 
@@ -669,21 +719,221 @@ button{cursor:pointer;border:0}
   </div>
 </div>
 
-<div class="modal-bg" id="creatorEditModal" onclick="backdropClose(event,'creatorEditModal')">
-  <div class="modal" style="max-width:560px">
-    <div class="modal-head"><h3>✏️ تعديل ملف صانع المحتوى</h3><button class="close" onclick="closeModal('creatorEditModal')">✕</button></div>
-    <div class="form">
-      <label>الصورة الشخصية</label>
-      <input id="creatorEditImageFile" type="file" accept="image/*" onchange="previewCreatorEditImage(event)">
-      <div id="creatorEditImagePreview" style="display:none;margin:8px 0;text-align:center"><img id="creatorEditImagePreviewImg" style="width:100px;height:100px;border-radius:50%;object-fit:cover;border:3px solid #ff6900"></div>
-      <label>الاسم</label><input id="creatorEditName" maxlength="40">
-      <label>النبذة</label><textarea id="creatorEditBio" maxlength="300" placeholder="اكتب نبذة عن محتواك..."></textarea>
-      <label>رابط Instagram</label><input id="creatorEditInstagram" type="url" placeholder="https://instagram.com/username">
-      <label>رابط TikTok</label><input id="creatorEditTikTok" type="url" placeholder="https://tiktok.com/@username">
-      <label>رابط WhatsApp</label><input id="creatorEditWhatsApp" type="url" placeholder="https://chat.whatsapp.com/... أو https://wa.me/...">
-      <label>رابط Telegram</label><input id="creatorEditTelegram" type="url" placeholder="https://t.me/username">
-      <button class="submit" onclick="saveCreatorProfile()">💾 حفظ الملف</button>
-    </div>
+<style id="vip-gold-css">
+/* ===================== VIP GOLD SYSTEM ===================== */
+.gold-text{background:linear-gradient(90deg,#8a5a00,#ffd24d,#fff3b0,#ffd24d,#8a5a00);background-size:200% auto;-webkit-background-clip:text;background-clip:text;color:transparent;animation:vipTextShine 4s linear infinite}
+@keyframes vipTextShine{to{background-position:200% center}}
+@keyframes vipPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.1)}}
+@keyframes vipSpin{to{transform:rotate(360deg)}}
+@keyframes vipSweep{0%{left:-70%}60%,100%{left:130%}}
+@keyframes vipGlow{0%,100%{box-shadow:0 8px 26px rgba(255,180,0,.35)}50%{box-shadow:0 8px 36px rgba(255,200,0,.6)}}
+@keyframes vipModalIn{from{transform:translateY(26px) scale(.96);opacity:0}to{transform:none;opacity:1}}
+@keyframes vipCrownFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+
+/* شارة VIP الذهبية */
+.vip-badge{display:inline-grid;place-items:center;width:20px;height:20px;vertical-align:-3px;flex:none}
+.vip-badge svg{width:100%;height:100%;display:block;animation:vipPulse 2.6s ease-in-out infinite;filter:drop-shadow(0 2px 5px rgba(255,170,0,.45))}
+.vip-badge.large{width:32px;height:32px;vertical-align:-7px}
+.vip-gold-word{background:linear-gradient(90deg,#8a5a00,#ffd24d,#8a5a00);background-size:200% auto;-webkit-background-clip:text;background-clip:text;color:transparent;font-weight:1000;animation:vipTextShine 3s linear infinite}
+
+/* الإطار الذهبي المتحرك */
+.vip-frame{display:inline-block;border-radius:50%;padding:3.5px;position:relative;background:linear-gradient(135deg,#a87400,#ffd75e,#fff2b0,#ffb300,#a87400);box-shadow:0 0 14px rgba(255,190,0,.4)}
+.vip-frame::after{content:'';position:absolute;inset:0;border-radius:50%;background:conic-gradient(from 0deg,transparent 0 55deg,rgba(255,255,255,.95) 80deg,transparent 115deg 360deg);animation:vipSpin 3.5s linear infinite;-webkit-mask:radial-gradient(farthest-side,transparent calc(100% - 5px),#000 calc(100% - 4px));mask:radial-gradient(farthest-side,transparent calc(100% - 5px),#000 calc(100% - 4px));pointer-events:none}
+.vip-frame-inner{width:100%;height:100%;border-radius:50%;overflow:hidden;display:grid;place-items:center;background:#221a08;color:#fff}
+.vip-frame-sm{width:44px;height:44px}
+.vip-frame-lg{width:92px;height:92px;font-size:38px}
+.vip-frame-lg .vip-frame-inner{font-size:38px}
+
+/* علامة "قريبًا" على زر اللاعب المميز */
+.nav{position:relative}
+.soon-tag{position:absolute;top:2px;left:50%;transform:translateX(-50%);background:#ff6900;color:#fff;font-size:7px;font-weight:900;padding:2px 7px;border-radius:99px;white-space:nowrap}
+
+/* بطاقة روم VIP */
+.room.vip-room{background:linear-gradient(180deg,#fffdf2,#fff);border:1.5px solid #e6c34a;box-shadow:0 12px 32px rgba(212,175,55,.28)}
+.room.vip-room::before{content:'';position:absolute;top:0;left:-70%;width:45%;height:100%;background:linear-gradient(105deg,transparent,rgba(255,215,0,.22),transparent);animation:vipSweep 4.5s ease-in-out infinite;pointer-events:none;z-index:1}
+.vip-ribbon{position:relative;z-index:2;margin:-11px -11px 9px;padding:6px 11px;background:linear-gradient(90deg,#8a5a00,#ffc93d,#8a5a00);background-size:200% auto;color:#3a2600;font-weight:900;font-size:10px;text-align:center;letter-spacing:.5px;animation:vipTextShine 5s linear infinite}
+.vip-owner{display:flex;align-items:center;gap:9px;margin-top:9px;padding:8px 10px;border-radius:13px;background:linear-gradient(135deg,#fff8e1,#fffdf2);border:1px solid #ecd27a;position:relative;z-index:2}
+.vip-owner-info b{font-size:12px;display:flex;align-items:center;gap:5px;color:#4a3400}
+.vip-owner-id{font-size:9px;color:#8a6a00;font-weight:800;display:block;margin-top:2px}
+
+/* صفحة VIP */
+.vip-page .creator-hero{background:radial-gradient(circle at 20% 20%,rgba(255,200,0,.28),transparent 30%),radial-gradient(circle at 85% 75%,rgba(255,160,0,.18),transparent 30%),linear-gradient(150deg,#171003,#33240a 60%,#1a1204);border-bottom:3px solid #ffd75e}
+.vip-hero-copy .vip-eyebrow{display:inline-flex;background:rgba(255,210,80,.12);border:1px solid rgba(255,215,0,.45);color:#ffe9a8;padding:5px 12px;border-radius:999px;font-size:10px;font-weight:900}
+.vip-price{margin-top:14px;font-size:14px;color:#cfc39a}
+.vip-price b{font-size:44px;color:#ffd75e;font-weight:1000;text-shadow:0 3px 14px rgba(255,190,0,.4)}
+.vip-subscribe-btn{margin-top:14px;height:52px;padding:0 28px;border:0;border-radius:15px;background:linear-gradient(135deg,#ffc93d,#ff9d00);color:#3a2600;font-weight:1000;font-size:14px;cursor:pointer;animation:vipGlow 2.8s ease-in-out infinite}
+.vip-note{margin-top:10px;font-size:9px;color:#b8a76e}
+
+/* مميزات VIP */
+.vip-features{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.vip-feature{background:#fff;border:1px solid #ecd27a;border-radius:15px;padding:13px;font-size:22px}
+.vip-feature b{display:block;font-size:12px;color:#5a4300;margin-top:6px}
+.vip-feature p{font-size:9px;color:#8a7a45;margin-top:3px}
+@media(max-width:760px){.vip-features{grid-template-columns:repeat(2,1fr)}}
+
+/* معاينات ما قبل الاشتراك */
+.vip-previews{display:grid;grid-template-columns:repeat(3,1fr);gap:11px}
+.vip-preview-box{background:#fff;border:1px solid #e7ebf1;border-radius:18px;padding:14px;position:relative}
+.vip-preview-box h4{font-size:12px;margin-bottom:11px;color:#263243}
+.vip-preview-tag{position:absolute;top:12px;left:12px;background:#fff4eb;border:1px solid #ffd1b2;color:#f15d00;font-size:7px;font-weight:900;padding:3px 8px;border-radius:99px}
+@media(max-width:760px){.vip-previews{grid-template-columns:1fr}}
+.vip-mock-profile{text-align:center;padding:18px 8px;background:linear-gradient(180deg,#fffdf2,#fff);border:1px dashed #e6c34a;border-radius:14px}
+.vip-mock-name{font-weight:900;font-size:15px;display:flex;align-items:center;justify-content:center;gap:6px;margin-top:10px;color:#3a2c05}
+.vip-mock-id{font-size:9px;color:#8a6a00;font-weight:800;margin-top:4px}
+.vip-mock-status{display:inline-block;margin-top:10px;background:linear-gradient(135deg,#2a1e05,#4a3408);color:#ffd75e;font-size:8px;font-weight:900;padding:5px 12px;border-radius:99px;border:1px solid #ffd75e}
+.vip-mock-room{border:1.5px solid #e6c34a;border-radius:14px;overflow:hidden;background:linear-gradient(180deg,#fffdf2,#fff)}
+.vip-mock-room .vip-ribbon{margin:0}
+.vip-mock-room-body{padding:11px}
+.vip-mock-room-title{font-weight:900;font-size:12px;color:#3a2c05;display:flex;align-items:center;gap:6px}
+.vip-mock-row{display:flex;justify-content:space-between;font-size:9px;color:#6b5a1e;font-weight:800;background:#fffaf0;border:1px solid #f0e0a8;border-radius:9px;padding:7px 9px;margin-top:9px}
+.vip-mock-join{width:100%;margin-top:10px;height:36px;border:0;border-radius:10px;background:linear-gradient(135deg,#ffc93d,#ff9d00);color:#3a2600;font-weight:900;font-size:11px;cursor:pointer}
+.vip-mock-badge-line{display:flex;align-items:center;justify-content:center;gap:8px;background:linear-gradient(135deg,#fff8e1,#fffdf5);border:1px dashed #e6c34a;border-radius:14px;padding:22px 8px;font-size:16px;font-weight:900;color:#3a2c05}
+
+/* النوافذ الذهبية */
+.vip-gold-modal{margin:0 auto 22px;max-width:430px;background:radial-gradient(circle at 50% -20%,rgba(255,215,0,.35),transparent 50%),linear-gradient(160deg,#191204,#3a2a08 55%,#211804);border:1px solid #ffd75e;color:#fff;text-align:center;border-radius:26px;padding:30px 24px;box-shadow:0 20px 60px rgba(0,0,0,.5),0 0 40px rgba(255,190,0,.15);animation:vipModalIn .35s ease}
+.vip-gold-crown{font-size:48px;display:block;animation:vipCrownFloat 3s ease-in-out infinite}
+.vip-gold-modal h3{font-size:26px;margin:8px 0 4px}
+.vip-gold-msg{font-size:15px;font-weight:900;color:#ffe9a8;margin-top:12px}
+.vip-gold-sub{font-size:11px;color:#cfc39a;margin-top:6px;line-height:1.8}
+.vip-gold-ok{margin-top:18px;width:100%;height:46px;border:0;border-radius:13px;background:linear-gradient(135deg,#ffc93d,#ff9d00);color:#3a2600;font-weight:900;font-size:13px;cursor:pointer}
+.vip-soon-modal{margin:0 auto 22px;max-width:430px;background:linear-gradient(160deg,#141821,#232b38 55%,#161b24);border:1px solid #3a4656;color:#fff;text-align:center;border-radius:26px;padding:28px 24px;box-shadow:0 20px 60px rgba(0,0,0,.5);animation:vipModalIn .35s ease}
+.soon-pill{display:inline-block;background:#ff6900;color:#fff;font-size:9px;font-weight:900;padding:4px 12px;border-radius:99px;margin-top:6px}
+
+/* حقن البروفايل: ID + بطاقة الحالة */
+.profile-id-row{display:flex;align-items:center;gap:7px;margin-top:8px;font-size:11px;color:#5a4a10;font-weight:800;background:#fffaf0;border:1px solid #ecd27a;border-radius:10px;padding:7px 10px;width:fit-content}
+.copy-id-btn{border:1px solid #e6c34a;background:#fff;color:#8a5a00;border-radius:8px;padding:3px 9px;font-size:9px;font-weight:900;cursor:pointer}
+.vip-status-card{margin:14px 0 4px;border-radius:16px;padding:14px;border:1px solid #ecd27a;background:linear-gradient(135deg,#fff8e1,#fffdf5);display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.vip-status-card.vip-on{background:linear-gradient(135deg,#2a1e05,#4a3408);border-color:#ffd75e;color:#ffe9a8;box-shadow:0 10px 28px rgba(255,180,0,.3)}
+.vip-status-title{font-size:14px;font-weight:900;display:flex;align-items:center;gap:7px}
+.vip-status-sub{font-size:9px;color:#8a7a45;margin-top:3px}
+.vip-status-card.vip-on .vip-status-sub{color:#cfc39a}
+.vip-upgrade-btn{margin-inline-start:auto;background:linear-gradient(135deg,#ffc93d,#ff9d00);color:#3a2600;border:0;border-radius:11px;padding:10px 15px;font-size:10px;font-weight:900;cursor:pointer;animation:vipGlow 2.8s ease-in-out infinite}
+
+/* البروفايل الذهبي عند تفعيل VIP */
+#profilePage.vip-gold-active .profile-big-wrap{border-radius:50%;padding:5px;background:linear-gradient(135deg,#a87400,#ffd75e,#fff2b0,#ffb300,#a87400);box-shadow:0 0 24px rgba(255,190,0,.45)}
+#profilePage.vip-gold-active .profile-big-wrap::after{content:'';position:absolute;inset:0;border-radius:50%;background:conic-gradient(from 0deg,transparent 0 55deg,rgba(255,255,255,.95) 80deg,transparent 115deg 360deg);animation:vipSpin 3.5s linear infinite;-webkit-mask:radial-gradient(farthest-side,transparent calc(100% - 8px),#000 calc(100% - 7px));mask:radial-gradient(farthest-side,transparent calc(100% - 8px),#000 calc(100% - 7px));pointer-events:none}
+#profilePage.vip-gold-active .profile-page-name{background:linear-gradient(90deg,#8a5a00,#ffd24d,#8a5a00);background-size:200% auto;-webkit-background-clip:text;background-clip:text;color:transparent}
+</style>
+<style id="account-fix-css">
+.account-modal{max-width:430px}
+.account-modal input{text-align:right}
+.vip-showcase{margin-top:24px}
+.vip-showcase-card{background:#fff;border:1px solid #ecd27a;border-radius:20px;padding:15px;margin-top:12px;box-shadow:0 10px 30px rgba(55,43,10,.08)}
+.vip-showcase-card h3{font-size:14px;color:#4b3905;margin:0 0 6px}
+.vip-showcase-card p{font-size:10px;color:#748091;line-height:1.8;margin:0 0 12px}
+.vip-shot{width:100%;display:block;border-radius:16px;border:1px solid #ead58a;background:#101010;box-shadow:0 12px 30px rgba(0,0,0,.16)}
+.vip-step{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.vip-step-item{background:linear-gradient(135deg,#fffdf3,#fff);border:1px solid #ecd27a;border-radius:14px;padding:12px}
+.vip-step-item b{display:block;font-size:11px;color:#4a3400;margin-bottom:4px}
+.vip-step-item span{font-size:9px;color:#7c6a3c;line-height:1.7}
+@media(max-width:650px){.vip-step{grid-template-columns:1fr}}
+.vip-page .creator-content{padding-bottom:35px}
+</style>
+
+<!-- ===================== صفحة VIP GOLD ===================== -->
+<div class="creator-page vip-page" id="creatorPage">
+  <div class="creator-shell">
+    <section class="creator-hero">
+      <div class="creator-top"><button class="creator-back" onclick="closeCreatorHub()">←</button><div class="creator-top-title">👑 VIP GOLD<small>رتبة اللاعب المميز</small></div></div>
+      <div class="creator-hero-copy vip-hero-copy">
+        <span class="vip-eyebrow">👑 VIP GOLD</span>
+        <h1>رتبة <span class="gold-text">VIP</span> داخل مجتمع Free Fire</h1>
+        <p>حوّل حسابك إلى هوية ذهبية مميزة: إطار متحرك، شارة ذهبية بجانب اسمك، رومات ذهبية وأولوية ظهور.</p>
+        <div class="vip-price"><b>$2</b> <span>/ شهريًا</span></div>
+        <button class="vip-subscribe-btn" onclick="openVipSubscribe()">👑 اشترك VIP — $2 / شهريًا</button>
+        <div class="vip-note">💳 الدفع غير متاح حاليًا — هذه معاينة للمميزات القادمة وليست تفعيلًا حقيقيًا</div>
+      </div>
+    </section>
+    <main class="creator-content">
+      <div class="creator-section-title"><h2>✨ مميزات VIP</h2><span>9 مزايا ذهبية</span></div>
+      <div class="vip-features">
+        <div class="vip-feature">👑<b>هوية VIP ذهبية</b><p>حسابك بالكامل بهوية ذهبية فاخرة.</p></div>
+        <div class="vip-feature">✨<b>بروفايل بإطار ذهبي متحرك</b><p>لمعان ذهبي خفيف حول صورتك.</p></div>
+        <div class="vip-feature">✓<b>شارة ذهبية بجانب الاسم</b><p>تظهر في البروفايل والرومات والبحث.</p></div>
+        <div class="vip-feature">🔥<b>رومات بتصميم ذهبي</b><p>بطاقة روم مميزة بحدود ولمعان ذهبي.</p></div>
+        <div class="vip-feature">🚀<b>أولوية ظهور الرومات</b><p>رومك يظهر قبل الرومات العادية.</p></div>
+        <div class="vip-feature">📌<b>تثبيت الروم</b><p>إبقاء رومك ظاهرًا في الأعلى.</p></div>
+        <div class="vip-feature">🔔<b>إشعارات متقدمة</b><p>تنبيهات خاصة للمشتركين.</p></div>
+        <div class="vip-feature">📊<b>إحصائيات الرومات</b><p>تقارير مشاهدات وانضمامات.</p></div>
+        <div class="vip-feature">🎨<b>تخصيص الملف</b><p>مزايا تخصيص إضافية للبروفايل.</p></div>
+        <div class="vip-feature">⭐<b>مزايا VIP مستقبلية</b><p>مزايا جديدة حصرية للمشتركين.</p></div>
+      </div>
+
+      <div class="creator-section-title" style="margin-top:22px"><h2>👀 معاينة قبل الاشتراك</h2><span>ليس تفعيلًا حقيقيًا</span></div>
+      <div class="vip-previews">
+        <div class="vip-preview-box">
+          <span class="vip-preview-tag">🔒 معاينة فقط</span>
+          <h4>👤 شاهد كيف سيصبح حسابك بعد VIP</h4>
+          <div class="vip-mock-profile">
+            <span class="vip-frame vip-frame-lg"><span class="vip-frame-inner">🎮</span></span>
+            <div class="vip-mock-name">صحراوي <span class="vip-badge-slot"></span></div>
+            <div class="vip-mock-id">🆔 FF-482731</div>
+            <span class="vip-mock-status">👑 VIP GOLD • مشترك</span>
+          </div>
+        </div>
+        <div class="vip-preview-box">
+          <span class="vip-preview-tag">🔒 معاينة فقط</span>
+          <h4>🔥 وهكذا سيظهر رومك</h4>
+          <div class="vip-mock-room">
+            <div class="vip-ribbon">👑 VIP ROOM</div>
+            <div class="vip-mock-room-body">
+              <div class="vip-mock-room-title">روم العرض الذهبي <span class="vip-badge-slot"></span></div>
+              <div class="vip-owner" style="margin-top:9px"><span class="vip-frame vip-frame-sm"><span class="vip-frame-inner">🎮</span></span><div class="vip-owner-info"><b>صحراوي <span class="vip-badge-slot"></span></b><span class="vip-owner-id">🆔 FF-482731</span></div></div>
+              <div class="vip-mock-row"><span>🆔 Room Code: 123456</span><span>⏱ 14 min</span></div>
+              <button class="vip-mock-join">🚀 انضمام</button>
+            </div>
+          </div>
+        </div>
+        <div class="vip-preview-box">
+          <span class="vip-preview-tag">🔒 معاينة فقط</span>
+          <h4>✓ وهكذا ستظهر شارتك</h4>
+          <div class="vip-mock-badge-line"><span>صحراوي</span> <span class="vip-badge-slot"></span> <span class="vip-gold-word">GOLD</span></div>
+          <div class="vip-mock-badge-line" style="margin-top:9px;font-size:12px"><span>صحراوي</span> <span class="vip-badge-slot" data-large="1"></span></div>
+        </div>
+      </div>
+
+      <section class="vip-showcase">
+        <div class="creator-section-title"><h2>📸 شاهد شكل المميزات</h2><span>صور معاينة</span></div>
+        <div class="vip-showcase-card"><h3>👤 كيف سيظهر بروفايلك؟</h3><p>صورتك داخل إطار ذهبي متحرك، اسمك مع الشارة، وID الحساب مع حالة VIP.</p><img class="vip-shot" alt="معاينة بروفايل VIP" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMjAwIiBoZWlnaHQ9IjcwMCIgdmlld0JveD0iMCAwIDEyMDAgNzAwIj48ZGVmcz48bGluZWFyR3JhZGllbnQgaWQ9ImciIHgxPSIwIiB4Mj0iMSI+PHN0b3Agc3RvcC1jb2xvcj0iIzhhNWEwMCIvPjxzdG9wIG9mZnNldD0iLjUiIHN0b3AtY29sb3I9IiNmZmU0OGEiLz48c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiNiNzc4MDAiLz48L2xpbmVhckdyYWRpZW50PjxsaW5lYXJHcmFkaWVudCBpZD0iYmciIHkxPSIwIiB5Mj0iMSI+PHN0b3Agc3RvcC1jb2xvcj0iIzE5MTQwYSIvPjxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iIzM1MjUwNyIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHdpZHRoPSIxMjAwIiBoZWlnaHQ9IjcwMCIgcng9IjM2IiBmaWxsPSIjZjdmN2Y3Ii8+PHJlY3QgeD0iMzUiIHk9IjM1IiB3aWR0aD0iMTEzMCIgaGVpZ2h0PSI2MzAiIHJ4PSIzMCIgZmlsbD0idXJsKCNiZykiLz48Y2lyY2xlIGN4PSI2MDAiIGN5PSIyNDAiIHI9IjEwNSIgZmlsbD0ibm9uZSIgc3Ryb2tlPSJ1cmwoI2cpIiBzdHJva2Utd2lkdGg9IjE4Ii8+PGNpcmNsZSBjeD0iNjAwIiBjeT0iMjQwIiByPSI4MCIgZmlsbD0iIzIxMWEwZCIvPjx0ZXh0IHg9IjYwMCIgeT0iMjY1IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LXNpemU9IjcwIj7wn46uPC90ZXh0Pjx0ZXh0IHg9IjYwMCIgeT0iMzkwIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iNDIiIGZvbnQtd2VpZ2h0PSI3MDAiIGZpbGw9IiNmZmU0OGEiPti12K3Ysdin2YjZiiDinJM8L3RleHQ+PHRleHQgeD0iNjAwIiB5PSI0NDAiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIyNSIgZmlsbD0iI2U3ZDhhYSI+8J+GlCBGRi00ODI3MzE8L3RleHQ+PHJlY3QgeD0iNDcwIiB5PSI0ODAiIHdpZHRoPSIyNjAiIGhlaWdodD0iNTgiIHJ4PSIyOSIgZmlsbD0iIzRhMzQwOCIgc3Ryb2tlPSIjZmZkNzVlIi8+PHRleHQgeD0iNjAwIiB5PSI1MTgiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIyNSIgZm9udC13ZWlnaHQ9IjcwMCIgZmlsbD0iI2ZmZDc1ZSI+8J+RkSBWSVAgR09MRCDigKIg2YXYtNiq2LHZgzwvdGV4dD48dGV4dCB4PSI2MDAiIHk9IjYwNSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXNpemU9IjIzIiBmaWxsPSIjY2ZjMzlhIj7YsdmI2YXYp9iqIDEyICAg4oCiICAg2YXYqtin2KjYudmI2YYgMjQ4ICAg4oCiICAg2KfZhti22YXYp9mF2KfYqiA4NzwvdGV4dD48L3N2Zz4="></div>
+        <div class="vip-showcase-card"><h3>🔥 كيف سيظهر رومك بعد النشر؟</h3><p>عند نشر روم وأنت VIP تظهر بطاقة ذهبية، اسمك، الشارة، ID اللاعب وبيانات الروم.</p><img class="vip-shot" alt="معاينة روم VIP بعد النشر" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMjAwIiBoZWlnaHQ9IjcwMCIgdmlld0JveD0iMCAwIDEyMDAgNzAwIj48ZGVmcz48bGluZWFyR3JhZGllbnQgaWQ9ImciIHgxPSIwIiB4Mj0iMSI+PHN0b3Agc3RvcC1jb2xvcj0iIzhhNWEwMCIvPjxzdG9wIG9mZnNldD0iLjUiIHN0b3AtY29sb3I9IiNmZmQ3NWUiLz48c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiNhODZkMDAiLz48L2xpbmVhckdyYWRpZW50PjwvZGVmcz48cmVjdCB3aWR0aD0iMTIwMCIgaGVpZ2h0PSI3MDAiIHJ4PSIzNiIgZmlsbD0iIzEyMTIxMiIvPjxyZWN0IHg9IjE3MCIgeT0iNzAiIHdpZHRoPSI4NjAiIGhlaWdodD0iNTYwIiByeD0iMjgiIGZpbGw9IiNmZmZkZjIiIHN0cm9rZT0idXJsKCNnKSIgc3Ryb2tlLXdpZHRoPSI4Ii8+PHJlY3QgeD0iMTcwIiB5PSI3MCIgd2lkdGg9Ijg2MCIgaGVpZ2h0PSI3MCIgcng9IjI4IiBmaWxsPSJ1cmwoI2cpIi8+PHRleHQgeD0iNjAwIiB5PSIxMTYiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIzMCIgZm9udC13ZWlnaHQ9IjcwMCIgZmlsbD0iIzNhMjYwMCI+8J+RkSBWSVAgUk9PTTwvdGV4dD48Y2lyY2xlIGN4PSIzMzAiIGN5PSIyMzUiIHI9IjcwIiBmaWxsPSIjMjExYTBkIiBzdHJva2U9IiNmZmQ3NWUiIHN0cm9rZS13aWR0aD0iMTIiLz48dGV4dCB4PSIzMzAiIHk9IjI1NSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC1zaXplPSI1MiI+8J+OrjwvdGV4dD48dGV4dCB4PSI0NDAiIHk9IjIyNSIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXNpemU9IjM0IiBmb250LXdlaWdodD0iNzAwIiBmaWxsPSIjM2EyYzA1Ij7YsdmI2YUg2LPZg9mI2KfYryDYtdit2LHYp9mI2Yog4pyTPC90ZXh0Pjx0ZXh0IHg9IjQ0MCIgeT0iMjcwIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMjIiIGZpbGw9IiM4YTZhMDAiPvCfhpQgRkYtNDgyNzMxPC90ZXh0PjxyZWN0IHg9IjI2MCIgeT0iMzUwIiB3aWR0aD0iNjgwIiBoZWlnaHQ9IjcwIiByeD0iMTQiIGZpbGw9IiNmZmY4ZTEiIHN0cm9rZT0iI2VjZDI3YSIvPjx0ZXh0IHg9IjYwMCIgeT0iMzk1IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMjUiIGZpbGw9IiM2YjVhMWUiPlJvb20gSUQ6IDEyMzQ1NiAgIOKAoiAgINin2YTYs9mK2LHZgdixOiDYp9mE2LTYsdmCINin2YTYo9mI2LPYtyAgIOKAoiAgIDE0INiv2YLZitmC2Kk8L3RleHQ+PHJlY3QgeD0iNDAwIiB5PSI0OTAiIHdpZHRoPSI0MDAiIGhlaWdodD0iNjUiIHJ4PSIxNiIgZmlsbD0idXJsKCNnKSIvPjx0ZXh0IHg9IjYwMCIgeT0iNTMyIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMjgiIGZvbnQtd2VpZ2h0PSI3MDAiIGZpbGw9IiMzYTI2MDAiPvCfmoAg2KfZhti22YUg2KfZhNii2YY8L3RleHQ+PC9zdmc+"></div>
+        <div class="vip-showcase-card"><h3>✓ كيف ستظهر الشارة؟</h3><p>شارة ذهبية حقيقية بجانب اسم اللاعب في أماكن العرض المدعومة داخل الموقع.</p><img class="vip-shot" alt="معاينة الشارة الذهبية" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMjAwIiBoZWlnaHQ9IjUwMCIgdmlld0JveD0iMCAwIDEyMDAgNTAwIj48ZGVmcz48bGluZWFyR3JhZGllbnQgaWQ9ImciIHgxPSIwIiB5MT0iMCIgeDI9IjEiIHkyPSIxIj48c3RvcCBzdG9wLWNvbG9yPSIjZmZmM2IwIi8+PHN0b3Agb2Zmc2V0PSIuNDUiIHN0b3AtY29sb3I9IiNmZmQyNGQiLz48c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiNjOThhMDAiLz48L2xpbmVhckdyYWRpZW50PjwvZGVmcz48cmVjdCB3aWR0aD0iMTIwMCIgaGVpZ2h0PSI1MDAiIHJ4PSIzNiIgZmlsbD0iIzE4MTgxOCIvPjx0ZXh0IHg9IjYwMCIgeT0iMTc1IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iNTgiIGZvbnQtd2VpZ2h0PSI3MDAiIGZpbGw9IiNmZmYiPti12K3Ysdin2YjZijwvdGV4dD48ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSg2NTAgMTA1KSBzY2FsZSgzKSI+PHBhdGggZD0iTTEyIDEuMmwyLjUgMS45IDMuMS0uMyAxLjIgMi45IDIuOSAxLjItLjMgMy4xIDEuOSAyLjUtMS45IDIuNS4zIDMuMS0yLjkgMS4yLTEuMiAyLjktMy4xLS4zTDEyIDIyLjhsLTIuNS0xLjktMy4xLjMtMS4yLTIuOS0yLjktMS4yLjMtMy4xTDEuNyAxMmwxLjktMi41LS4zLTMuMSAyLjktMS4yIDEuMi0yLjkgMy4xLjN6IiBmaWxsPSJ1cmwoI2cpIiBzdHJva2U9IiM4YTVhMDAiIHN0cm9rZS13aWR0aD0iLjYiLz48cGF0aCBkPSJNNy42IDEyLjJsMi44IDIuOCA2LjEtNi4zIiBmaWxsPSJub25lIiBzdHJva2U9IiM1YTNhMDAiIHN0cm9rZS13aWR0aD0iMi4xIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiLz48L2c+PHRleHQgeD0iNjAwIiB5PSIzMzAiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIzMCIgZmlsbD0iI2ZmZDc1ZSI+2LTYp9ix2KkgVklQIEdPTEQ8L3RleHQ+PHRleHQgeD0iNjAwIiB5PSIzODUiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIyMCIgZmlsbD0iI2NmYzM5YSI+2KrYuNmH2LEg2KjYrNin2YbYqCDYp9iz2YUg2KfZhNmE2KfYudioINiv2KfYrtmEINin2YTZhdmI2YLYuTwvdGV4dD48L3N2Zz4="></div>
+        <div class="vip-showcase-card"><h3>🚀 ماذا يحصل عليه VIP؟</h3><div class="vip-step"><div class="vip-step-item"><b>1. هوية ذهبية</b><span>إطار متحرك + شارة VIP + حالة ذهبية.</span></div><div class="vip-step-item"><b>2. روم مميز</b><span>تصميم ذهبي عند نشر الروم مع بيانات اللاعب.</span></div><div class="vip-step-item"><b>3. ظهور ومزايا</b><span>أولوية ظهور الرومات والمزايا التي يتم تفعيلها مستقبلًا.</span></div><div class="vip-step-item"><b>4. الحساب دائم</b><span>الـID والبيانات مرتبطة بحساب Firebase وليست بالهاتف.</span></div></div></div>
+      </section>
+    </main>
+  </div>
+</div>
+
+<!-- نافذة الاشتراك غير المتاح -->
+<div class="modal-bg" id="vipSubscribeModal" onclick="backdropClose(event,'vipSubscribeModal')">
+  <div class="vip-gold-modal">
+    <span class="vip-gold-crown">👑</span>
+    <h3 class="gold-text">VIP GOLD</h3>
+    <p class="vip-gold-msg">ميزة الاشتراك غير متوفرة حاليًا</p>
+    <p class="vip-gold-sub">قريبًا يمكنك تفعيل VIP والحصول على جميع المميزات الذهبية.</p>
+    <button class="vip-gold-ok" onclick="closeModal('vipSubscribeModal')">حسنًا</button>
+  </div>
+</div>
+
+<!-- نافذة البروفايل غير المتاح حاليًا -->
+<div class="modal-bg" id="profileSoonModal" onclick="backdropClose(event,'profileSoonModal')">
+  <div class="vip-gold-modal profile-soon-modal">
+    <span class="vip-gold-crown">👤</span>
+    <h3 class="gold-text">البروفايل</h3>
+    <p class="vip-gold-msg">ميزة البروفايل غير متوفرة حاليًا</p>
+    <p class="vip-gold-sub">قريبًا يمكنك الوصول إلى ملفك الشخصي وإدارة حسابك من هنا.</p>
+    <button class="vip-gold-ok" onclick="closeModal('profileSoonModal')">حسنًا</button>
+  </div>
+</div>
+
+<!-- نافذة اللاعب المميز قريبًا -->
+<div class="modal-bg" id="vipSoonModal" onclick="backdropClose(event,'vipSoonModal')">
+  <div class="vip-soon-modal">
+    <span class="vip-gold-crown">⭐</span>
+    <h3>اللاعب المميز</h3>
+    <span class="soon-pill">قريبًا</span>
+    <p class="vip-gold-msg" style="color:#fff">ميزة جديدة قادمة قريبًا.</p>
+    <p class="vip-gold-sub">سيتمكن اللاعبون المميزون من الحصول على مزايا خاصة داخل مجتمع Free Fire.</p>
+    <button class="vip-gold-ok" onclick="closeModal('vipSoonModal')">حسنًا</button>
   </div>
 </div>
 
@@ -991,23 +1241,133 @@ const creatorsRef = database.ref('creators');
 const creatorApplicationsRef = database.ref('creatorApplications');
 const announcementsRef = database.ref('announcements');
 const usersRef = database.ref('users');
+const followsRef = database.ref('follows');
+const userNotificationsRef = database.ref('userNotifications');
 
-// ===== Firebase بدون تسجيل دخول =====
-// اللاعب لا يحتاج حساباً ولا تسجيل دخول. نستخدم معرفاً محلياً للجهاز فقط.
+// ===== Firebase Authentication: حساب دائم مرتبط بالحساب وليس بالجهاز =====
 let firebaseUser = null;
-let firebaseLocalMode = true;
-function localPublisherId(){
-  let id=localStorage.getItem('ff_local_uid');
-  if(!id){id='local_'+Date.now().toString(36)+'_'+Math.random().toString(36).slice(2,9);localStorage.setItem('ff_local_uid',id)}
-  return id;
+let firebaseAuth = null;
+let firebaseAuthReady = false;
+let accountMode = 'register';
+
+function syntheticEmail(playerId){
+  return String(playerId||'').toLowerCase().replace(/[^a-z0-9-]/g,'')+'@ffrooms.app';
 }
+function randomPlayerId(){
+  return 'FF-'+String(Math.floor(100000+Math.random()*900000));
+}
+async function createUniquePlayerId(){
+  for(let i=0;i<12;i++){
+    const id=randomPlayerId();
+    try{ const snap=await database.ref('playerIds/'+id).once('value'); if(!snap.exists()) return id; }catch(e){ return id; }
+  }
+  return 'FF-'+String(Date.now()).slice(-6);
+}
+function localPublisherId(){ return firebaseUser?.uid || localStorage.getItem('ff_legacy_uid') || 'guest'; }
 function firebaseErrorText(e){return (e&&(e.code||e.message))?String(e.code||e.message):'خطأ غير معروف'}
 function showFirebaseStatus(msg,ok=false){
   console[ok?'log':'warn']('[FreeFire Rooms] Firebase:',msg);
   const el=document.getElementById('firebaseStatus');
   if(el){el.textContent=msg;el.style.color=ok?'#239c48':'#c2410c';}
 }
-function getPublisherId(){return localPublisherId()}
+function getPublisherId(){ return localPublisherId(); }
+function requireAccount(){
+  if(firebaseUser && profile?.name) return true;
+  openAccountModal('register');
+  notify('👤 أنشئ حسابك أولًا لحفظ بياناتك');
+  return false;
+}
+function login(){openAccountModal('login')}
+function showAccount(){ if(firebaseUser)openProfile(); else openAccountModal('login'); }
+async function logoutAccount(){try{await firebaseAuth.signOut();closeProfilePage();notify('تم تسجيل الخروج');}catch(e){notify('⚠️ تعذر تسجيل الخروج')}}
+function openAccountModal(mode='register'){
+  accountMode=mode;
+  const title=document.getElementById('accountModalTitle'),hint=document.getElementById('accountModalHint'),name=document.getElementById('accountNameLabel'),nameInput=document.getElementById('accountNameInput'),idLabel=document.getElementById('accountIdLabel'),idInput=document.getElementById('accountIdInput'),submit=document.getElementById('accountSubmitBtn'),switchBtn=document.getElementById('accountSwitchBtn'),msg=document.getElementById('accountMessage');
+  if(!title)return;
+  const login=mode==='login';
+  title.textContent=login?'🔐 تسجيل الدخول':'👤 إنشاء حساب';
+  hint.textContent=login?'أدخل ID اللاعب وكلمة المرور لاستعادة نفس حسابك من أي هاتف.':'أنشئ حسابك مرة واحدة. سيبقى حسابك وID والرومات والمتابعون محفوظين حتى عند تغيير الهاتف.';
+  name.style.display=login?'none':'block'; nameInput.style.display=login?'none':'block';
+  idLabel.style.display=login?'block':'none'; idInput.style.display=login?'block':'none';
+  submit.textContent=login?'🔐 دخول إلى الحساب':'🚀 إنشاء الحساب';
+  switchBtn.textContent=login?'ليس لديك حساب؟ إنشاء حساب جديد':'لدي حساب بالفعل — تسجيل الدخول';
+  msg.textContent='';
+  openModal('loginModal');
+}
+function switchAccountMode(){openAccountModal(accountMode==='login'?'register':'login')}
+async function submitAccount(){
+  const name=(document.getElementById('accountNameInput')?.value||'').trim();
+  const id=(document.getElementById('accountIdInput')?.value||'').trim().toUpperCase();
+  const password=(document.getElementById('accountPasswordInput')?.value||'');
+  const msg=document.getElementById('accountMessage'),btn=document.getElementById('accountSubmitBtn');
+  if(password.length<6){msg.textContent='⚠️ كلمة المرور يجب أن تكون 6 أحرف على الأقل';return}
+  btn.disabled=true;msg.textContent='⏳ جاري الاتصال...';
+  try{
+    if(accountMode==='register'){
+      if(!name){msg.textContent='⚠️ اكتب اسمك';return}
+      const playerId=await createUniquePlayerId();
+      const cred=await firebaseAuth.createUserWithEmailAndPassword(syntheticEmail(playerId),password);
+      const uid=cred.user.uid;
+      const base={uid,playerId,name,username:name.toLowerCase().replace(/\s+/g,'_').slice(0,24),bio:'لاعب في مجتمع FreeFire Rooms 🎮',image:'',posted:0,joined:0,followers:0,following:0,followingList:[],subscription:{plan:'free',status:'inactive',startedAt:null,expiresAt:null},createdAt:firebase.database.ServerValue.TIMESTAMP};
+      await database.ref('users/'+uid).set(base);
+      await database.ref('playerIds/'+playerId).set(uid);
+      firebaseUser=cred.user; profile={...base}; delete profile.uid; delete profile.createdAt; profile.privacy={hideFollowers:false,hideFollowing:false}; saveState();
+      closeModal('loginModal'); updateProfilePage(); updateProfileUI(); notify('✅ تم إنشاء حسابك — ID: '+playerId);
+    }else{
+      if(!/^FF-\d{6}$/.test(id)){msg.textContent='⚠️ اكتب ID صحيح مثل FF-482731';return}
+      const cred=await firebaseAuth.signInWithEmailAndPassword(syntheticEmail(id),password);
+      await loadAccountProfile(cred.user.uid);
+      closeModal('loginModal'); notify('✅ تم تسجيل الدخول بنجاح');
+    }
+  }catch(e){
+    const code=String(e?.code||'');
+    msg.textContent=code.includes('email-already')?'⚠️ هذا الحساب موجود بالفعل':code.includes('invalid-credential')||code.includes('wrong-password')||code.includes('user-not-found')?'⚠️ ID أو كلمة المرور غير صحيحة':('⚠️ '+firebaseErrorText(e));
+  }finally{btn.disabled=false}
+}
+async function loadAccountProfile(uid){
+  const snap=await usersRef.child(uid).once('value');
+  const d=snap.val()||{};
+  firebaseUser=firebaseAuth.currentUser;
+  profile={name:d.name||'',username:d.username||'',bio:d.bio||'لاعب في مجتمع FreeFire Rooms 🎮',image:d.image||'',posted:Number(d.posted||0),joined:Number(d.joined||0),followers:Number(d.followers||0),following:Number(d.following||0),followingList:Array.isArray(d.followingList)?d.followingList:[],privacy:d.privacy||{hideFollowers:false,hideFollowing:false},playerId:d.playerId||''};
+  profile.subscription=d.subscription||{plan:'free',status:'inactive',startedAt:null,expiresAt:null};
+  profile.following=profile.followingList.length;
+  saveState(); updateProfileUI(); updateProfilePage();
+}
+function startUserNotifications(uid){
+  if(!uid)return;
+  try{
+    userNotificationsRef?.child(uid).limitToLast(50).on('value',snap=>{
+      const d=snap.val()||{};
+      const incoming=Object.keys(d).map(k=>({...d[k],id:k})).sort((a,b)=>Number(b.createdAt||0)-Number(a.createdAt||0));
+      incoming.slice(0,30).forEach(n=>{
+        if(!notifications.some(x=>x.id===n.id))notifications.unshift(n);
+      });
+      notifications=notifications.slice(0,50); saveState(); updateNotificationBadge();
+    });
+  }catch(e){console.warn('user notifications listener failed',e)}
+}
+
+function startFirebaseAuth(){
+  if(firebaseAuthReady)return;
+  firebaseAuthReady=true;
+  try{
+    firebaseAuth=firebase.auth();
+    firebaseAuth.setPersistence(firebase.auth.Auth.Persistence.LOCAL).catch(()=>{});
+    firebaseAuth.onAuthStateChanged(async user=>{
+      firebaseUser=user||null;
+      if(user){
+        try{await loadAccountProfile(user.uid);startUserNotifications(user.uid);showFirebaseStatus('الحساب متصل بـ Firebase ✓',true);}
+        catch(e){showFirebaseStatus('تعذر تحميل ملف الحساب: '+firebaseErrorText(e));}
+      }else{
+        auth=false;
+        showFirebaseStatus('لم يتم تسجيل الدخول');
+        if(!profile.name) setTimeout(()=>openAccountModal('register'),500);
+      }
+      auth=!!user;
+      try{syncCreatorProfileButton();updateProfilePage();updateProfileUI()}catch(e){}
+    });
+  }catch(e){showFirebaseStatus('Firebase Auth غير متاح: '+firebaseErrorText(e))}
+}
 function retryPendingRooms(){return Promise.resolve()}
 
 function startFirebaseListeners(){
@@ -1074,7 +1434,6 @@ let auth=false;
 
 
 function esc(s){return String(s ?? '').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]))}
-function getPublisherId(){ return localPublisherId(); }
 function getFlag(c){const m={'موريتانيا':'🇲🇷','مصر':'🇪🇬','الجزائر':'🇩🇿','المغرب':'🇲🇦','السعودية':'🇸🇦','تونس':'🇹🇳','العراق':'🇮🇶','الأردن':'🇯🇴','ليبيا':'🇱🇾','السودان':'🇸🇩','فلسطين':'🇵🇸','الإمارات':'🇦🇪','قطر':'🇶🇦','الكويت':'🇰🇼','عُمان':'🇴🇲','البحرين':'🇧🇭','اليمن':'🇾🇪','سوريا':'🇸🇾','لبنان':'🇱🇧','الصومال':'🇸🇴','جيبوتي':'🇩🇯','جزر القمر':'🇰🇲'};return m[c]||'🌍'}
 function getGenderClass(g){return g==='male'?'male':g==='female'?'female':'default'}
 function getGenderIcon(g){return g==='male'?'👨':g==='female'?'👩':''}
@@ -1090,7 +1449,7 @@ function applyFilter(){
  if(sortMode==='new')list=[...list].sort((a,b)=>(b.createdAt||0)-(a.createdAt||0));
  if(sortMode==='fast')list=[...list].sort((a,b)=>(b.views||0)-(a.views||0));
  if(sortMode==='fav')list=list.filter(r=>JSON.parse(localStorage.getItem('favRooms')||'[]').includes(r.firebaseKey));
- list=[...list].sort((a,b)=>{const ac=!!(a.creator||approvedCreatorForUid(a.publisherId));const bc=!!(b.creator||approvedCreatorForUid(b.publisherId));if(ac!==bc)return bc-ac;return (b.createdAt||0)-(a.createdAt||0)});
+ list=[...list].sort((a,b)=>{const av=!!a.vip,bv=!!b.vip;if(av!==bv)return bv-av;return (b.createdAt||0)-(a.createdAt||0)});
  renderRooms(list);
 }
 
@@ -1124,6 +1483,7 @@ let publishingRoom = false;
 
 async function createRoom(){
  if(publishingRoom)return;
+ if(!requireAccount())return;
  const btn=document.querySelector('#createModal .submit');
  const country=document.getElementById('roomCountry')?.value||'';
  const g=document.getElementById('roomGender')?.value||'';
@@ -1136,8 +1496,8 @@ async function createRoom(){
  publishingRoom=true;
  if(btn){btn.disabled=true;btn.textContent='🚀 نشر الروم الآن';}
  const publisherId=localPublisherId();
- const currentCreator=approvedCreatorForUid(publisherId);
- const room={firebaseKey:'local_'+Date.now().toString(36),name:`روم ${mode} - ${currentCreator?.name||'لاعب'}`,roomId,password,mode,country,gender:g,server,notes,createdAt:Date.now(),publisherId,publisherName:currentCreator?.name||'لاعب',publisherUsername:currentCreator?.handle||currentCreator?.username||'player',publisherImage:currentCreator?.image||'',creator:currentCreator?{id:currentCreator.id,name:currentCreator.name,handle:currentCreator.handle||currentCreator.username||'',image:currentCreator.image||'',badgeType:currentCreator.badgeType||'none',verified:currentCreator.verified===true}:null,views:0};
+ const vip=isVip();
+ const room={firebaseKey:'local_'+Date.now().toString(36),name:`روم ${mode} - ${profile.name||'لاعب'}`,roomId,password,mode,country,gender:g,server,notes,createdAt:Date.now(),publisherId,publisherName:profile.name||'لاعب',publisherUsername:profile.username||'player',publisherImage:profile.image||'',vip,playerId:getPlayerId(),views:0};
 
  // قاعدة المنصة: لكل ناشر روم واحد فقط. نحذف الروم السابق محليًا فورًا.
  roomsData=roomsData.filter(r=>r.publisherId!==publisherId||r.demo);
@@ -1162,7 +1522,10 @@ async function createRoom(){
    if(Object.keys(updates).length) await database.ref().update(updates);
 
    const ref=roomsRef.push();
-   await ref.set({name:room.name,roomId,password,mode,country,gender:g,server,notes,createdAt:firebase.database.ServerValue.TIMESTAMP,publisherId,publisherName:room.publisherName,publisherUsername:room.publisherUsername,publisherImage:room.publisherImage,creator:room.creator,views:0});
+   await ref.set({name:room.name,roomId,password,mode,country,gender:g,server,notes,createdAt:firebase.database.ServerValue.TIMESTAMP,publisherId,publisherName:room.publisherName,publisherUsername:room.publisherUsername,publisherImage:room.publisherImage,creator:null,vip:room.vip,playerId:room.playerId,views:0});
+   profile.posted=Number(profile.posted||0)+1; saveState();
+   if(firebaseUser) usersRef.child(firebaseUser.uid).update({posted:profile.posted});
+   room.firebaseKey=ref.key; await notifyFollowersOnRoom(room);
    roomsData=roomsData.filter(r=>r.firebaseKey!==room.firebaseKey);
    try{localStorage.setItem('ff_pending_rooms',JSON.stringify([]));}catch(e){}
    applyFilter();
@@ -1223,7 +1586,7 @@ function openProfileEditor(){
   const userEl=document.getElementById('profileUsernameInput');
   const bioEl=document.getElementById('profileBioInput');
   if(nameEl)nameEl.value=profile.name||'';
-  if(userEl)userEl.value=profile.username||profile.name.toLowerCase().replace(/\s+/g,'_');
+  if(userEl){userEl.value=profile.username||profile.name.toLowerCase().replace(/\s+/g,'_');userEl.readOnly=true;userEl.style.opacity='.65';}
   if(bioEl)bioEl.value=profile.bio||'لاعب في مجتمع FreeFire Rooms 🎮';
   updateProfileUI();
   closeModal('profileSettingsModal');
@@ -1257,7 +1620,7 @@ function updateProfilePage(){
   const name=profile.name||'لاعب جديد';
   const username=profile.username||name.toLowerCase().replace(/\s+/g,'_');
   const el=(id)=>document.getElementById(id);
-  if(el('profilePageName'))el('profilePageName').textContent=name;
+  if(el('profilePageName'))el('profilePageName').innerHTML=esc(name)+(isVip()?(' '+vipBadgeHtml()):'');
   if(el('profilePageUser'))el('profilePageUser').textContent='@'+username.replace(/^@/,'');
   if(el('profileBio'))el('profileBio').textContent=profile.bio||'لاعب في مجتمع FreeFire Rooms 🎮';
   if(el('pagePosted'))el('pagePosted').textContent=profile.posted||0;
@@ -1274,12 +1637,12 @@ function updateProfilePage(){
 }
 function syncPublicProfile(){
   try{
-    if(!isApprovedCreator(getPublisherId())) return;
+    if(!firebaseUser) return;
     if(firebaseUser && typeof usersRef!=='undefined'){
       // لا نستخدم set حتى لا نمسح عدادات المتابعين أثناء تحديث الملف.
       usersRef.child(firebaseUser.uid).update({
         uid:firebaseUser.uid,name:profile.name||'',username:profile.username||'',bio:profile.bio||'',image:profile.image||'',
-        posted:profile.posted||0,joined:profile.joined||0,
+        posted:profile.posted||0,joined:profile.joined||0,playerId:profile.playerId||getPlayerId(),subscription:profile.subscription||{plan:'free',status:'inactive'},
         privacy:{hideFollowers:!!profile.privacy?.hideFollowers,hideFollowing:!!profile.privacy?.hideFollowing},updatedAt:firebase.database.ServerValue.TIMESTAMP
       }).catch(()=>{});
     }
@@ -1305,9 +1668,7 @@ function updateNotificationBadge(){
   if(b)b.classList.toggle('show',unread);
 }
 function openCreate(){openModal('createModal')}
-function requireAccount(){return true}
-function login(){}
-function showAccount(){notify('ℹ️ لا يوجد حساب شخصي — أنت لاعب فقط')}
+// account functions are defined in the Firebase authentication block above
 function renderNotificationsOnly(){
   const box=document.getElementById('notificationsList');
   if(!box)return;
@@ -1316,6 +1677,10 @@ function renderNotificationsOnly(){
   const all=[...adminItems,...localItems].sort((a,b)=>{if(!!a.pinned!==!!b.pinned)return a.pinned?-1:1;return Number(b.id?b.createdAt||0:0)-Number(a.createdAt||0)});
   if(!all.length)box.innerHTML='<div class="no-notifications">🔕 لا توجد إشعارات حالياً<br><small>ستظهر هنا رسائل الإدارة والتحديثات الجديدة.</small></div>';
   else box.innerHTML=all.slice(0,50).map(n=>`<div class="notification-item">${n.image?`<img src="${esc(n.image)}" style="width:52px;height:52px;border-radius:13px;object-fit:cover;margin-left:9px">`:''}<div class="notification-icon">${esc(n.icon||'🔥')}</div><div><b>${esc(n.title)}</b>${n.pinned?'<span style="font-size:8px;color:#ff6900;margin-right:5px">مثبت</span>':''}<p>${esc(n.text)}</p><time>${esc(n.time||'')}</time></div></div>`).join('');
+}
+function openProfileSoon(){
+  try{closeModal('notificationsModal');closeCreatorHub();}catch(e){}
+  openModal('profileSoonModal');
 }
 function openNotifications(){
   // تحميل إشعارات الإدارة عند الطلب فقط، بدل الاستماع لها طوال الوقت.
@@ -1339,10 +1704,10 @@ let publicProfileUid='';
 let publicProfileData=null;
 function defaultAvatar(){return 'data:image/svg+xml;charset=UTF-8,'+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="120" height="120"><rect width="120" height="120" rx="60" fill="#e8edf3"/><text x="60" y="77" text-anchor="middle" font-size="52">👤</text></svg>')}
 async function openPublicProfile(uid){
-  if(!uid || !isApprovedCreator(uid)) return;
+  if(!uid) return;
+  if(uid===getPublisherId()){openProfile();return;}
   const creator=approvedCreatorForUid(uid);
-  if(creator){openCreatorDetail(creator.id||uid);return;}
-  if(uid===getPublisherId()){openProfile();return}
+  if(creator){ /* legacy creator data is no longer required for player profiles */ }
   publicProfileUid=uid;
   let d=null;
   try{ if(firebaseUser) { const snap=await usersRef.child(uid).once('value'); d=snap.val()||null; } }catch(e){}
@@ -1364,14 +1729,14 @@ async function openPublicProfile(uid){
   openModal('publicProfileModal');
 }
 async function refreshFollowButton(){
-  const btn=document.getElementById('publicFollowBtn'); if(!btn||!publicProfileUid||!isApprovedCreator(publicProfileUid))return;
+  const btn=document.getElementById('publicFollowBtn'); if(!btn||!publicProfileUid)return;
   let following=false;
   if(firebaseUser){try{following=!!(await followsRef.child(publicProfileUid).child(firebaseUser.uid).once('value')).val()}catch(e){}}
   if(!following)following=(profile.followingList||[]).includes(publicProfileUid);
   btn.classList.toggle('following',following);btn.textContent=following?'✓ تتابعه':'＋ متابعة';
 }
 async function togglePublicFollow(){
-  if(!isApprovedCreator(publicProfileUid))return;
+  if(!publicProfileUid)return;
   if(!requireAccount())return;
   if(!publicProfileUid||publicProfileUid===getPublisherId())return;
   const targetUid=publicProfileUid, me=getPublisherId();
@@ -1392,7 +1757,8 @@ async function togglePublicFollow(){
   try{
     const updates={};
     updates['follows/'+targetUid+'/'+me]=was?null:true;
-    // تحديث ذري بدون قراءة قائمة المتابعين كاملة أو قراءة شجرة follows كلها.
+    // نحفظ قائمة المتابعة داخل الحساب حتى تبقى بعد تغيير الهاتف.
+    updates['users/'+me+'/followingList']=profile.followingList||[];
     updates['users/'+targetUid+'/followers']=firebase.database.ServerValue.increment(was?-1:1);
     updates['users/'+me+'/following']=firebase.database.ServerValue.increment(was?-1:1);
     await database.ref().update(updates);
@@ -1414,20 +1780,24 @@ function toggleFollow(){
 }
 function followFromRoom(e,owner){
   e.stopPropagation();
-  if(!owner || !isApprovedCreator(owner)) return;
-  const creator=approvedCreatorForUid(owner);
-  if(creator) openCreatorDetail(creator.id||owner);
+  if(!owner || owner===getPublisherId()) return;
+  publicProfileUid=owner;
+  openPublicProfile(owner);
 }
 
-function notifyFollowersOnRoom(room){
- // In the real Firebase version this should write to each follower's notification feed.
- // For this standalone build we add a local notification explaining the event.
- if(profile.followers>0){
-   addNotification('روم جديد من حساب تتابعه', 'تم نشر: '+room.name+' • '+room.country);
- }
+async function notifyFollowersOnRoom(room){
+  if(!firebaseUser||!room?.publisherId)return;
+  try{
+    const snap=await followsRef.child(room.publisherId).once('value');
+    const followers=snap.val()||{}; const updates={};
+    Object.keys(followers).forEach(uid=>{
+      if(followers[uid]===true) updates['userNotifications/'+uid+'/'+database.ref().child('userNotifications/'+uid).push().key]={title:'🔥 روم جديد من لاعب تتابعه',text:(room.publisherName||'لاعب')+' نشر '+(room.name||'روم جديد'),roomKey:room.firebaseKey||'',createdAt:firebase.database.ServerValue.TIMESTAMP,read:false};
+    });
+    if(Object.keys(updates).length)await database.ref().update(updates);
+  }catch(e){console.warn('notify followers failed',e)}
 }
 function updateProfileUI(){
- document.getElementById('profilePreviewName').textContent=profile.name||"لاعب جديد";
+ document.getElementById('profilePreviewName').innerHTML=esc(profile.name||"لاعب جديد")+(isVip()?(' '+vipBadgeHtml()):'');
  document.getElementById('postedScore').textContent=profile.posted||0;
  document.getElementById('joinedScore').textContent=profile.joined||0;
  document.getElementById('totalScore').textContent=(profile.posted||0)+(profile.joined||0);
@@ -1451,13 +1821,15 @@ function previewProfileImage(e){
  reader.readAsDataURL(file);
 }
 function saveProfile(){
- const name=document.getElementById('profileNameInput').value.trim();
- let username=document.getElementById('profileUsernameInput').value.trim().replace(/^@/,'').replace(/\s+/g,'_');
+ const name=document.getElementById('profileNameInput')?.value.trim();
+ const usernameEl=document.getElementById('profileUsernameInput');
+ const bio=document.getElementById('profileBioInput')?.value.trim()||profile.bio||'لاعب في مجتمع FreeFire Rooms 🎮';
  if(!name){notify('اكتب اسمك أولاً');return}
- if(username.length<2){notify('اكتب اسم مستخدم صحيح');return}
- if(!/^[A-Za-z0-9_\u0600-\u06FF.\-]+$/.test(username)){notify('اسم المستخدم يحتوي على رموز غير مسموحة');return}
- profile.name=name; profile.username=username; profile.bio=(document.getElementById('profileBioInput')?.value.trim()||profile.bio||'لاعب في مجتمع FreeFire Rooms 🎮');
- localStorage.setItem('ffprofile',JSON.stringify(profile)); updateProfileUI(); updateProfilePage(); syncPublicProfile(); closeModal('profileModal'); notify('✅ تم حفظ الملف الشخصي');
+ if(!profile.username) profile.username=name.toLowerCase().replace(/\s+/g,'_').slice(0,24);
+ profile.name=name; profile.bio=bio;
+ saveState(); updateProfileUI(); updateProfilePage();
+ if(firebaseUser) usersRef.child(firebaseUser.uid).update({name:profile.name,bio:profile.bio,image:profile.image||'',updatedAt:firebase.database.ServerValue.TIMESTAMP}).catch(()=>{});
+ closeModal('profileModal'); notify('✅ تم حفظ الملف الشخصي');
 }
 
 // ===== First paint: لا تنتظر Firebase حتى تظهر الصفحة =====
@@ -1501,6 +1873,155 @@ startFirebaseAuth();
 .creator-room-post .info+.info{border-right:1px solid #e6ebf1!important}
 .creator-room-post .info-grid{background:#f7f9fc!important}
 </style>
+<script id="vip-gold-system">
+/* ================================================================
+   👑 VIP GOLD SYSTEM — يعمل فوق الكود الحالي دون كسر Firebase
+   - الاشتراك غير متاح حاليًا (نافذة "غير متوفرة")
+   - بيانات الاشتراك مستقبلًا: profile.subscription {plan,status,startedAt,expiresAt}
+   - عند انتهاء الاشتراك يعود الشكل المجاني تلقائيًا (isVip()=false)
+     دون حذف الحساب أو ID أو الرومات أو المتابعين أو الصور.
+   ================================================================ */
+function isVip(){const sub=profile?.subscription; if(!sub)return false; if(sub.status!=='active'||sub.plan!=='vip')return false; if(sub.expiresAt && Number(sub.expiresAt)<=Date.now())return false; return true}
+
+/* ID اللاعب: مرتبط بالحساب (localPublisherId = معرف الحساب) وليس بالجهاز */
+function playerIdFor(uid){
+  let h=2166136261;const s='FFACC'+String(uid||'player');
+  for(let i=0;i<s.length;i++){h^=s.charCodeAt(i);h=Math.imul(h,16777619)>>>0}
+  return 'FF-'+String(100000+h%900000);
+}
+function getPlayerId(){return profile?.playerId || playerIdFor(localPublisherId())}
+
+/* شارة VIP الذهبية (SVG حقيقي — ليست Emoji) */
+let __vipUid=0;
+function vipBadgeHtml(large){
+  __vipUid++;const g='vipGoldG'+__vipUid;
+  return '<span class="vip-badge'+(large?' large':'')+'" title="VIP GOLD — لاعب مميز"><svg viewBox="0 0 24 24" aria-hidden="true"><defs><linearGradient id="'+g+'" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff3b0"/><stop offset=".45" stop-color="#ffd24d"/><stop offset="1" stop-color="#c98a00"/></linearGradient></defs><path d="M12 1.2l2.5 1.9 3.1-.3 1.2 2.9 2.9 1.2-.3 3.1 1.9 2.5-1.9 2.5.3 3.1-2.9 1.2-1.2 2.9-3.1-.3L12 22.8l-2.5-1.9-3.1.3-1.2-2.9-2.9-1.2.3-3.1L1.7 12l1.9-2.5-.3-3.1 2.9-1.2 1.2-2.9 3.1.3z" fill="url(#'+g+')" stroke="#8a5a00" stroke-width=".6"/><path d="M7.6 12.2l2.8 2.8 6.1-6.3" fill="none" stroke="#5a3a00" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"/></svg></span>';
+}
+
+/* ---------- تعطيل ميزة صنّاع المحتوى نهائيًا (بشكل آمن) ---------- */
+window.openCreatorHub=function(){openVipHub()};
+window.openCreatorDetail=function(){openVipSoon()};
+window.openCreatorApply=function(){openVipSoon()};
+window.openCreatorStatus=function(){openVipSoon()};
+window.openCreatorChallenge=function(){openVipSoon()};
+window.openCreatorEdit=function(){};
+window.saveCreatorProfile=function(){};
+window.toggleCreatorFollow=function(){};
+window.shareCreator=function(){};
+window.openMyCreatorProfile=function(){};
+window.openApprovedCreatorFromStatus=function(){};
+window.selectCreatorContact=function(){};
+window.submitCreatorApplication=function(){};
+window.cancelCreatorApplication=function(){};
+window.previewCreatorApplyImage=function(){};
+window.previewCreatorEditImage=function(){};
+window.handleCreatorRoute=function(){};
+window.syncCreatorProfileButton=function(){var b=document.getElementById('navCreatorProfile');if(b)b.style.display='none'};
+
+/* ---------- صفحة VIP والنوافذ ---------- */
+function openVipHub(){var p=document.getElementById('creatorPage');if(!p)return;p.classList.add('show');document.body.style.overflow='hidden';setNav('navCreators');p.scrollTop=0;try{refreshVipProfileUI()}catch(e){}}
+function openVipSubscribe(){
+  if(isVip()){notify('👑 أنت مشترك في VIP بالفعل');return}
+  openModal('vipSubscribeModal');
+}
+function openVipSoon(){openModal('vipSoonModal')}
+function upgradeToVip(){
+  /* نقطة الدخول من الحساب المجاني — لا يفعّل VIP، فقط يعرض الصفحة */
+  openVipHub();
+  setTimeout(function(){notify('👑 تصفح مميزات VIP ثم اضغط زر الاشتراك')},350);
+}
+
+/* ---------- إعادة رسم بطاقات الرومات مع دعم VIP (تستبدل النسخة القديمة) ---------- */
+window.renderRooms=function(list){
+  const el=document.getElementById('rooms');if(!el)return;
+  const now=Date.now();
+  const data=(list||roomsData||[]).filter(r=>r&&r.createdAt&&now-r.createdAt<ROOM_LIFETIME);
+  const favRooms=JSON.parse(localStorage.getItem('favRooms')||'[]');
+  if(!data.length){el.innerHTML='';document.getElementById('empty').style.display='block'}
+  else{
+    document.getElementById('empty').style.display='none';
+    el.innerHTML=data.map(r=>{
+      const own=r.publisherId===getPublisherId(),gi=getGenderIcon(r.gender),gn=getGenderName(r.gender),fav=favRooms.includes(r.firebaseKey);
+      const vip=!!(r.vip===true || (own&&isVip()));
+      const pubName=esc(r.publisherName||(own?'أنت':'لاعب'));
+      const vipOwner=vip?('<div class="vip-owner"><span class="vip-frame vip-frame-sm"><span class="vip-frame-inner">'+(r.publisherImage?'<img src="'+esc(r.publisherImage)+'" alt="">':'🎮')+'</span></span><div class="vip-owner-info"><b>'+pubName+' '+vipBadgeHtml()+'</b><span class="vip-owner-id">🆔 '+(r.playerId||playerIdFor(r.publisherId||'player'))+'</span></div></div>'):'';
+      return '<article class="room '+(vip?'vip-room':'')+'" onclick="openDetails(\''+r.firebaseKey+'\')">'
+        +'<button class="more" onclick="event.stopPropagation();favorite(\''+r.firebaseKey+'\')">'+(fav?'★':'☆')+'</button>'
+        +(vip?'<div class="vip-ribbon">👑 VIP ROOM</div>':'')
+        +'<div class="room-top"><div><div class="room-name">'+esc(r.name||('روم '+(r.mode||'فري فاير')))+' '+(vip?vipBadgeHtml():'')+'</div><div class="owner-line"><div class="owner">👑 '+pubName+' • '+(gn||'لاعب')+'</div></div></div><span class="badge">● نشط</span></div>'
+        +vipOwner
+        +'<div class="room-meta"><span class="meta">'+getFlag(r.country)+' '+esc(r.country)+'</span><span class="meta">🎮 '+esc(r.mode)+'</span><span class="meta">👁 '+(r.views||0)+'</span></div>'
+        +'<div class="info-grid"><div class="info"><b>🆔 '+esc(r.roomId)+'</b><span>Room ID</span></div><div class="info"><b>⏱ '+getTimeLeft(r.createdAt)+'</b><span>الوقت المتبقي</span></div><div class="info"><b>🌐 '+esc(r.server)+'</b><span>السيرفر</span></div></div>'
+        +(r.notes?'<div class="room-notes">📝 '+esc(r.notes)+'</div>':'')
+        +'<div class="room-actions"><button class="join" onclick="event.stopPropagation();joinRoom(\''+r.firebaseKey+'\')">🚀 انضم الآن</button><button class="details" onclick="event.stopPropagation();openDetails(\''+r.firebaseKey+'\')">👁 عرض التفاصيل</button></div>'
+        +'</article>';
+    }).join('');
+  }
+  const count=document.getElementById('activeCount');if(count)count.textContent=data.length;
+  const topRooms=document.getElementById('topRooms');if(topRooms)topRooms.textContent=data.length;
+};
+
+/* ---------- حقن ID + بطاقة الحالة في صفحة البروفايل ---------- */
+function ensureVipProfileUI(){
+  const userEl=document.getElementById('profilePageUser');
+  if(userEl&&!document.getElementById('playerIdRow')){
+    const row=document.createElement('div');
+    row.id='playerIdRow';row.className='profile-id-row';
+    row.innerHTML='🆔 <b id="playerIdText"></b> <button type="button" class="copy-id-btn" onclick="copyText(getPlayerId());notify(\'✅ تم نسخ ID بنجاح\')">📋 نسخ</button>';
+    userEl.parentNode.insertBefore(row,userEl.nextSibling);
+  }
+  const bio=document.getElementById('profileBio');
+  if(bio&&!document.getElementById('vipStatusCard')){
+    const card=document.createElement('div');
+    card.id='vipStatusCard';card.className='vip-status-card';
+    bio.parentNode.insertBefore(card,bio.nextSibling);
+  }
+}
+function refreshVipProfileUI(){
+  const idText=document.getElementById('playerIdText');
+  if(idText)idText.textContent=getPlayerId();
+  const card=document.getElementById('vipStatusCard');
+  const page=document.getElementById('profilePage');
+  if(card){
+    if(isVip()){
+      card.classList.add('vip-on');
+      const exp=profile.subscription&&profile.subscription.expiresAt?new Date(profile.subscription.expiresAt).toLocaleDateString('ar'):'—';
+      card.innerHTML='<div><div class="vip-status-title">👑 VIP GOLD</div><div class="vip-status-sub">الحالة: مشترك ✓ • ينتهي في: '+exp+'</div></div>';
+      if(page)page.classList.add('vip-gold-active');
+    }else{
+      card.classList.remove('vip-on');
+      card.innerHTML='<div><div class="vip-status-title">⭐ الحساب المجاني</div><div class="vip-status-sub">الحالة: غير مشترك — حوّل حسابك إلى رتبة ذهبية</div></div><button type="button" class="vip-upgrade-btn" onclick="upgradeToVip()">👑 الترقية إلى VIP</button>';
+      if(page)page.classList.remove('vip-gold-active');
+    }
+  }
+}
+
+/* غلاف آمن حول updateProfilePage (الأصلي يفترض وجود عناصر قد لا توجد) */
+const __vipOrigUpdateProfilePage=(typeof updateProfilePage==='function')?updateProfilePage:null;
+window.updateProfilePage=function(){
+  try{if(__vipOrigUpdateProfilePage)__vipOrigUpdateProfilePage()}catch(e){}
+  ensureVipProfileUI();refreshVipProfileUI();
+};
+
+/* نسخة آمنة من updateProfileUI */
+window.updateProfileUI=function(){
+  const n=document.getElementById('profilePreviewName');if(n)n.textContent=profile.name||'لاعب جديد';
+  const set=(id,v)=>{const e=document.getElementById(id);if(e)e.textContent=v};
+  set('postedScore',profile.posted||0);set('joinedScore',profile.joined||0);set('totalScore',(profile.posted||0)+(profile.joined||0));
+  const img=document.getElementById('profilePreviewImg');
+  if(img)img.src=profile.image||('data:image/svg+xml;charset=UTF-8,'+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100"><rect width="100" height="100" rx="50" fill="#e8edf3"/><text x="50" y="62" text-anchor="middle" font-size="42">👤</text></svg>'));
+};
+
+/* ---------- تشغيل أولي ---------- */
+try{if(location.hash&&/creator/i.test(location.hash)){history.replaceState(null,'',location.pathname+location.search)}}catch(e){}
+try{startFirebaseAuth()}catch(e){console.warn('auth init failed',e)}
+document.querySelectorAll('.vip-badge-slot').forEach(function(el){el.innerHTML=vipBadgeHtml(el.dataset.large==='1')});
+ensureVipProfileUI();
+try{renderRooms()}catch(e){console.warn(e)}
+try{updateProfilePage()}catch(e){console.warn(e)}
+try{updateNotificationBadge()}catch(e){}
+</script>
+
 </body>
 </html>
 <style>
