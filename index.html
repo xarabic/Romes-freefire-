@@ -367,7 +367,7 @@ button{cursor:pointer;border:0}
 #publicProfileModal{display:none!important}.creator-room-profile{cursor:pointer}
 
 /* وضع اللاعب فقط: إخفاء الحساب والملفات الشخصية نهائياً */
-.profile-page,.profile-modal,#profileSettingsModal,#loginModal,#publicProfileModal,.account-panel,.profile-avatar-edit{display:none!important}.profile-page.show{display:block!important}
+.profile-page,.profile-modal,#profileSettingsModal,#publicProfileModal,.account-panel,.profile-avatar-edit{display:none!important}.profile-page.show{display:block!important}
 .contact-methods{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:6px 0}.contact-choice{border:1px solid #e5e9ef;background:#f7f9fc;border-radius:14px;padding:10px 7px;display:flex;align-items:center;justify-content:center;gap:7px;cursor:pointer;font-size:10px;color:#344052}.contact-choice.active{border-color:#ff6900;background:#fff4eb;box-shadow:0 0 0 2px rgba(255,105,0,.08)}.contact-logo{width:30px;height:30px;border-radius:9px;display:grid;place-items:center;color:#fff;font-weight:900;font-size:14px}.whatsapp-logo{background:#25d366}.instagram-logo{background:linear-gradient(135deg,#7c3aed,#ec4899,#f59e0b)}.telegram-logo{background:#229ed9}.form-note{font-size:8px;color:#8792a0;background:#f7f9fc;border:1px solid #e7ebf1;border-radius:10px;padding:8px;line-height:1.6}@media(max-width:480px){.contact-methods{grid-template-columns:1fr 1fr 1fr}.contact-choice{font-size:8px}}
 /* ===== Creator room: same real room card as players, creator identity inline ===== */
 .room.creator-room-post{background:var(--card);border:1px solid #e9edf2;border-radius:16px;padding:11px;box-shadow:var(--shadow);color:inherit;overflow:hidden}
@@ -544,7 +544,7 @@ button{cursor:pointer;border:0}
   <button class="nav vip-nav" id="navCreators" onclick="openVipHub()"><i>⭐</i><span>اللاعب المميز</span><em class="soon-tag">قريبًا</em></button>
   <button class="nav create" onclick="openCreate()"><i>+</i><span>إنشاء</span></button>
   <button class="nav notification-bell" id="navNotifications" onclick="openNotifications()"><i>🔔</i><span class="notification-badge" id="notificationBadge"></span><span>الإشعارات</span></button>
-  <button class="nav profile-nav" id="navProfileSoon" onclick="openProfileSoon()"><i>👤</i><span>البروفايل</span></button>
+  <button class="nav profile-nav" id="navProfileSoon" onclick="openProfile()"><i>👤</i><span>البروفايل</span></button>
 </nav>
 
 <div class="modal-bg" id="createModal" onclick="backdropClose(event,'createModal')">
@@ -650,9 +650,10 @@ button{cursor:pointer;border:0}
       <label id="accountNameLabel">اسمك</label>
       <input id="accountNameInput" maxlength="24" placeholder="مثال: صحراوي">
       <label id="accountIdLabel" style="display:none">ID اللاعب</label>
-      <input id="accountIdInput" maxlength="10" placeholder="FF-482731" style="display:none;text-transform:uppercase">
+      <input id="accountIdInput" maxlength="10" placeholder="10000000" inputmode="numeric" style="display:none;text-transform:none">
       <label>كلمة المرور</label>
       <input id="accountPasswordInput" type="password" minlength="6" maxlength="72" placeholder="6 أحرف أو أكثر">
+      <div class="account-id-hint">🆔 سيحصل كل لاعب على ID دائم ومتسلسل. يبدأ النظام من <b>10000000</b> ثم <b>10000001</b> ثم <b>10000002</b>…<br>هذا الـID سيكون هو هوية حسابك ويمكن استخدامه لاحقًا لتفعيل الاشتراك من لوحة الإدارة.</div>
       <button class="submit" id="accountSubmitBtn" onclick="submitAccount()">🚀 إنشاء الحساب</button>
       <button type="button" id="accountSwitchBtn" onclick="switchAccountMode()" style="border:0;background:none;color:#ff6900;font-weight:900;font-size:10px;cursor:pointer;margin-top:2px">لدي حساب بالفعل — تسجيل الدخول</button>
     </div>
@@ -1253,16 +1254,21 @@ let accountMode = 'register';
 function syntheticEmail(playerId){
   return String(playerId||'').toLowerCase().replace(/[^a-z0-9-]/g,'')+'@ffrooms.app';
 }
-function randomPlayerId(){
-  return 'FF-'+String(Math.floor(100000+Math.random()*900000));
+// ===== نظام ID متسلسل للحسابات =====
+// أول حساب = 10000000، ثم 10000001، 10000002...
+// Transaction يمنع إعطاء نفس الرقم لشخصين عند التسجيل في نفس الوقت.
+const PLAYER_ID_START = 10000000;
+async function reserveNextPlayerId(){
+  const counterRef = database.ref('system/nextPlayerId');
+  const result = await counterRef.transaction(current => {
+    const n = (current === null || Number.isNaN(Number(current))) ? PLAYER_ID_START : Number(current);
+    return n + 1;
+  });
+  if(!result.committed) throw new Error('تعذر حجز ID اللاعب');
+  const allocated = Number(result.snapshot.val()) - 1;
+  return String(allocated);
 }
-async function createUniquePlayerId(){
-  for(let i=0;i<12;i++){
-    const id=randomPlayerId();
-    try{ const snap=await database.ref('playerIds/'+id).once('value'); if(!snap.exists()) return id; }catch(e){ return id; }
-  }
-  return 'FF-'+String(Date.now()).slice(-6);
-}
+function validPlayerId(id){return /^\d{8,}$/.test(String(id||''));}
 function localPublisherId(){ return firebaseUser?.uid || localStorage.getItem('ff_legacy_uid') || 'guest'; }
 function firebaseErrorText(e){return (e&&(e.code||e.message))?String(e.code||e.message):'خطأ غير معروف'}
 function showFirebaseStatus(msg,ok=false){
@@ -1286,7 +1292,7 @@ function openAccountModal(mode='register'){
   if(!title)return;
   const login=mode==='login';
   title.textContent=login?'🔐 تسجيل الدخول':'👤 إنشاء حساب';
-  hint.textContent=login?'أدخل ID اللاعب وكلمة المرور لاستعادة نفس حسابك من أي هاتف.':'أنشئ حسابك مرة واحدة. سيبقى حسابك وID والرومات والمتابعون محفوظين حتى عند تغيير الهاتف.';
+  hint.textContent=login?'أدخل ID اللاعب (8 أرقام) وكلمة المرور لاستعادة نفس حسابك من أي هاتف.':'أنشئ حسابك مرة واحدة. سيبقى حسابك وID والرومات والمتابعون محفوظين حتى عند تغيير الهاتف.';
   name.style.display=login?'none':'block'; nameInput.style.display=login?'none':'block';
   idLabel.style.display=login?'block':'none'; idInput.style.display=login?'block':'none';
   submit.textContent=login?'🔐 دخول إلى الحساب':'🚀 إنشاء الحساب';
@@ -1305,16 +1311,26 @@ async function submitAccount(){
   try{
     if(accountMode==='register'){
       if(!name){msg.textContent='⚠️ اكتب اسمك';return}
-      const playerId=await createUniquePlayerId();
-      const cred=await firebaseAuth.createUserWithEmailAndPassword(syntheticEmail(playerId),password);
+      // ننشئ حساب Firebase أولاً ببريد داخلي مؤقت، ثم نحجز الرقم المتسلسل.
+      // بهذه الطريقة لا نحتاج لاستخدام رقم عشوائي كـ ID.
+      const tempEmail='new_'+Date.now().toString(36)+'_'+Math.random().toString(36).slice(2,8)+'@ffrooms.app';
+      const cred=await firebaseAuth.createUserWithEmailAndPassword(tempEmail,password);
       const uid=cred.user.uid;
-      const base={uid,playerId,name,username:name.toLowerCase().replace(/\s+/g,'_').slice(0,24),bio:'لاعب في مجتمع FreeFire Rooms 🎮',image:'',posted:0,joined:0,followers:0,following:0,followingList:[],subscription:{plan:'free',status:'inactive',startedAt:null,expiresAt:null},createdAt:firebase.database.ServerValue.TIMESTAMP};
-      await database.ref('users/'+uid).set(base);
-      await database.ref('playerIds/'+playerId).set(uid);
-      firebaseUser=cred.user; profile={...base}; delete profile.uid; delete profile.createdAt; profile.privacy={hideFollowers:false,hideFollowing:false}; saveState();
-      closeModal('loginModal'); updateProfilePage(); updateProfileUI(); notify('✅ تم إنشاء حسابك — ID: '+playerId);
+      let playerId='';
+      try{
+        playerId=await reserveNextPlayerId();
+        await cred.user.updateEmail(syntheticEmail(playerId));
+        const base={uid,playerId,name,username:name.toLowerCase().replace(/\s+/g,'_').slice(0,24),bio:'لاعب في مجتمع FreeFire Rooms 🎮',image:'',posted:0,joined:0,followers:0,following:0,followingList:[],subscription:{plan:'free',status:'inactive',startedAt:null,expiresAt:null},createdAt:firebase.database.ServerValue.TIMESTAMP};
+        await database.ref('users/'+uid).set(base);
+        await database.ref('playerIds/'+playerId).set(uid);
+        firebaseUser=cred.user; profile={...base}; delete profile.uid; delete profile.createdAt; profile.privacy={hideFollowers:false,hideFollowing:false}; saveState();
+        closeModal('loginModal'); updateProfilePage(); updateProfileUI(); notify('✅ تم إنشاء حسابك — ID: '+playerId);
+      }catch(inner){
+        try{await cred.user.delete()}catch(e){}
+        throw inner;
+      }
     }else{
-      if(!/^FF-\d{6}$/.test(id)){msg.textContent='⚠️ اكتب ID صحيح مثل FF-482731';return}
+      if(!validPlayerId(id)){msg.textContent='⚠️ اكتب ID صحيح من 8 أرقام مثل 10000000';return}
       const cred=await firebaseAuth.signInWithEmailAndPassword(syntheticEmail(id),password);
       await loadAccountProfile(cred.user.uid);
       closeModal('loginModal'); notify('✅ تم تسجيل الدخول بنجاح');
@@ -1328,7 +1344,7 @@ async function loadAccountProfile(uid){
   const snap=await usersRef.child(uid).once('value');
   const d=snap.val()||{};
   firebaseUser=firebaseAuth.currentUser;
-  profile={name:d.name||'',username:d.username||'',bio:d.bio||'لاعب في مجتمع FreeFire Rooms 🎮',image:d.image||'',posted:Number(d.posted||0),joined:Number(d.joined||0),followers:Number(d.followers||0),following:Number(d.following||0),followingList:Array.isArray(d.followingList)?d.followingList:[],privacy:d.privacy||{hideFollowers:false,hideFollowing:false},playerId:d.playerId||''};
+  const fl=d.followingList; const followingList=Array.isArray(fl)?fl:(fl&&typeof fl==='object'?Object.keys(fl).filter(k=>fl[k]):[]); profile={name:d.name||'',username:d.username||'',bio:d.bio||'لاعب في مجتمع FreeFire Rooms 🎮',image:d.image||'',posted:Number(d.posted||0),joined:Number(d.joined||0),followers:Number(d.followers||0),following:Number(d.following||0),followingList,privacy:d.privacy||{hideFollowers:false,hideFollowing:false},playerId:String(d.playerId||'')};
   profile.subscription=d.subscription||{plan:'free',status:'inactive',startedAt:null,expiresAt:null};
   profile.following=profile.followingList.length;
   saveState(); updateProfileUI(); updateProfilePage();
@@ -1569,6 +1585,7 @@ function goHome(){
   window.scrollTo({top:0,behavior:'smooth'});
 }
 function openProfile(){
+  if(!requireAccount())return;
   updateProfilePage();
   document.getElementById('profilePage')?.classList.add('show');
   document.body.style.overflow='auto';
@@ -1889,7 +1906,7 @@ function playerIdFor(uid){
   for(let i=0;i<s.length;i++){h^=s.charCodeAt(i);h=Math.imul(h,16777619)>>>0}
   return 'FF-'+String(100000+h%900000);
 }
-function getPlayerId(){return profile?.playerId || playerIdFor(localPublisherId())}
+function getPlayerId(){return profile?.playerId || ''}
 
 /* شارة VIP الذهبية (SVG حقيقي — ليست Emoji) */
 let __vipUid=0;
@@ -1990,7 +2007,7 @@ function refreshVipProfileUI(){
       if(page)page.classList.add('vip-gold-active');
     }else{
       card.classList.remove('vip-on');
-      card.innerHTML='<div><div class="vip-status-title">⭐ الحساب المجاني</div><div class="vip-status-sub">الحالة: غير مشترك — حوّل حسابك إلى رتبة ذهبية</div></div><button type="button" class="vip-upgrade-btn" onclick="upgradeToVip()">👑 الترقية إلى VIP</button>';
+      card.innerHTML='<div><div class="vip-status-title">⭐ الحساب المجاني</div><div class="vip-status-sub">اللاعب المميز غير متاح حاليًا — سيظهر التفعيل لاحقًا من الإدارة.</div></div>';
       if(page)page.classList.remove('vip-gold-active');
     }
   }
@@ -2022,6 +2039,14 @@ try{updateProfilePage()}catch(e){console.warn(e)}
 try{updateNotificationBadge()}catch(e){}
 </script>
 
+
+<style id="real-account-ui-fix">
+.profile-nav{position:relative!important;color:#7a5200!important;background:linear-gradient(135deg,#fff8df,#ffe08a,#ffc42e)!important;border:1px solid #d69a16!important;box-shadow:0 0 0 1px rgba(255,207,70,.22),0 7px 20px rgba(206,146,0,.22)!important;animation:profileGoldPulse 2.4s ease-in-out infinite!important}
+.profile-nav i{color:#7a5200!important}.profile-nav span{font-weight:950!important}.profile-nav:after{content:'';position:absolute;inset:1px;border-radius:inherit;border:1px solid rgba(255,255,255,.7);pointer-events:none}
+@keyframes profileGoldPulse{0%,100%{transform:translateY(0);filter:brightness(1)}50%{transform:translateY(-2px);filter:brightness(1.08)}}
+.account-id-hint{font-size:9px;color:#7b8492;background:#f8fafc;border:1px solid #e8edf3;border-radius:10px;padding:8px;line-height:1.7}
+.player-id-display{display:inline-flex;align-items:center;gap:7px;padding:7px 10px;border-radius:10px;background:linear-gradient(135deg,#fff9e8,#fff2c4);border:1px solid #f1ce69;color:#704900;font-weight:950;font-size:11px}
+</style>
 </body>
 </html>
 <style>
