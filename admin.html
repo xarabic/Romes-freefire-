@@ -1,31 +1,166 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>FreeFire Rooms — الإدارة</title>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
 <style>
-*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;background:#090b10;color:#fff;min-height:100vh}button,input,select{font:inherit} .wrap{max-width:900px;margin:auto;padding:20px}.card{background:#11151d;border:1px solid #242b37;border-radius:20px;padding:20px;margin:16px 0;box-shadow:0 12px 35px #0005}.brand{font-size:25px;font-weight:900}.gold{color:#ffb300}.muted{color:#9da6b5}.hidden{display:none!important}.row{display:flex;gap:10px;flex-wrap:wrap}.row>*{flex:1;min-width:140px}input,select{width:100%;padding:14px;border-radius:12px;border:1px solid #303846;background:#0b0e14;color:#fff;outline:none}button{border:0;border-radius:12px;padding:13px 18px;font-weight:800;cursor:pointer}.primary{background:linear-gradient(135deg,#ffb300,#ff7a00);color:#111}.danger{background:#8d2020;color:#fff}.ghost{background:#202631;color:#fff}.top{display:flex;justify-content:space-between;align-items:center;gap:10px}.player{display:flex;gap:15px;align-items:center}.avatar{width:72px;height:72px;border-radius:18px;object-fit:cover;background:#202631}.status{padding:8px 12px;border-radius:999px;display:inline-block;background:#252b35}.vip{background:#4b3500;color:#ffc44d}.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.stat{background:#0b0e14;border:1px solid #202631;border-radius:14px;padding:13px}.msg{margin-top:12px;padding:12px;border-radius:12px;background:#171c25}.err{color:#ff7777}.ok{color:#6ee7a0}@media(max-width:600px){.grid{grid-template-columns:1fr}.wrap{padding:12px}}
-</style></head>
-<body><div class="wrap">
-<div class="top"><div><div class="brand">🎮 FreeFire Rooms <span class="gold">ADMIN</span></div><div class="muted">لوحة الإدارة الخاصة — نفس Firebase الخاص بالموقع</div></div><button id="logout" class="ghost hidden">تسجيل خروج</button></div>
-<section id="login" class="card"><h2>🔐 دخول الإدارة</h2><p class="muted">استخدم حساب Firebase الذي تم تعيينه كمسؤول.</p><div class="row"><input id="email" type="email" placeholder="البريد الإلكتروني"><input id="password" type="password" placeholder="كلمة المرور"></div><button id="loginBtn" class="primary" style="margin-top:10px;width:100%">دخول</button><div id="loginMsg" class="msg hidden"></div></section>
-<section id="panel" class="hidden">
-<div class="card"><h2>🔎 البحث عن لاعب</h2><div class="row"><input id="playerId" inputmode="numeric" maxlength="8" placeholder="Player ID — مثال 10000015"><button id="searchBtn" class="primary">بحث</button></div><div id="searchMsg" class="msg hidden"></div></div>
-<div id="playerCard" class="card hidden"><div class="player"><img id="avatar" class="avatar"><div><h2 id="pname" style="margin:0 0 6px"></h2><div id="puser" class="muted"></div><div id="pid" class="muted"></div></div></div><div class="grid" style="margin-top:15px"><div class="stat">الحالة<br><b id="pstatus"></b></div><div class="stat">ينتهي في<br><b id="pexpires"></b></div></div><h3>👑 إدارة VIP</h3><div class="row"><select id="days"><option value="7">7 أيام</option><option value="30">30 يوم</option><option value="90">90 يوم</option><option value="365">365 يوم</option></select><button id="activate" class="primary">تفعيل / تمديد VIP</button><button id="deactivate" class="danger">إلغاء VIP</button></div><div id="actionMsg" class="msg hidden"></div></div>
-</section></div>
+*{box-sizing:border-box}body{margin:0;background:#080a0f;color:#f5f7fb;font-family:Arial,sans-serif}
+.wrap{max-width:900px;margin:auto;padding:20px}.top{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px}
+.logo{font-size:22px;font-weight:900}.gold{color:#ffb52e}.card{background:#11151d;border:1px solid #252c38;border-radius:18px;padding:18px;margin-bottom:15px;box-shadow:0 12px 35px #0005}
+h1{font-size:25px;margin:5px 0 8px}.muted{color:#9299a8;font-size:13px}label{display:block;margin:12px 0 7px;color:#cbd0da;font-size:13px}
+input,select{width:100%;padding:14px;border-radius:12px;border:1px solid #303846;background:#0b0e14;color:white;outline:none}
+button{border:0;border-radius:12px;padding:13px 17px;font-weight:800;cursor:pointer}
+.primary{background:#ffb52e;color:#111}.danger{background:#df4759;color:white}.ghost{background:#202633;color:white}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:10px}.hidden{display:none}.player{display:flex;gap:15px;align-items:center}.avatar{width:70px;height:70px;border-radius:50%;object-fit:cover;background:#202633;border:2px solid #ffb52e}
+.badge{display:inline-block;padding:6px 10px;border-radius:20px;background:#252b36;color:#cbd0da;font-size:12px}.vip{background:#5b4211;color:#ffd36d}.actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:15px}
+.msg{padding:11px;border-radius:10px;margin-top:12px;font-size:13px;background:#1b2230}.err{background:#351820;color:#ffb5bd}.ok{background:#152d20;color:#9ff0b4}
+@media(max-width:600px){.row,.actions{grid-template-columns:1fr}.wrap{padding:12px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top"><div class="logo">🔥 FreeFire <span class="gold">Rooms</span></div><button id="logout" class="ghost hidden">تسجيل الخروج</button></div>
+
+  <section id="loginCard" class="card">
+    <h1>لوحة الإدارة</h1>
+    <div class="muted">تسجيل دخول المسؤول فقط</div>
+    <label>البريد الإلكتروني</label>
+    <input id="email" type="email" autocomplete="username" placeholder="admin@example.com">
+    <label>كلمة المرور</label>
+    <input id="password" type="password" autocomplete="current-password" placeholder="••••••••">
+    <button id="login" class="primary" style="width:100%;margin-top:15px">دخول الإدارة</button>
+    <div id="loginMsg"></div>
+  </section>
+
+  <main id="adminApp" class="hidden">
+    <section class="card">
+      <h1>👑 إدارة اللاعبين</h1>
+      <div class="muted">ابحث بالـ Player ID ثم إدارة حالة VIP.</div>
+      <div class="row" style="margin-top:10px">
+        <input id="playerId" inputmode="numeric" maxlength="8" placeholder="مثال: 10000015">
+        <button id="search" class="primary">بحث عن اللاعب</button>
+      </div>
+      <div id="searchMsg"></div>
+    </section>
+
+    <section id="playerCard" class="card hidden">
+      <div class="player">
+        <img id="avatar" class="avatar" alt="">
+        <div>
+          <h1 id="name">—</h1>
+          <div class="muted" id="username">—</div>
+          <div style="margin-top:8px"><span id="pid" class="badge">ID —</span> <span id="status" class="badge">FREE</span></div>
+        </div>
+      </div>
+      <div class="row" style="margin-top:18px">
+        <div><div class="muted">حالة VIP</div><strong id="vipState">—</strong></div>
+        <div><div class="muted">تاريخ الانتهاء</div><strong id="expires">—</strong></div>
+      </div>
+      <label>مدة التفعيل / التمديد</label>
+      <select id="days"><option value="7">7 أيام</option><option value="30">30 يوم</option><option value="90">90 يوم</option><option value="365">365 يوم</option></select>
+      <div class="actions">
+        <button id="activate" class="primary">👑 تفعيل / تمديد VIP</button>
+        <button id="deactivate" class="danger">إلغاء VIP</button>
+      </div>
+      <div id="actionMsg"></div>
+    </section>
+  </main>
+</div>
+
 <script>
-const firebaseConfig={apiKey:"AIzaSyB2Hf_5AyhDUzbw8I2hk5hDatSj2J7Ly_Y",authDomain:"freefire-community-efb6c.firebaseapp.com",databaseURL:"https://freefire-community-efb6c-default-rtdb.firebaseio.com",projectId:"freefire-community-efb6c",storageBucket:"freefire-community-efb6c.firebasestorage.app",messagingSenderId:"69980561331",appId:"1:69980561331:web:88fdc24bcb63e04fa3f5c6"};
-firebase.initializeApp(firebaseConfig);const auth=firebase.auth(),db=firebase.database();let currentUid=null,currentPlayer=null;
-const $=id=>document.getElementById(id);function msg(el,text,type=''){el.textContent=text;el.className='msg '+(type||'');el.classList.remove('hidden')}
-function fmt(t){if(!t)return '—';return new Date(Number(t)).toLocaleString('ar',{dateStyle:'medium',timeStyle:'short'})}
-async function isAdmin(user){const s=await db.ref('users/'+user.uid+'/isAdmin').once('value');return s.val()===true}
-auth.onAuthStateChanged(async user=>{if(!user){$('login').classList.remove('hidden');$('panel').classList.add('hidden');$('logout').classList.add('hidden');return}try{if(!(await isAdmin(user)))throw new Error('هذا الحساب ليس حساب إدارة.');currentUid=user.uid;$('login').classList.add('hidden');$('panel').classList.remove('hidden');$('logout').classList.remove('hidden')}catch(e){await auth.signOut();msg($('loginMsg'),e.message,'err')}});
-$('loginBtn').onclick=async()=>{try{await auth.signInWithEmailAndPassword($('email').value.trim(),$('password').value)}catch(e){msg($('loginMsg'),'تعذر تسجيل الدخول: '+e.message,'err')}};$('logout').onclick=()=>auth.signOut();
-$('searchBtn').onclick=async()=>{const id=$('playerId').value.trim();if(!/^\d{8}$/.test(id)){msg($('searchMsg'),'اكتب ID من 8 أرقام.','err');return}try{const us=await db.ref('playerIds/'+id).once('value');const uid=us.val();if(!uid)throw new Error('لا يوجد لاعب بهذا ID.');const s=await db.ref('users/'+uid).once('value');if(!s.exists())throw new Error('بيانات اللاعب غير موجودة.');currentPlayer={uid,data:s.val()||{},id};renderPlayer()}catch(e){$('playerCard').classList.add('hidden');msg($('searchMsg'),e.message,'err')}};
-function renderPlayer(){const d=currentPlayer.data,sub=d.subscription||{};$('playerCard').classList.remove('hidden');$('searchMsg').classList.add('hidden');$('pname').textContent=d.name||'بدون اسم';$('puser').textContent=d.username?'@'+d.username:'';$('pid').textContent='ID: '+currentPlayer.id;$('avatar').src=d.image||'data:image/svg+xml;charset=UTF-8,'+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="72" height="72"><rect width="100%" height="100%" rx="18" fill="#202631"/><text x="50%" y="58%" text-anchor="middle" fill="#ffb300" font-size="28">FF</text></svg>');const active=sub.plan==='vip'&&sub.status==='active'&&(!sub.expiresAt||Number(sub.expiresAt)>Date.now());$('pstatus').textContent=active?'👑 VIP نشط':'حساب مجاني';$('pstatus').className=active?'vip':'';$('pexpires').textContent=active?fmt(sub.expiresAt):'—'}
-async function action(type){if(!currentPlayer)return;const uid=currentPlayer.uid,now=Date.now();try{if(type==='activate'){const days=Number($('days').value);const ref=db.ref('users/'+uid+'/subscription');const s=(await ref.once('value')).val()||{};const active=s.plan==='vip'&&s.status==='active'&&Number(s.expiresAt)>now;const from=active?Number(s.expiresAt):now;const sub={plan:'vip',status:'active',startedAt:active?Number(s.startedAt||now):now,expiresAt:from+days*86400000,activatedAt:now,activatedBy:currentUid};const updates={};updates['users/'+uid+'/subscription']=sub;updates['userNotifications/'+uid+'/vip_'+now]={title:'👑 تم تفعيل VIP',text:'تم تفعيل اللاعب المميز لمدة '+days+' يوم.',createdAt:now,read:false,icon:'👑'};await db.ref().update(updates);currentPlayer.data.subscription=sub;renderPlayer();msg($('actionMsg'),'✅ تم تفعيل/تمديد VIP بنجاح.','ok')}else{const sub={plan:'free',status:'inactive',startedAt:null,expiresAt:null,updatedAt:now,updatedBy:currentUid};await db.ref('users/'+uid+'/subscription').set(sub);currentPlayer.data.subscription=sub;renderPlayer();msg($('actionMsg'),'✅ تم إلغاء VIP.','ok')}}catch(e){msg($('actionMsg'),'حدث خطأ: '+e.message,'err')}}
-$('activate').onclick=()=>action('activate');$('deactivate').onclick=()=>action('deactivate');
-</script></body></html>
+const firebaseConfig={
+  apiKey:"YOUR_FIREBASE_API_KEY",
+  authDomain:"freefire-community-efb6c.firebaseapp.com",
+  databaseURL:"https://freefire-community-efb6c-default-rtdb.firebaseio.com",
+  projectId:"freefire-community-efb6c",
+  storageBucket:"freefire-community-efb6c.firebasestorage.app",
+  messagingSenderId:"69980561331",
+  appId:"1:69980561331:web:88fdc24bcb63e04fa3f5c6"
+};
+firebase.initializeApp(firebaseConfig);
+const auth=firebase.auth(), db=firebase.database();
+let current=null;
+
+const $=id=>document.getElementById(id);
+function msg(id,text,type=""){ $(id).innerHTML=text?`<div class="msg ${type}">${text}</div>`:""; }
+function date(v){return v?new Date(Number(v)).toLocaleString('ar-EG',{dateStyle:'medium',timeStyle:'short'}):"—";}
+function active(s){return s&&s.plan==="vip"&&s.status==="active"&&(!s.expiresAt||Number(s.expiresAt)>Date.now());}
+
+$("login").onclick=async()=>{
+  msg("loginMsg","");
+  try{
+    await auth.signInWithEmailAndPassword($("email").value.trim(),$("password").value);
+  }catch(e){msg("loginMsg","بيانات الدخول غير صحيحة أو الحساب غير موجود.","err");}
+};
+
+auth.onAuthStateChanged(async user=>{
+  if(!user){$("loginCard").classList.remove("hidden");$("adminApp").classList.add("hidden");$("logout").classList.add("hidden");return;}
+  try{
+    const snap=await db.ref("users/"+user.uid).once("value");
+    const p=snap.val()||{};
+    if(p.isAdmin!==true){
+      await auth.signOut();
+      msg("loginMsg","هذا الحساب ليس حساب إدارة. يجب تعيين isAdmin = true له أولًا.","err");
+      return;
+    }
+    $("loginCard").classList.add("hidden");$("adminApp").classList.remove("hidden");$("logout").classList.remove("hidden");
+  }catch(e){
+    await auth.signOut();msg("loginMsg","تعذر التحقق من صلاحية الإدارة: "+e.message,"err");
+  }
+});
+$("logout").onclick=()=>auth.signOut();
+
+$("search").onclick=async()=>{
+  const id=$("playerId").value.trim();
+  $("playerCard").classList.add("hidden");msg("searchMsg","");
+  if(!/^\d{8}$/.test(id)){msg("searchMsg","اكتب Player ID من 8 أرقام.","err");return;}
+  try{
+    const map=await db.ref("playerIds/"+id).once("value"), uid=map.val();
+    if(!uid){msg("searchMsg","لا يوجد لاعب بهذا ID.","err");return;}
+    const snap=await db.ref("users/"+uid).once("value");
+    if(!snap.exists()){msg("searchMsg","الحساب غير موجود.","err");return;}
+    current={uid,data:snap.val()||{}};
+    render();
+  }catch(e){msg("searchMsg","حدث خطأ: "+e.message,"err");}
+};
+
+function render(){
+  const p=current.data,s=p.subscription||{plan:"free",status:"inactive"};
+  $("name").textContent=p.name||"بدون اسم";$("username").textContent=p.username?"@"+p.username:"";
+  $("pid").textContent="ID "+(p.playerId||"—");
+  $("avatar").src=p.image||"data:image/svg+xml;charset=UTF-8,"+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100"><rect width="100" height="100" fill="#202633"/><text x="50" y="58" text-anchor="middle" font-size="45" fill="#ffb52e">👤</text></svg>');
+  const on=active(s);$("status").textContent=on?"VIP GOLD":"FREE";$("status").className="badge "+(on?"vip":"");
+  $("vipState").textContent=on?"مفعّل":"غير مفعّل";$("expires").textContent=on?date(s.expiresAt):"—";
+  $("playerCard").classList.remove("hidden");
+}
+
+$("activate").onclick=async()=>{
+  if(!current)return;
+  msg("actionMsg","جاري التفعيل...");
+  try{
+    const now=Date.now(), days=Number($("days").value);
+    const ref=db.ref("users/"+current.uid+"/subscription"), old=(await ref.once("value")).val()||{};
+    const oldOn=active(old), start=oldOn?Number(old.startedAt||now):now, from=oldOn?Number(old.expiresAt):now;
+    const sub={plan:"vip",status:"active",startedAt:start,expiresAt:from+days*86400000,activatedAt:now,activatedBy:auth.currentUser.uid};
+    await ref.set(sub);
+    await db.ref("userNotifications/"+current.uid+"/vip_"+now).set({title:"👑 تم تفعيل VIP",text:"تم تفعيل اللاعب المميز لمدة "+days+" يوم.",createdAt:now,read:false,icon:"👑"});
+    current.data.subscription=sub;render();msg("actionMsg","تم تفعيل/تمديد VIP بنجاح.","ok");
+  }catch(e){msg("actionMsg","فشل التفعيل: "+e.message,"err");}
+};
+
+$("deactivate").onclick=async()=>{
+  if(!current)return;
+  if(!confirm("هل تريد إلغاء VIP لهذا اللاعب؟"))return;
+  try{
+    const sub={plan:"free",status:"inactive",startedAt:null,expiresAt:null,updatedAt:Date.now(),updatedBy:auth.currentUser.uid};
+    await db.ref("users/"+current.uid+"/subscription").set(sub);
+    current.data.subscription=sub;render();msg("actionMsg","تم إلغاء VIP.","ok");
+  }catch(e){msg("actionMsg","فشل الإلغاء: "+e.message,"err");}
+};
+</script>
+</body>
+</html>
