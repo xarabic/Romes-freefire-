@@ -1373,15 +1373,30 @@ function startFirebaseAuth(){
     firebaseAuth.onAuthStateChanged(async user=>{
       firebaseUser=user||null;
       if(user){
-        try{await loadAccountProfile(user.uid);startUserNotifications(user.uid);showFirebaseStatus('الحساب متصل بـ Firebase ✓',true);}
-        catch(e){showFirebaseStatus('تعذر تحميل ملف الحساب: '+firebaseErrorText(e));}
+        try{
+          await loadAccountProfile(user.uid);
+          startUserNotifications(user.uid);
+          showFirebaseStatus('الحساب متصل بـ Firebase ✓',true);
+        }catch(e){showFirebaseStatus('تعذر تحميل ملف الحساب: '+firebaseErrorText(e));}
       }else{
         auth=false;
         showFirebaseStatus('لم يتم تسجيل الدخول');
-        if(!profile.name) setTimeout(()=>openAccountModal('register'),500);
+        try{
+          const saved=JSON.parse(localStorage.getItem('ffprofile')||'null');
+          if(saved&&saved.name){
+            profile={...profile,...saved};
+            updateProfileUI();
+            updateProfilePage();
+          }
+        }catch(e){}
       }
       auth=!!user;
-      try{syncCreatorProfileButton();updateProfilePage();updateProfileUI()}catch(e){}
+      try{
+        syncCreatorProfileButton();
+        updateProfilePage();
+        updateProfileUI();
+        if(typeof refreshVipProfileUI==='function')refreshVipProfileUI();
+      }catch(e){}
     });
   }catch(e){showFirebaseStatus('Firebase Auth غير متاح: '+firebaseErrorText(e))}
 }
@@ -1850,6 +1865,12 @@ function saveProfile(){
  closeModal('profileModal'); notify('✅ تم حفظ الملف الشخصي');
 }
 
+// ===== Restore saved account immediately while Firebase restores the session =====
+try{
+  const savedProfile=JSON.parse(localStorage.getItem('ffprofile')||'null');
+  if(savedProfile&&savedProfile.name)profile={...profile,...savedProfile};
+}catch(e){}
+
 // ===== First paint: لا تنتظر Firebase حتى تظهر الصفحة =====
 try{
   roomsData=[...DEMO_ROOMS];
@@ -2048,6 +2069,67 @@ try{updateNotificationBadge()}catch(e){}
 .account-id-hint{font-size:9px;color:#7b8492;background:#f8fafc;border:1px solid #e8edf3;border-radius:10px;padding:8px;line-height:1.7}
 .player-id-display{display:inline-flex;align-items:center;gap:7px;padding:7px 10px;border-radius:10px;background:linear-gradient(135deg,#fff9e8,#fff2c4);border:1px solid #f1ce69;color:#704900;font-weight:950;font-size:11px}
 </style>
+
+<style id="vip-visual-fix-v3">
+#profilePage.vip-gold-active .profile-big-wrap{padding:0!important;background:none!important;box-shadow:none!important}
+#profilePage.vip-gold-active .profile-image-click{
+position:relative!important;display:block!important;width:112px!important;height:112px!important;
+padding:4px!important;border-radius:50%!important;
+background:linear-gradient(135deg,#a87400,#ffd75e,#fff2b0,#ffb300,#a87400)!important;
+box-shadow:0 0 24px rgba(255,190,0,.45)!important
+}
+#profilePage.vip-gold-active .profile-image-click::after{
+content:""!important;position:absolute!important;inset:0!important;border-radius:50%!important;
+background:conic-gradient(from 0deg,transparent 0 55deg,rgba(255,255,255,.95) 80deg,transparent 115deg 360deg)!important;
+animation:vipSpin 3.5s linear infinite!important;
+-webkit-mask:radial-gradient(farthest-side,transparent calc(100% - 5px),#000 calc(100% - 4px))!important;
+mask:radial-gradient(farthest-side,transparent calc(100% - 5px),#000 calc(100% - 4px))!important;
+pointer-events:none!important;z-index:3!important
+}
+#profilePage.vip-gold-active .profile-big{
+width:100%!important;height:100%!important;border:0!important;border-radius:50%!important;
+object-fit:cover!important;display:block!important;position:relative!important;z-index:1!important
+}
+#profilePage.vip-gold-active .profile-image-edit{z-index:5!important;bottom:2px!important;left:2px!important}
+.vip-owner .vip-frame{flex:0 0 44px!important;width:44px!important;height:44px!important}
+.vip-owner .vip-frame-inner{width:100%!important;height:100%!important;border-radius:50%!important;overflow:hidden!important}
+.vip-owner .vip-frame-inner img{width:100%!important;height:100%!important;display:block!important;object-fit:cover!important;border-radius:50%!important;margin:0!important}
+#publicProfileImg.public-vip-avatar{
+border:4px solid #ffd75e!important;box-shadow:0 0 0 2px #a87400,0 0 18px rgba(255,190,0,.42)!important;
+object-fit:cover!important
+}
+@media(max-width:560px){
+#profilePage.vip-gold-active .profile-image-click{width:86px!important;height:86px!important}
+}
+</style>
+
+<script id="vip-room-profile-fix-v3">
+(function(){
+  const oldRefresh=window.refreshVipProfileUI;
+  window.refreshVipProfileUI=function(){
+    try{if(oldRefresh)oldRefresh()}catch(e){}
+    const page=document.getElementById('profilePage');
+    const vip=typeof isVip==='function'&&isVip();
+    if(page)page.classList.toggle('vip-gold-active',!!vip);
+    const pubImg=document.getElementById('publicProfileImg');
+    try{
+      if(pubImg&&window.publicProfileData){
+        const sub=window.publicProfileData.subscription;
+        const on=!!(sub&&sub.plan==='vip'&&sub.status==='active'&&(!sub.expiresAt||Number(sub.expiresAt)>Date.now()));
+        pubImg.classList.toggle('public-vip-avatar',on);
+      }
+    }catch(e){}
+  };
+  try{
+    const raw=localStorage.getItem('ffprofile');
+    if(raw&&typeof profile!=='undefined'){
+      const saved=JSON.parse(raw);
+      if(saved&&saved.name&&!profile.name)profile=saved;
+    }
+  }catch(e){}
+})();
+</script>
+
 </body>
 </html>
 <style>
