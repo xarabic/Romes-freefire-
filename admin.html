@@ -27,9 +27,9 @@ button{border:0;border-radius:12px;padding:13px 17px;font-weight:800;cursor:poin
 
   <section id="loginCard" class="card">
     <h1>لوحة الإدارة</h1>
-    <div class="muted">تسجيل دخول المسؤول فقط</div>
-    <label>البريد الإلكتروني</label>
-    <input id="email" type="email" autocomplete="username" placeholder="admin@example.com">
+    <div class="muted">ادخل بنفس بيانات حسابك في Romes FreeFire</div>
+    <label>Player ID</label>
+    <input id="playerLoginId" type="text" inputmode="numeric" autocomplete="username" maxlength="12" placeholder="مثال: 10000015">
     <label>كلمة المرور</label>
     <input id="password" type="password" autocomplete="current-password" placeholder="••••••••">
     <button id="login" class="primary" style="width:100%;margin-top:15px">دخول الإدارة</button>
@@ -41,7 +41,7 @@ button{border:0;border-radius:12px;padding:13px 17px;font-weight:800;cursor:poin
       <h1>👑 إدارة اللاعبين</h1>
       <div class="muted">ابحث بالـ Player ID ثم إدارة حالة VIP.</div>
       <div class="row" style="margin-top:10px">
-        <input id="playerId" inputmode="numeric" maxlength="8" placeholder="مثال: 10000015">
+        <input id="playerId" inputmode="numeric" maxlength="12" placeholder="مثال: 10000015">
         <button id="search" class="primary">بحث عن اللاعب</button>
       </div>
       <div id="searchMsg"></div>
@@ -73,7 +73,7 @@ button{border:0;border-radius:12px;padding:13px 17px;font-weight:800;cursor:poin
 
 <script>
 const firebaseConfig={
-  apiKey:"YOUR_FIREBASE_API_KEY",
+  apiKey:"AIzaSyB2Hf_5AyhDUzbw8I2hk5hDatSj2J7Ly_Y",
   authDomain:"freefire-community-efb6c.firebaseapp.com",
   databaseURL:"https://freefire-community-efb6c-default-rtdb.firebaseio.com",
   projectId:"freefire-community-efb6c",
@@ -90,11 +90,30 @@ function msg(id,text,type=""){ $(id).innerHTML=text?`<div class="msg ${type}">${
 function date(v){return v?new Date(Number(v)).toLocaleString('ar-EG',{dateStyle:'medium',timeStyle:'short'}):"—";}
 function active(s){return s&&s.plan==="vip"&&s.status==="active"&&(!s.expiresAt||Number(s.expiresAt)>Date.now());}
 
+function syntheticEmail(playerId){
+  return String(playerId||'').toLowerCase().replace(/[^a-z0-9-]/g,'')+'@ffrooms.app';
+}
+
 $("login").onclick=async()=>{
   msg("loginMsg","");
+  const playerId=$("playerLoginId").value.trim();
+  const password=$("password").value;
+  if(!/^\\d{8,}$/.test(playerId)){
+    msg("loginMsg","اكتب Player ID صحيحًا من 8 أرقام على الأقل.","err");
+    return;
+  }
+  if(!password){
+    msg("loginMsg","اكتب كلمة المرور.","err");
+    return;
+  }
+  $("login").disabled=true;
   try{
-    await auth.signInWithEmailAndPassword($("email").value.trim(),$("password").value);
-  }catch(e){msg("loginMsg","بيانات الدخول غير صحيحة أو الحساب غير موجود.","err");}
+    await auth.signInWithEmailAndPassword(syntheticEmail(playerId),password);
+  }catch(e){
+    msg("loginMsg","⚠️ ID أو كلمة المرور غير صحيحة.","err");
+  }finally{
+    $("login").disabled=false;
+  }
 };
 
 auth.onAuthStateChanged(async user=>{
