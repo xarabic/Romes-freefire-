@@ -1311,21 +1311,22 @@ async function submitAccount(){
   try{
     if(accountMode==='register'){
       if(!name){msg.textContent='⚠️ اكتب اسمك';return}
-      // ننشئ حساب Firebase أولاً ببريد داخلي مؤقت، ثم نحجز الرقم المتسلسل.
-      // بهذه الطريقة لا نحتاج لاستخدام رقم عشوائي كـ ID.
-      const tempEmail='new_'+Date.now().toString(36)+'_'+Math.random().toString(36).slice(2,8)+'@ffrooms.app';
-      const cred=await firebaseAuth.createUserWithEmailAndPassword(tempEmail,password);
+      // نحجز الـ ID أولاً ثم ننشئ حساب Firebase بالبريد النهائي نفسه.
+      // مهم: لا نستخدم updateEmail() بعد الإنشاء، لأن إعداد Email Enumeration Protection
+      // قد يجعل تغيير البريد بعد التسجيل يفشل بـ auth/operation-not-allowed.
+      const playerId=await reserveNextPlayerId();
+      const accountEmail=syntheticEmail(playerId);
+      const cred=await firebaseAuth.createUserWithEmailAndPassword(accountEmail,password);
       const uid=cred.user.uid;
-      let playerId='';
       try{
-        playerId=await reserveNextPlayerId();
-        await cred.user.updateEmail(syntheticEmail(playerId));
         const base={uid,playerId,name,username:name.toLowerCase().replace(/\s+/g,'_').slice(0,24),bio:'لاعب في مجتمع FreeFire Rooms 🎮',image:'',posted:0,joined:0,followers:0,following:0,followingList:[],subscription:{plan:'free',status:'inactive',startedAt:null,expiresAt:null},createdAt:firebase.database.ServerValue.TIMESTAMP};
         await database.ref('users/'+uid).set(base);
         await database.ref('playerIds/'+playerId).set(uid);
         firebaseUser=cred.user; profile={...base}; delete profile.uid; delete profile.createdAt; profile.privacy={hideFollowers:false,hideFollowing:false}; saveState();
         closeModal('loginModal'); updateProfilePage(); updateProfileUI(); notify('✅ تم إنشاء حسابك — ID: '+playerId);
       }catch(inner){
+        try{await database.ref('playerIds/'+playerId).remove()}catch(e){}
+        try{await database.ref('users/'+uid).remove()}catch(e){}
         try{await cred.user.delete()}catch(e){}
         throw inner;
       }
