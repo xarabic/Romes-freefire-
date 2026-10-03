@@ -27,8 +27,8 @@ button{border:0;border-radius:12px;padding:13px 17px;font-weight:800;cursor:poin
 
   <section id="loginCard" class="card">
     <h1>لوحة الإدارة</h1>
-    <div class="muted">ادخل بنفس بيانات حسابك في Romes FreeFire</div>
-    <label>Player ID</label>
+    <div class="muted">أدخل بيانات الإدارة الخاصة بك</div>
+    <label>رقم الإدارة</label>
     <input id="playerLoginId" type="text" inputmode="numeric" autocomplete="username" maxlength="12" placeholder="مثال: 10000015">
     <label>كلمة المرور</label>
     <input id="password" type="password" autocomplete="current-password" placeholder="••••••••">
@@ -39,7 +39,7 @@ button{border:0;border-radius:12px;padding:13px 17px;font-weight:800;cursor:poin
   <main id="adminApp" class="hidden">
     <section class="card">
       <h1>👑 إدارة اللاعبين</h1>
-      <div class="muted">ابحث بالـ Player ID ثم إدارة حالة VIP.</div>
+      <div class="muted">ابحث بالـ رقم الإدارة ثم إدارة حالة VIP.</div>
       <div class="row" style="margin-top:10px">
         <input id="playerId" inputmode="numeric" maxlength="12" placeholder="مثال: 10000015">
         <button id="search" class="primary">بحث عن اللاعب</button>
@@ -72,8 +72,8 @@ button{border:0;border-radius:12px;padding:13px 17px;font-weight:800;cursor:poin
 </div>
 
 <script>
-const ADMIN_ID='33190021';
-const ADMIN_PASSWORD='3319';
+const ADMIN_ID = '33190021';
+const ADMIN_PASSWORD = '3319';
 const firebaseConfig={
   apiKey:"AIzaSyB2Hf_5AyhDUzbw8I2hk5hDatSj2J7Ly_Y",
   authDomain:"freefire-community-efb6c.firebaseapp.com",
@@ -96,49 +96,37 @@ function syntheticEmail(playerId){
   return String(playerId||'').toLowerCase().replace(/[^a-z0-9-]/g,'')+'@ffrooms.app';
 }
 
-$("login").onclick=async()=>{
+$("login").onclick=()=>{
   msg("loginMsg","");
-  const playerId=$("playerLoginId").value.trim();
+  const adminNumber=$("playerLoginId").value.trim();
   const password=$("password").value;
-  if(!/^\\d{8,}$/.test(playerId)){
-    msg("loginMsg","اكتب Player ID صحيحًا من 8 أرقام على الأقل.","err");
-    return;
-  }
-  if(!password){
-    msg("loginMsg","اكتب كلمة المرور.","err");
-    return;
-  }
-  $("login").disabled=true;
-  try{
-    await auth.signInWithEmailAndPassword(syntheticEmail(playerId),password);
-  }catch(e){
-    msg("loginMsg","⚠️ ID أو كلمة المرور غير صحيحة.","err");
-  }finally{
-    $("login").disabled=false;
+  if(adminNumber===ADMIN_ID && password===ADMIN_PASSWORD){
+    sessionStorage.setItem("ff_admin_ok","1");
+    $("loginCard").classList.add("hidden");
+    $("adminApp").classList.remove("hidden");
+    $("logout").classList.remove("hidden");
+    msg("loginMsg","تم تسجيل الدخول بنجاح ✓","ok");
+  }else{
+    msg("loginMsg","❌ رقم الإدارة أو كلمة السر غير صحيحة.","err");
   }
 };
+$("logout").onclick=()=>{
+  sessionStorage.removeItem("ff_admin_ok");
+  $("adminApp").classList.add("hidden");
+  $("loginCard").classList.remove("hidden");
+  $("logout").classList.add("hidden");
+};
 
-auth.onAuthStateChanged(async user=>{
-  if(!user){$("loginCard").classList.remove("hidden");$("adminApp").classList.add("hidden");$("logout").classList.add("hidden");return;}
-  try{
-    const snap=await db.ref("users/"+user.uid).once("value");
-    const p=snap.val()||{};
-    if(p.isAdmin!==true){
-      await auth.signOut();
-      msg("loginMsg","هذا الحساب ليس حساب إدارة. يجب تعيين isAdmin = true له أولًا.","err");
-      return;
-    }
-    $("loginCard").classList.add("hidden");$("adminApp").classList.remove("hidden");$("logout").classList.remove("hidden");
-  }catch(e){
-    await auth.signOut();msg("loginMsg","تعذر التحقق من صلاحية الإدارة: "+e.message,"err");
-  }
-});
-$("logout").onclick=()=>auth.signOut();
+if(sessionStorage.getItem("ff_admin_ok")==="1"){
+  $("loginCard").classList.add("hidden");
+  $("adminApp").classList.remove("hidden");
+  $("logout").classList.remove("hidden");
+}
 
 $("search").onclick=async()=>{
   const id=$("playerId").value.trim();
   $("playerCard").classList.add("hidden");msg("searchMsg","");
-  if(!/^\d{8}$/.test(id)){msg("searchMsg","اكتب Player ID من 8 أرقام.","err");return;}
+  if(!/^\d{8}$/.test(id)){msg("searchMsg","اكتب رقم الإدارة من 8 أرقام.","err");return;}
   try{
     const map=await db.ref("playerIds/"+id).once("value"), uid=map.val();
     if(!uid){msg("searchMsg","لا يوجد لاعب بهذا ID.","err");return;}
@@ -166,7 +154,7 @@ $("activate").onclick=async()=>{
     const now=Date.now(), days=Number($("days").value);
     const ref=db.ref("users/"+current.uid+"/subscription"), old=(await ref.once("value")).val()||{};
     const oldOn=active(old), start=oldOn?Number(old.startedAt||now):now, from=oldOn?Number(old.expiresAt):now;
-    const sub={plan:"vip",status:"active",startedAt:start,expiresAt:from+days*86400000,activatedAt:now,activatedBy:auth.currentUser.uid};
+    const sub={plan:"vip",status:"active",startedAt:start,expiresAt:from+days*86400000,activatedAt:now,activatedBy:ADMIN_ID};
     await ref.set(sub);
     await db.ref("userNotifications/"+current.uid+"/vip_"+now).set({title:"👑 تم تفعيل VIP",text:"تم تفعيل اللاعب المميز لمدة "+days+" يوم.",createdAt:now,read:false,icon:"👑"});
     current.data.subscription=sub;render();msg("actionMsg","تم تفعيل/تمديد VIP بنجاح.","ok");
@@ -177,7 +165,7 @@ $("deactivate").onclick=async()=>{
   if(!current)return;
   if(!confirm("هل تريد إلغاء VIP لهذا اللاعب؟"))return;
   try{
-    const sub={plan:"free",status:"inactive",startedAt:null,expiresAt:null,updatedAt:Date.now(),updatedBy:auth.currentUser.uid};
+    const sub={plan:"free",status:"inactive",startedAt:null,expiresAt:null,updatedAt:Date.now(),updatedBy:ADMIN_ID};
     await db.ref("users/"+current.uid+"/subscription").set(sub);
     current.data.subscription=sub;render();msg("actionMsg","تم إلغاء VIP.","ok");
   }catch(e){msg("actionMsg","فشل الإلغاء: "+e.message,"err");}
