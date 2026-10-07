@@ -553,7 +553,7 @@ button{cursor:pointer;border:0}
     <div class="form" id="createRoomForm">
       <label>الدولة</label><select id="roomCountry"><option value="موريتانيا">🇲🇷 موريتانيا</option><option value="الجزائر">🇩🇿 الجزائر</option><option value="البحرين">🇧🇭 البحرين</option><option value="جزر القمر">🇰🇲 جزر القمر</option><option value="جيبوتي">🇩🇯 جيبوتي</option><option value="مصر">🇪🇬 مصر</option><option value="العراق">🇮🇶 العراق</option><option value="الأردن">🇯🇴 الأردن</option><option value="الكويت">🇰🇼 الكويت</option><option value="لبنان">🇱🇧 لبنان</option><option value="ليبيا">🇱🇾 ليبيا</option><option value="المغرب">🇲🇦 المغرب</option><option value="عُمان">🇴🇲 عُمان</option><option value="فلسطين">🇵🇸 فلسطين</option><option value="قطر">🇶🇦 قطر</option><option value="السعودية">🇸🇦 السعودية</option><option value="الصومال">🇸🇴 الصومال</option><option value="السودان">🇸🇩 السودان</option><option value="سوريا">🇸🇾 سوريا</option><option value="تونس">🇹🇳 تونس</option><option value="الإمارات">🇦🇪 الإمارات</option><option value="اليمن">🇾🇪 اليمن</option></select>
       <label>الجنس</label><select id="roomGender"><option value="">اختر الجنس</option><option value="male">👨 ذكر</option><option value="female">👩 أنثى</option></select>
-      <label>نوع الروم</label><select id="roomMode"><option>كلاسيك</option><option>باتل رويال</option><option>دراغونوف سولو</option></select>
+      <label>نوع الروم</label><select id="roomMode"><option>باتل رويال</option><option>كلاسيك</option><option>كلاش سكواد</option></select>
       <label>السيرفر</label><select id="roomServer"><option>الشرق الأوسط</option><option>أوروبا</option><option>آسيا</option><option>أمريكا</option></select>
       <label>Room ID</label><input id="roomId" inputmode="numeric" placeholder="مثال: 123456789">
       <label>كلمة السر</label><input id="roomPass" inputmode="numeric" placeholder="مثال: 1234">
@@ -750,9 +750,9 @@ button{cursor:pointer;border:0}
 .soon-tag{position:absolute;top:2px;left:50%;transform:translateX(-50%);background:#ff6900;color:#fff;font-size:7px;font-weight:900;padding:2px 7px;border-radius:99px;white-space:nowrap}
 
 /* بطاقة روم VIP */
-.room.vip-room{background:linear-gradient(180deg,#fffdf2,#fff);border:1.5px solid #e6c34a;box-shadow:0 12px 32px rgba(212,175,55,.28)}
-.room.vip-room::before{content:'';position:absolute;top:0;left:-70%;width:45%;height:100%;background:linear-gradient(105deg,transparent,rgba(255,215,0,.22),transparent);animation:vipSweep 4.5s ease-in-out infinite;pointer-events:none;z-index:1}
-.vip-ribbon{position:relative;z-index:2;margin:-11px -11px 9px;padding:6px 11px;background:linear-gradient(90deg,#8a5a00,#ffc93d,#8a5a00);background-size:200% auto;color:#3a2600;font-weight:900;font-size:10px;text-align:center;letter-spacing:.5px;animation:vipTextShine 5s linear infinite}
+.room.vip-room{background:linear-gradient(180deg,#fffdf2,#fff);border:1.5px solid #e6c34a;box-shadow:0 8px 22px rgba(212,175,55,.20);position:relative;overflow:hidden;contain:paint}
+.room.vip-room::before{content:'';position:absolute;inset:0;border-radius:inherit;background:linear-gradient(135deg,rgba(255,215,0,.07),transparent 38%,rgba(255,215,0,.04));pointer-events:none;z-index:0}
+.vip-ribbon{position:relative;z-index:2;margin:-11px -11px 9px;padding:6px 11px;background:linear-gradient(90deg,#8a5a00,#ffc93d,#8a5a00);color:#3a2600;font-weight:900;font-size:10px;text-align:center;letter-spacing:.5px;animation:none}
 .vip-owner{display:flex;align-items:center;gap:9px;margin-top:9px;padding:8px 10px;border-radius:13px;background:linear-gradient(135deg,#fff8e1,#fffdf2);border:1px solid #ecd27a;position:relative;z-index:2}
 .vip-owner-info b{font-size:12px;display:flex;align-items:center;gap:5px;color:#4a3400}
 .vip-owner-id{font-size:9px;color:#8a6a00;font-weight:800;display:block;margin-top:2px}
@@ -1519,7 +1519,9 @@ async function createRoom(){
  const btn=document.querySelector('#createModal .submit');
  const country=document.getElementById('roomCountry')?.value||'';
  const g=document.getElementById('roomGender')?.value||'';
- const mode=document.getElementById('roomMode')?.value||'';
+ let mode=document.getElementById('roomMode')?.value||'';
+ const allowedModes=['باتل رويال','كلاسيك','كلاش سكواد'];
+ if(!allowedModes.includes(mode)){notify('⚠️ نوع الروم غير مسموح');return}
  const server=document.getElementById('roomServer')?.value||'';
  const roomId=(document.getElementById('roomId')?.value||'').trim();
  const password=(document.getElementById('roomPass')?.value||'').trim();
@@ -1557,8 +1559,10 @@ async function createRoom(){
    await ref.set({name:room.name,roomId,password,mode,country,gender:g,server,notes,createdAt:firebase.database.ServerValue.TIMESTAMP,publisherId,publisherName:room.publisherName,publisherUsername:room.publisherUsername,publisherImage:room.publisherImage,creator:null,vip:room.vip,playerId:room.playerId,views:0});
    profile.posted=Number(profile.posted||0)+1; saveState();
    if(firebaseUser) usersRef.child(firebaseUser.uid).update({posted:profile.posted});
-   room.firebaseKey=ref.key; await notifyFollowersOnRoom(room);
-   roomsData=roomsData.filter(r=>r.firebaseKey!==room.firebaseKey);
+   room.firebaseKey=ref.key;
+   await notifyFollowersOnRoom(room);
+   roomsData=roomsData.filter(r=>r.publisherId!==publisherId||r.demo||r.firebaseKey===room.firebaseKey);
+   if(!roomsData.some(r=>r.firebaseKey===room.firebaseKey)) roomsData.unshift(room);
    try{localStorage.setItem('ff_pending_rooms',JSON.stringify([]));}catch(e){}
    applyFilter();
  }catch(e){
@@ -2130,6 +2134,17 @@ object-fit:cover!important
 })();
 </script>
 
+
+<style id="vip-room-final-containment">
+.room.vip-room{overflow:hidden!important;contain:paint!important;clip-path:inset(0 round 16px)}
+.room.vip-room::before{inset:0!important;left:0!important;top:0!important;width:100%!important;height:100%!important;animation:none!important}
+.room.vip-room .vip-ribbon,.room.vip-room .vip-owner,.room.vip-room .room-top,.room.vip-room .room-meta,.room.vip-room .info-grid,.room.vip-room .room-notes,.room.vip-room .room-actions{position:relative;z-index:2}
+.room.vip-room .vip-ribbon{overflow:hidden;max-width:100%;box-sizing:border-box;animation:none!important}
+.room.vip-room .vip-frame{width:44px!important;height:44px!important;min-width:44px!important;max-width:44px!important;overflow:hidden!important;box-sizing:border-box!important}
+.room.vip-room .vip-frame::after{inset:0!important;overflow:hidden!important}
+.room.vip-room .vip-frame-inner{width:100%!important;height:100%!important;overflow:hidden!important}
+.room.vip-room .vip-frame-inner img{width:100%!important;height:100%!important;object-fit:cover!important}
+</style>
 </body>
 </html>
 <style>
