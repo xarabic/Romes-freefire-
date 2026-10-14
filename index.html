@@ -3,7 +3,20 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>FreeFire Rooms | غرف فريفاير</title>
+<title>Romes FreeFire | رومات فري فاير وباتل رويال وسكواد</title>
+<meta name="description" content="Romes FreeFire — منصة غرف ورومات فري فاير للعب الجماعي. اكتشف رومات باتل رويال، انشر رومك، وانضم إلى لاعبين من موريتانيا والدول العربية بسرعة.">
+<meta name="keywords" content="Romes FreeFire, Romes Freefire, Free Fire, فري فاير, رومات فري فاير, غرف فري فاير, روم فري فاير, رومات فري فاير موريتانيا, رومات فري فاير المغرب, رومات فري فاير الجزائر, باتل رويال, Battle Royale, Free Fire rooms, Free Fire room ID, روم سكواد, رومات عربية, انضمام روم فري فاير, نشر روم فري فاير, لاعبين فري فاير">
+<meta name="robots" content="index,follow,max-image-preview:large">
+<meta name="author" content="Romes FreeFire">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Romes FreeFire">
+<meta property="og:title" content="Romes FreeFire | رومات فري فاير">
+<meta property="og:description" content="اكتشف وانشر رومات فري فاير وباتل رويال وانضم إلى مجتمع اللاعبين العربي.">
+<meta property="og:url" content="https://romes-freefire.vercel.app/">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Romes FreeFire | رومات فري فاير">
+<meta name="twitter:description" content="منصة رومات وغرف فري فاير وباتل رويال للاعبين العرب.">
+<link rel="canonical" href="https://romes-freefire.vercel.app/">
 <meta name="theme-color" content="#ff6a00">
 <meta name="color-scheme" content="light">
 <meta name="format-detection" content="telephone=no">
@@ -530,6 +543,17 @@ body,.app{background:#fbf7eb;color:#123b30}
 @media(max-width:620px){.hero{width:100%;aspect-ratio:909/510;min-height:0}.rooms{grid-template-columns:1fr!important;padding-bottom:120px!important}.room{padding:14px!important;border-radius:23px!important}.room-name{font-size:18px!important}.room .meta{font-size:11px!important;padding:6px 8px!important}.room .info b{font-size:13px!important}.room .info span{font-size:10px!important}.room .join,.room .details{height:47px!important;font-size:13px!important;border-radius:14px!important}.bottom{height:84px!important;padding:5px 8px env(safe-area-inset-bottom)!important}.nav{height:66px!important;border-radius:15px!important;font-size:10px!important}.nav i{font-size:23px!important}.nav.create{height:68px!important}.fab{bottom:73px!important;width:68px!important;height:68px!important;font-size:36px!important}.fab-label{bottom:43px!important}}
 </style>
 
+<script type="application/ld+json">
+{
+  "@context":"https://schema.org",
+  "@type":"WebSite",
+  "name":"Romes FreeFire",
+  "alternateName":["FreeFire Rooms","رومات فري فاير","غرف فري فاير"],
+  "url":"https://romes-freefire.vercel.app/",
+  "inLanguage":"ar",
+  "description":"منصة عربية لاكتشاف ونشر رومات فري فاير وباتل رويال والانضمام إلى اللاعبين."
+}
+</script>
 </head>
 <body>
 <div class="app">
@@ -537,8 +561,8 @@ body,.app{background:#fbf7eb;color:#123b30}
     <div class="top">
       <div class="brand">FreeFire<span>Rooms</span><small>🔥 العب • انضم • استمتع</small></div>
       <div class="top-stats">
-        <div class="top-stat"><b id="online">8,742</b><span>👥 متصل</span></div>
-        <div class="top-stat"><b id="activeCount">4</b><span>🔥 نشط</span></div>
+        <div class="top-stat"><b id="online">—</b><span>👥 متصل الآن</span></div>
+        <div class="top-stat"><b id="activeCount">0</b><span>🔥 غرف نشطة</span></div>
       </div>
 
     </div>
@@ -1286,6 +1310,54 @@ const usersRef = database.ref('users');
 const followsRef = database.ref('follows');
 const userNotificationsRef = database.ref('userNotifications');
 
+// Real-time presence: count distinct authenticated player accounts only.
+(function startRealPresence(){
+  try{
+    const presenceRef=database.ref('presence');
+    const connectedRef=database.ref('.info/connected');
+    let sessionId=sessionStorage.getItem('ff_presence_session');
+    if(!sessionId){
+      sessionId='s_'+Date.now().toString(36)+'_'+Math.random().toString(36).slice(2,12);
+      sessionStorage.setItem('ff_presence_session',sessionId);
+    }
+    const myPresence=presenceRef.child(sessionId);
+    let connected=false, currentUid=null;
+    async function syncMyPresence(){
+      if(!connected || !currentUid){
+        try{await myPresence.remove()}catch(e){}
+        return;
+      }
+      try{
+        await myPresence.onDisconnect().remove();
+        await myPresence.set({
+          uid:currentUid,
+          connectedAt:firebase.database.ServerValue.TIMESTAMP
+        });
+      }catch(err){console.warn('presence registration failed',err)}
+    }
+    connectedRef.on('value',snap=>{
+      connected=snap.val()===true;
+      syncMyPresence();
+    });
+    firebase.auth().onAuthStateChanged(user=>{
+      currentUid=user&&user.uid?user.uid:null;
+      syncMyPresence();
+    });
+    presenceRef.on('value',snap=>{
+      const now=Date.now(),data=snap.val()||{},uids=new Set();
+      Object.values(data).forEach(v=>{
+        if(v&&v.uid&&Number(v.connectedAt||0)>now-120000)uids.add(v.uid);
+      });
+      const el=document.getElementById('online');
+      if(el)el.textContent=uids.size.toLocaleString('en-US');
+    },err=>{
+      const el=document.getElementById('online');
+      if(el){el.textContent='—';el.title='عداد المتصلين يحتاج صلاحيات Firebase لقراءة presence';}
+      console.warn('presence count unavailable',err);
+    });
+  }catch(e){console.warn('presence setup failed',e)}
+})();
+
 // ===== Firebase Authentication: حساب دائم مرتبط بالحساب وليس بالجهاز =====
 let firebaseUser = null;
 let firebaseAuth = null;
@@ -1410,7 +1482,7 @@ function startFirebaseAuth(){
   firebaseAuthReady=true;
   try{
     firebaseAuth=firebase.auth();
-    firebaseAuth.setPersistence(firebase.auth.Auth.Persistence.LOCAL).catch(()=>{});
+    firebaseAuth.setPersistence(firebase.auth.Auth.Persistence.LOCAL).catch(e=>console.warn('تعذر تفعيل حفظ تسجيل الدخول محلياً',e));
     firebaseAuth.onAuthStateChanged(async user=>{
       firebaseUser=user||null;
       if(user){
@@ -1448,25 +1520,30 @@ function startFirebaseListeners(){
   window.__ffFirebaseListenersStarted=true;
   const normalizeRooms=(list)=>{
     const now=Date.now(),cutoff=now-ROOM_LIFETIME,seen=new Set();
-    return list.filter(r=>r&&r.createdAt&&r.createdAt>=cutoff).sort((a,b)=>(b.createdAt||0)-(a.createdAt||0)).filter(r=>{
+    return list.filter(r=>r&&Number(r.createdAt||0)>=cutoff).sort((a,b)=>(b.createdAt||0)-(a.createdAt||0)).filter(r=>{
       if(r.demo)return true;
       const id=r.firebaseKey||r.publisherId;
-      if(seen.has(id))return false; seen.add(id); return true;
+      if(id && seen.has(id))return false;
+      if(id)seen.add(id);
+      return true;
     });
   };
   const activeByKey={};
-  roomsRef.orderByChild('createdAt').limitToLast(50).once('value').then(snap=>{
+  // Attach the live listener immediately. The first Firebase snapshot loads all
+  // current rooms; subsequent additions/edits/deletions are reflected in real time.
+  roomsRef.orderByChild('createdAt').on('value',snap=>{
     const d=snap.val()||{};
-    Object.keys(d).forEach(k=>activeByKey[k]={firebaseKey:k,...d[k]});
+    Object.keys(activeByKey).forEach(k=>delete activeByKey[k]);
+    Object.keys(d).forEach(k=>activeByKey[k]={firebaseKey:k,...(d[k]||{})});
     roomsData=[...DEMO_ROOMS,...normalizeRooms(Object.values(activeByKey))];
     applyFilter();
-    const q=roomsRef.orderByChild('createdAt').limitToLast(50);
-    q.on('child_added',snap=>{activeByKey[snap.key]={firebaseKey:snap.key,...(snap.val()||{})};roomsData=[...DEMO_ROOMS,...normalizeRooms(Object.values(activeByKey))];applyFilter()});
-    q.on('child_changed',snap=>{activeByKey[snap.key]={firebaseKey:snap.key,...(snap.val()||{})};roomsData=[...DEMO_ROOMS,...normalizeRooms(Object.values(activeByKey))];applyFilter()});
-    q.on('child_removed',snap=>{delete activeByKey[snap.key];roomsData=[...DEMO_ROOMS,...normalizeRooms(Object.values(activeByKey))];applyFilter()});
-    showFirebaseStatus('متصل بـ Firebase ✓',true);
-  }).catch(err=>{window.__ffFirebaseListenersStarted=false;showFirebaseStatus('تعذر تحميل الرومات: '+firebaseErrorText(err));});
+    showFirebaseStatus('الرومات متصلة وتتحدث مباشرة ✓',true);
+  },err=>{
+    window.__ffFirebaseListenersStarted=false;
+    showFirebaseStatus('تعذر تحميل الرومات: '+firebaseErrorText(err));
+  });
 }
+
 loadApprovedCreators();
 try{
   database.ref('creators').orderByChild('status').equalTo('approved').on('value', snap=>{
@@ -1528,6 +1605,9 @@ function applyFilter(){
 
 function renderRooms(list=roomsData){
  const el=document.getElementById('rooms'); const now=Date.now();
+ const realActiveCount=roomsData.filter(r=>r&&!r.demo&&Number(r.createdAt||0)>now-ROOM_LIFETIME).length;
+ const activeCountEl=document.getElementById('activeCount');
+ if(activeCountEl)activeCountEl.textContent=realActiveCount.toLocaleString('en-US');
  let data=list.filter(r=>r.createdAt && now-r.createdAt<ROOM_LIFETIME);
  const favRooms=JSON.parse(localStorage.getItem('favRooms')||'[]');
  if(!data.length){el.innerHTML='';document.getElementById('empty').style.display='block'}else{document.getElementById('empty').style.display='none';el.innerHTML=data.map(r=>{
@@ -1591,13 +1671,16 @@ async function createRoom(){
 
  // الحفظ الحقيقي: احذف جميع الرومات القديمة لهذا الناشر من Firebase (حتى لو كانت خارج آخر 50 روم)، ثم احفظ الجديد.
  try{
-   const oldSnap=await roomsRef.orderByChild('publisherId').equalTo(publisherId).once('value');
-   const updates={};
-   oldSnap.forEach(child=>{updates['rooms/'+child.key]=null;});
-   if(Object.keys(updates).length) await database.ref().update(updates);
-
+   // Publish the replacement first so players see it immediately, then remove older rooms.
    const ref=roomsRef.push();
    await ref.set({name:room.name,roomId,password,mode,country,gender:g,server,notes,createdAt:firebase.database.ServerValue.TIMESTAMP,publisherId,publisherName:room.publisherName,publisherUsername:room.publisherUsername,publisherImage:room.publisherImage,creator:null,vip:room.vip,playerId:room.playerId,views:0});
+   room.firebaseKey=ref.key;
+   roomsData=[room,...roomsData.filter(r=>r.publisherId!==publisherId||r.demo)];
+   applyFilter();
+   const oldSnap=await roomsRef.orderByChild('publisherId').equalTo(publisherId).once('value');
+   const updates={};
+   oldSnap.forEach(child=>{if(child.key!==ref.key)updates['rooms/'+child.key]=null;});
+   if(Object.keys(updates).length) await database.ref().update(updates);
    profile.posted=Number(profile.posted||0)+1; saveState();
    if(firebaseUser) usersRef.child(firebaseUser.uid).update({posted:profile.posted});
    room.firebaseKey=ref.key;
