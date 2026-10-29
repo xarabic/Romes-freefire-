@@ -85,7 +85,8 @@ button{border:0;border-radius:12px;padding:13px 17px;font-weight:800;cursor:poin
       <div class="ta-grid">
         <div><label>اسم البطولة</label><input id="tournamentTitle" maxlength="70" placeholder="مثال: بطولة Romes الأسبوعية"></div>
         <div><label>نوع الصفحة</label><select id="tournamentType"><option value="normal">🎮 روم عادي</option><option value="final">🏆 روم النهائي</option></select></div>
-        <div><label>مدة العد التنازلي (بالدقائق)</label><input id="tournamentMinutes" type="number" min="1" max="1440" value="10"></div>
+        <div><label>العد التنازلي — الساعات</label><input id="tournamentHours" type="number" min="0" max="72" value="0"></div>
+        <div><label>العد التنازلي — الدقائق</label><input id="tournamentMinutes" type="number" min="0" max="59" value="10"></div>
         <div><label>Room ID</label><input id="tournamentRoomId" inputmode="numeric" placeholder="رقم الغرفة"></div>
         <div><label>Room Code</label><input id="tournamentRoomCode" inputmode="numeric" placeholder="كود الغرفة"></div>
       </div>
@@ -93,12 +94,12 @@ button{border:0;border-radius:12px;padding:13px 17px;font-weight:800;cursor:poin
         <button id="tournamentNew" class="ghost">＋ بطولة جديدة</button>
         <button id="tournamentSave" class="primary">💾 حفظ البيانات</button>
         <button id="tournamentStart" class="primary">⏳ بدء العد التنازلي</button>
-        <button id="tournamentPublish" class="primary">🚀 نشر / تحديث صفحة الروم</button>
+        <button id="tournamentPublish" class="primary">🔐 تعديل بيانات الروم وإظهار ID والكود</button>
         <button id="tournamentUnpublish" class="ghost">إخفاء من الموقع</button>
         <button id="tournamentDelete" class="danger">🗑️ حذف البطولة</button>
       </div>
       <div id="tournamentAdminMsg"></div>
-      <div class="muted" style="margin-top:12px">ملاحظة: يظهر العد التنازلي للاعب بعد ضغط «انضمام». لا تُعرض بيانات الغرفة في صفحة البطولات إلا بعد النشر.</div>
+      <div class="muted" style="margin-top:12px">ملاحظة: يظهر العد التنازلي للاعب بعد ضغط «انضمام». عند بدء العدّ التنازلي تُخفى بيانات الغرفة. عندما تضغط «تعديل بيانات الروم وإظهار ID والكود» تظهر البيانات لمن انضم فقط. تغيير النوع من عادي إلى نهائي أو العكس يعيد ضبط الانضمامات والعدّ التنازلي حتى يضغط اللاعبون انضمام من جديد.</div>
       <div id="tournamentAdminList" class="ta-list"></div>
     </section>
 
@@ -218,6 +219,7 @@ function resetTournamentForm(){
   $("tournamentSelect").value="";
   $("tournamentTitle").value="";
   $("tournamentType").value="normal";
+  $("tournamentHours").value="0";
   $("tournamentMinutes").value="10";
   $("tournamentRoomId").value="";
   $("tournamentRoomCode").value="";
@@ -228,7 +230,9 @@ function loadTournamentIntoForm(key){
   selectedTournamentKey=key;$("tournamentSelect").value=key;
   $("tournamentTitle").value=t.title||"";
   $("tournamentType").value=t.type==="final"?"final":"normal";
-  $("tournamentMinutes").value=Math.max(1,Math.min(1440,Number(t.countdownMinutes)||10));
+  const totalMins=Math.max(1,Math.min(4320,Number(t.countdownMinutes)||10));
+  $("tournamentHours").value=Math.floor(totalMins/60);
+  $("tournamentMinutes").value=totalMins%60;
   $("tournamentRoomId").value=t.roomId||"";
   $("tournamentRoomCode").value=t.roomCode||"";
   tournamentAdminMessage("تم تحميل البطولة للتعديل.");
@@ -259,12 +263,19 @@ function startTournamentAdminListener(){
 async function saveTournamentAdmin(){
   const title=$("tournamentTitle").value.trim();
   const type=$("tournamentType").value==="final"?"final":"normal";
-  const countdownMinutes=Math.max(1,Math.min(1440,Number($("tournamentMinutes").value)||10));
+  const hours=Math.max(0,Math.min(72,Number($("tournamentHours").value)||0));
+  const minutes=Math.max(0,Math.min(59,Number($("tournamentMinutes").value)||0));
+  const countdownMinutes=Math.max(1,Math.min(4320,hours*60+minutes));
   if(!title){tournamentAdminMessage("اكتب اسم البطولة أولاً.","err");return null}
   try{
     const key=selectedTournamentKey||tournamentsRef.push().key;
     const old=tournamentAdminData[key]||{};
-    const data={...old,title,type,countdownMinutes,roomId:$("tournamentRoomId").value.trim(),roomCode:$("tournamentRoomCode").value.trim(),verified:true,publisherName:"Romes FreeFire",createdAt:Number(old.createdAt)||Date.now(),updatedAt:Date.now()};
+    const typeChanged=!!old.type&&old.type!==type;
+    const roomId=$("tournamentRoomId").value.trim(),roomCode=$("tournamentRoomCode").value.trim();
+    const roomChanged=String(old.roomId||"")!==roomId||String(old.roomCode||"")!==roomCode;
+    const data={...old,title,type,countdownMinutes,roomId,roomCode,verified:true,publisherName:"Romes FreeFire",createdAt:Number(old.createdAt)||Date.now(),updatedAt:Date.now()};
+    if(roomChanged)data.roomVisible=false;
+    if(typeChanged){data.roomVisible=false;data.startAt=null;data.status="draft";data.participants={};}
     await tournamentsRef.child(key).update(data);
     selectedTournamentKey=key;$("tournamentSelect").value=key;
     tournamentAdminMessage("تم حفظ بيانات البطولة ✓","ok");
@@ -276,10 +287,12 @@ $("tournamentNew").onclick=resetTournamentForm;
 $("tournamentSave").onclick=()=>saveTournamentAdmin();
 $("tournamentStart").onclick=async()=>{
   const key=await saveTournamentAdmin();if(!key)return;
-  const mins=Math.max(1,Math.min(1440,Number($("tournamentMinutes").value)||10));
+  const hours=Math.max(0,Math.min(72,Number($("tournamentHours").value)||0));
+  const minutes=Math.max(0,Math.min(59,Number($("tournamentMinutes").value)||0));
+  const mins=Math.max(1,Math.min(4320,hours*60+minutes));
   try{
     const startAt=Date.now()+mins*60000;
-    await tournamentsRef.child(key).update({startAt,countdownMinutes:mins,status:"countdown",updatedAt:Date.now()});
+    await tournamentsRef.child(key).update({startAt,countdownMinutes:mins,roomVisible:false,status:"countdown",updatedAt:Date.now()});
     tournamentAdminMessage("بدأ العد التنازلي لمدة "+mins+" دقيقة. يظهر للاعب بعد ضغط انضمام.","ok");
   }catch(e){tournamentAdminMessage("تعذر بدء العد التنازلي: "+(e.message||e),"err")}
 };
@@ -288,7 +301,7 @@ $("tournamentPublish").onclick=async()=>{
   const roomId=$("tournamentRoomId").value.trim(),roomCode=$("tournamentRoomCode").value.trim();
   if(!roomId||!roomCode){tournamentAdminMessage("أدخل Room ID وRoom Code قبل النشر.","err");return}
   try{
-    await tournamentsRef.child(key).update({roomId,roomCode,published:true,status:"published",publishedAt:Date.now(),verified:true,updatedAt:Date.now()});
+    await tournamentsRef.child(key).update({roomId,roomCode,roomVisible:true,published:true,status:"published",publishedAt:Date.now(),verified:true,updatedAt:Date.now()});
     tournamentAdminMessage("تم نشر/تحديث صفحة الروم في قسم البطولات ✓","ok");
   }catch(e){tournamentAdminMessage("فشل النشر: "+(e.message||e),"err")}
 };

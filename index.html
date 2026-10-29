@@ -2354,7 +2354,7 @@ object-fit:cover!important
       const people=t.participants&&typeof t.participants==="object"?t.participants:{};
       const count=Object.keys(people).length,joined=!!people[participantKey()],isFinal=t.type==="final";
       const title=tournamentEsc(t.title||"بطولة Free Fire"),key=t.key;
-      const roomDetails=joined?'<div class="tournament-room-details"><div class="tournament-room-line"><span>🆔 Room ID</span><b>'+tournamentEsc(t.roomId||"—")+'</b><button type="button" onclick="event.stopPropagation();copyText(\''+tournamentEsc(t.roomId||"")+'\')">نسخ</button></div><div class="tournament-room-line"><span>🔐 Room Code</span><b>'+tournamentEsc(t.roomCode||"—")+'</b><button type="button" onclick="event.stopPropagation();copyText(\''+tournamentEsc(t.roomCode||"")+'\')">نسخ</button></div></div>':"";
+      const roomDetails=(joined&&t.roomVisible===true)?'<div class="tournament-room-details"><div class="tournament-room-line"><span>🆔 Room ID</span><b>'+tournamentEsc(t.roomId||"—")+'</b><button type="button" onclick="event.stopPropagation();copyText(\''+tournamentEsc(t.roomId||"")+'\')">نسخ</button></div><div class="tournament-room-line"><span>🔐 Room Code</span><b>'+tournamentEsc(t.roomCode||"—")+'</b><button type="button" onclick="event.stopPropagation();copyText(\''+tournamentEsc(t.roomCode||"")+'\')">نسخ</button></div></div>':"";
       const countdown=joined?'<div class="tournament-countdown" id="tCountdown_'+key+'">'+timeText(t.startAt)+'</div>':"";
       return '<article class="tournament-card '+(isFinal?"final":"normal")+'">'
        +'<div class="tournament-card-head"><div class="tournament-title">'+title+'</div><span class="tournament-type">'+(isFinal?"🏆 النهائي":"🎮 روم عادي")+'</span></div>'
@@ -2384,8 +2384,9 @@ object-fit:cover!important
       const snap=await tournamentRef.child(key).once("value");
       tournamentRecords[key]=snap.val()||t;
       renderTournamentCards();
-      if(!t.startAt)notify("✅ تم تسجيل انضمامك. انتظر بدء العد التنازلي من الإدارة.");
-      else notify("🏆 تم انضمامك للبطولة وظهرت بيانات الروم.");
+      if(t.roomVisible===true)notify("🏆 تم انضمامك للبطولة وظهرت بيانات الروم.");
+      else if(!t.startAt)notify("✅ تم تسجيل انضمامك. انتظر بدء العد التنازلي من الإدارة.");
+      else notify("✅ تم انضمامك. ستظهر بيانات الروم عندما تنشرها الإدارة.");
     }catch(e){notify("⚠️ تعذر الانضمام: "+(e.message||"تحقق من اتصال Firebase"))}
   };
   window.openTournamentHub=function(){
