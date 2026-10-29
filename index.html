@@ -2359,7 +2359,7 @@ object-fit:cover!important
       return '<article class="tournament-card '+(isFinal?"final":"normal")+'">'
        +'<div class="tournament-card-head"><div class="tournament-title">'+title+'</div><span class="tournament-type">'+(isFinal?"🏆 النهائي":"🎮 روم عادي")+'</span></div>'
        +'<div class="tournament-owner"><span class="creator-badge check" aria-label="حساب موثق"></span><span>Romes FreeFire • موثق</span></div>'
-       +'<div class="tournament-meta"><div class="tournament-meta-item"><b>👥 '+count+'</b><span>لاعب انضم</span></div><div class="tournament-meta-item"><b>'+(t.startAt?new Date(Number(t.startAt)).toLocaleTimeString('ar',{hour:'2-digit',minute:'2-digit'}):'بانتظار الإدارة')+'</b><span>موعد البطولة</span></div></div>'
+       +'<div class="tournament-meta"><div class="tournament-meta-item"><b>👥 '+count+'</b><span>لاعب انضم</span></div><div class="tournament-meta-item"><b>'+(t.startAt?(Number(t.startAt)<=Date.now()?'حان وقت البداية':'العدّ التنازلي يعمل'):'بانتظار بدء العدّ')+'</b><span>موعد البطولة</span></div></div>'
        +countdown+roomDetails
        +'<div class="tournament-actions"><button class="tournament-join '+(joined?"joined":"")+'" onclick="joinTournament(\''+key+'\')">'+(joined?"✓ أنت منضم — عرض البيانات":"🚀 انضم إلى البطولة")+'</button></div></article>';
     }).join("");
@@ -2385,7 +2385,7 @@ object-fit:cover!important
       tournamentRecords[key]=snap.val()||t;
       renderTournamentCards();
       if(t.roomVisible===true)notify("🏆 تم انضمامك للبطولة وظهرت بيانات الروم.");
-      else if(!t.startAt)notify("✅ تم تسجيل انضمامك. انتظر بدء العد التنازلي من الإدارة.");
+      else if(!t.startAt)notify("✅ تم تسجيل انضمامك. سيظهر لك العدّ التنازلي بالثواني عندما تبدأه الإدارة.");
       else notify("✅ تم انضمامك. ستظهر بيانات الروم عندما تنشرها الإدارة.");
     }catch(e){notify("⚠️ تعذر الانضمام: "+(e.message||"تحقق من اتصال Firebase"))}
   };
