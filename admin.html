@@ -19,6 +19,13 @@ button{border:0;border-radius:12px;padding:13px 17px;font-weight:800;cursor:poin
 .badge{display:inline-block;padding:6px 10px;border-radius:20px;background:#252b36;color:#cbd0da;font-size:12px}.vip{background:#5b4211;color:#ffd36d}.actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:15px}
 .msg{padding:11px;border-radius:10px;margin-top:12px;font-size:13px;background:#1b2230}.err{background:#351820;color:#ffb5bd}.ok{background:#152d20;color:#9ff0b4}
 @media(max-width:600px){.row,.actions{grid-template-columns:1fr}.wrap{padding:12px}}
+
+.tournament-admin{border-color:#6b4b17;background:linear-gradient(145deg,#11151d,#171a20)}
+.ta-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.ta-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
+.ta-list{display:grid;gap:8px;margin-top:12px}.ta-item{background:#0b0e14;border:1px solid #2b3442;border-radius:12px;padding:12px;display:flex;gap:10px;align-items:center;justify-content:space-between}
+.ta-item b{display:block}.ta-item small{color:#a3adbb}.ta-item button{padding:8px 10px}.ta-status{color:#ffd36d;font-size:11px}
+@media(max-width:600px){.ta-grid,.ta-actions{grid-template-columns:1fr}.ta-item{align-items:flex-start;flex-direction:column}}
+
 </style>
 </head>
 <body>
@@ -68,6 +75,33 @@ button{border:0;border-radius:12px;padding:13px 17px;font-weight:800;cursor:poin
       </div>
       <div id="actionMsg"></div>
     </section>
+
+
+    <section class="card tournament-admin">
+      <h1>🏆 إدارة البطولات</h1>
+      <div class="muted">أنشئ بطولة عادية أو نهائية، ابدأ العد التنازلي، ثم حدّث بيانات الروم وانشرها للاعبين.</div>
+      <label>البطولة المحفوظة</label>
+      <select id="tournamentSelect"><option value="">＋ إنشاء بطولة جديدة</option></select>
+      <div class="ta-grid">
+        <div><label>اسم البطولة</label><input id="tournamentTitle" maxlength="70" placeholder="مثال: بطولة Romes الأسبوعية"></div>
+        <div><label>نوع الصفحة</label><select id="tournamentType"><option value="normal">🎮 روم عادي</option><option value="final">🏆 روم النهائي</option></select></div>
+        <div><label>مدة العد التنازلي (بالدقائق)</label><input id="tournamentMinutes" type="number" min="1" max="1440" value="10"></div>
+        <div><label>Room ID</label><input id="tournamentRoomId" inputmode="numeric" placeholder="رقم الغرفة"></div>
+        <div><label>Room Code</label><input id="tournamentRoomCode" inputmode="numeric" placeholder="كود الغرفة"></div>
+      </div>
+      <div class="ta-actions">
+        <button id="tournamentNew" class="ghost">＋ بطولة جديدة</button>
+        <button id="tournamentSave" class="primary">💾 حفظ البيانات</button>
+        <button id="tournamentStart" class="primary">⏳ بدء العد التنازلي</button>
+        <button id="tournamentPublish" class="primary">🚀 نشر / تحديث صفحة الروم</button>
+        <button id="tournamentUnpublish" class="ghost">إخفاء من الموقع</button>
+        <button id="tournamentDelete" class="danger">🗑️ حذف البطولة</button>
+      </div>
+      <div id="tournamentAdminMsg"></div>
+      <div class="muted" style="margin-top:12px">ملاحظة: يظهر العد التنازلي للاعب بعد ضغط «انضمام». لا تُعرض بيانات الغرفة في صفحة البطولات إلا بعد النشر.</div>
+      <div id="tournamentAdminList" class="ta-list"></div>
+    </section>
+
   </main>
 </div>
 
@@ -106,6 +140,7 @@ $("login").onclick=()=>{
     $("adminApp").classList.remove("hidden");
     $("logout").classList.remove("hidden");
     msg("loginMsg","تم تسجيل الدخول بنجاح ✓","ok");
+    startTournamentAdminListener();
   }else{
     msg("loginMsg","❌ رقم الإدارة أو كلمة السر غير صحيحة.","err");
   }
@@ -170,6 +205,106 @@ $("deactivate").onclick=async()=>{
     current.data.subscription=sub;render();msg("actionMsg","تم إلغاء VIP.","ok");
   }catch(e){msg("actionMsg","فشل الإلغاء: "+e.message,"err");}
 };
+
+// ===== إدارة بطولات Romes FreeFire =====
+const tournamentsRef=db.ref("tournaments");
+let tournamentAdminData={};
+let selectedTournamentKey="";
+let tournamentAdminListenerStarted=false;
+function tournamentAdminMessage(text,type=""){msg("tournamentAdminMsg",text,type)}
+function safeTournamentText(v){return String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
+function resetTournamentForm(){
+  selectedTournamentKey="";
+  $("tournamentSelect").value="";
+  $("tournamentTitle").value="";
+  $("tournamentType").value="normal";
+  $("tournamentMinutes").value="10";
+  $("tournamentRoomId").value="";
+  $("tournamentRoomCode").value="";
+  tournamentAdminMessage("تم فتح نموذج بطولة جديدة.");
+}
+function loadTournamentIntoForm(key){
+  const t=tournamentAdminData[key];if(!t)return;
+  selectedTournamentKey=key;$("tournamentSelect").value=key;
+  $("tournamentTitle").value=t.title||"";
+  $("tournamentType").value=t.type==="final"?"final":"normal";
+  $("tournamentMinutes").value=Math.max(1,Math.min(1440,Number(t.countdownMinutes)||10));
+  $("tournamentRoomId").value=t.roomId||"";
+  $("tournamentRoomCode").value=t.roomCode||"";
+  tournamentAdminMessage("تم تحميل البطولة للتعديل.");
+}
+function renderTournamentAdminList(){
+  const select=$("tournamentSelect"),list=$("tournamentAdminList");if(!select||!list)return;
+  const old=selectedTournamentKey;
+  select.innerHTML='<option value="">＋ إنشاء بطولة جديدة</option>'+Object.keys(tournamentAdminData).map(key=>{
+    const t=tournamentAdminData[key]||{};
+    return '<option value="'+safeTournamentText(key)+'">'+safeTournamentText(t.title||"بطولة بدون اسم")+' — '+(t.type==="final"?"نهائي":"عادي")+'</option>';
+  }).join("");
+  if(old&&tournamentAdminData[old])select.value=old;else if(old)selectedTournamentKey="";
+  list.innerHTML=Object.keys(tournamentAdminData).sort((a,b)=>(Number(tournamentAdminData[b]?.updatedAt)||0)-(Number(tournamentAdminData[a]?.updatedAt)||0)).map(key=>{
+    const t=tournamentAdminData[key]||{},count=Object.keys(t.participants||{}).length;
+    const state=t.published?"منشورة":(t.startAt?"بدأ العد التنازلي":"مسودة");
+    return '<div class="ta-item"><div><b>'+safeTournamentText(t.title||"بطولة")+'</b><small>'+(t.type==="final"?"🏆 نهائي":"🎮 عادي")+' • '+state+' • '+count+' منضم</small></div><button class="ghost" type="button" data-load-tournament="'+safeTournamentText(key)+'">تعديل</button></div>';
+  }).join("")||'<div class="muted">لا توجد بطولات محفوظة حتى الآن.</div>';
+  list.querySelectorAll("[data-load-tournament]").forEach(b=>b.onclick=()=>loadTournamentIntoForm(b.getAttribute("data-load-tournament")));
+}
+function startTournamentAdminListener(){
+  if(tournamentAdminListenerStarted)return;
+  tournamentAdminListenerStarted=true;
+  tournamentsRef.on("value",snap=>{
+    tournamentAdminData=snap.val()||{};
+    renderTournamentAdminList();
+  },err=>tournamentAdminMessage("تعذر قراءة البطولات: "+(err.message||err),"err"));
+}
+async function saveTournamentAdmin(){
+  const title=$("tournamentTitle").value.trim();
+  const type=$("tournamentType").value==="final"?"final":"normal";
+  const countdownMinutes=Math.max(1,Math.min(1440,Number($("tournamentMinutes").value)||10));
+  if(!title){tournamentAdminMessage("اكتب اسم البطولة أولاً.","err");return null}
+  try{
+    const key=selectedTournamentKey||tournamentsRef.push().key;
+    const old=tournamentAdminData[key]||{};
+    const data={...old,title,type,countdownMinutes,roomId:$("tournamentRoomId").value.trim(),roomCode:$("tournamentRoomCode").value.trim(),verified:true,publisherName:"Romes FreeFire",createdAt:Number(old.createdAt)||Date.now(),updatedAt:Date.now()};
+    await tournamentsRef.child(key).update(data);
+    selectedTournamentKey=key;$("tournamentSelect").value=key;
+    tournamentAdminMessage("تم حفظ بيانات البطولة ✓","ok");
+    return key;
+  }catch(e){tournamentAdminMessage("فشل الحفظ: "+(e.message||e),"err");return null}
+}
+$("tournamentSelect").onchange=()=>{const key=$("tournamentSelect").value;if(key)loadTournamentIntoForm(key);else resetTournamentForm()};
+$("tournamentNew").onclick=resetTournamentForm;
+$("tournamentSave").onclick=()=>saveTournamentAdmin();
+$("tournamentStart").onclick=async()=>{
+  const key=await saveTournamentAdmin();if(!key)return;
+  const mins=Math.max(1,Math.min(1440,Number($("tournamentMinutes").value)||10));
+  try{
+    const startAt=Date.now()+mins*60000;
+    await tournamentsRef.child(key).update({startAt,countdownMinutes:mins,status:"countdown",updatedAt:Date.now()});
+    tournamentAdminMessage("بدأ العد التنازلي لمدة "+mins+" دقيقة. يظهر للاعب بعد ضغط انضمام.","ok");
+  }catch(e){tournamentAdminMessage("تعذر بدء العد التنازلي: "+(e.message||e),"err")}
+};
+$("tournamentPublish").onclick=async()=>{
+  const key=await saveTournamentAdmin();if(!key)return;
+  const roomId=$("tournamentRoomId").value.trim(),roomCode=$("tournamentRoomCode").value.trim();
+  if(!roomId||!roomCode){tournamentAdminMessage("أدخل Room ID وRoom Code قبل النشر.","err");return}
+  try{
+    await tournamentsRef.child(key).update({roomId,roomCode,published:true,status:"published",publishedAt:Date.now(),verified:true,updatedAt:Date.now()});
+    tournamentAdminMessage("تم نشر/تحديث صفحة الروم في قسم البطولات ✓","ok");
+  }catch(e){tournamentAdminMessage("فشل النشر: "+(e.message||e),"err")}
+};
+$("tournamentUnpublish").onclick=async()=>{
+  if(!selectedTournamentKey){tournamentAdminMessage("اختر بطولة أولاً.","err");return}
+  try{await tournamentsRef.child(selectedTournamentKey).update({published:false,status:"hidden",updatedAt:Date.now()});tournamentAdminMessage("تم إخفاء البطولة من الموقع.","ok")}
+  catch(e){tournamentAdminMessage("تعذر الإخفاء: "+(e.message||e),"err")}
+};
+$("tournamentDelete").onclick=async()=>{
+  if(!selectedTournamentKey){tournamentAdminMessage("اختر بطولة أولاً.","err");return}
+  if(!confirm("هل تريد حذف البطولة وكل سجلات الانضمام؟"))return;
+  try{await tournamentsRef.child(selectedTournamentKey).remove();resetTournamentForm();tournamentAdminMessage("تم حذف البطولة.","ok")}
+  catch(e){tournamentAdminMessage("تعذر حذف البطولة: "+(e.message||e),"err")}
+};
+
+if(sessionStorage.getItem("ff_admin_ok")==="1")startTournamentAdminListener();
 </script>
 </body>
 </html>

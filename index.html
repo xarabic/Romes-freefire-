@@ -596,8 +596,25 @@ body,.app{background:#fbf7eb;color:#123b30}
   <button class="nav vip-nav" id="navCreators" onclick="openVipHub()"><i>⭐</i><span>اللاعب المميز</span><em class="soon-tag">قريبًا</em></button>
   <button class="nav create" onclick="openCreate()"><i>+</i><span>إنشاء</span></button>
   <button class="nav notification-bell" id="navNotifications" onclick="openNotifications()"><i>🔔</i><span class="notification-badge" id="notificationBadge"></span><span>الإشعارات</span></button>
+  <button class="nav" id="navTournaments" onclick="openTournamentHub()"><i>🏆</i><span>البطولات</span></button>
   <button class="nav profile-nav" id="navProfileSoon" onclick="openProfile()"><i>👤</i><span>البروفايل</span></button>
 </nav>
+
+
+<section class="tournament-page" id="tournamentPage" aria-label="البطولات">
+  <header class="tournament-hero">
+    <div class="tournament-heading">
+      <div><h1>🏆 البطولات</h1><p>شارك في البطولات العادية والنهائيات من Romes FreeFire</p></div>
+      <button class="tournament-back" onclick="closeTournamentHub()">رجوع ↩</button>
+    </div>
+    <div style="margin-top:14px"><span class="tournament-count-pill">🔥 بطولات منشورة: <b id="tournamentTotal">0</b></span></div>
+  </header>
+  <div class="tournament-content">
+    <div class="tournament-list" id="tournamentList"></div>
+    <div class="tournament-empty" id="tournamentEmpty"><div style="font-size:42px">🏆</div><b>لا توجد بطولات منشورة الآن</b><span style="font-size:11px">ستظهر البطولات هنا عندما ينشرها المدير.</span></div>
+    <p class="tournament-small-note">اضغط «انضمام» لتسجيل مشاركتك وإظهار العد التنازلي وبيانات الغرفة. يتم احتساب حسابك مرة واحدة لكل بطولة على هذا الجهاز أو الحساب.</p>
+  </div>
+</section>
 
 <div class="modal-bg" id="createModal" onclick="backdropClose(event,'createModal')">
   <div class="modal">
@@ -2256,6 +2273,144 @@ object-fit:cover!important
 .room.vip-room .vip-frame-inner{width:100%!important;height:100%!important;overflow:hidden!important}
 .room.vip-room .vip-frame-inner img{width:100%!important;height:100%!important;object-fit:cover!important}
 </style>
+
+<style id="romes-tournaments-style">
+.bottom{grid-template-columns:repeat(6,minmax(0,1fr))!important}
+.bottom .nav{min-width:0;font-size:9px}
+.bottom .nav i{font-size:20px}
+.tournament-page{position:fixed;inset:0;z-index:95;background:#fbf7eb;display:none;overflow:auto;color:#123b30}
+.tournament-page.show{display:block}
+.tournament-hero{padding:18px 16px 22px;background:radial-gradient(circle at 90% 5%,#e2ad3240,transparent 28%),linear-gradient(135deg,#073b25,#0a2118 70%,#07130e);color:#fff;border-bottom:3px solid #d8b84d}
+.tournament-back{height:38px;padding:0 12px;border-radius:11px;background:#ffffff18;color:#fff;border:1px solid #ffffff28;font-weight:900}
+.tournament-heading{display:flex;align-items:center;gap:10px;justify-content:space-between}
+.tournament-heading h1{font-size:23px;font-weight:900}.tournament-heading p{font-size:10px;color:#c9d8ce;margin-top:3px}
+.tournament-count-pill{white-space:nowrap;background:#ffffff12;border:1px solid #ffffff20;padding:8px 10px;border-radius:12px;font-size:10px;font-weight:900}
+.tournament-content{max-width:900px;margin:auto;padding:15px 14px 100px}
+.tournament-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.tournament-card{position:relative;overflow:hidden;background:#fff;border:1px solid #dce7df;border-radius:20px;box-shadow:0 10px 28px #173c2710}
+.tournament-card.normal{border-top:4px solid #168746}
+.tournament-card.final{background:linear-gradient(145deg,#10151b,#17222b 70%,#10141a);color:#fff;border:1px solid #d6a83c;box-shadow:0 14px 32px #151b2430}
+.tournament-card-head{padding:14px 13px 12px;display:flex;gap:10px;align-items:flex-start;justify-content:space-between}
+.tournament-title{font-size:16px;font-weight:950;line-height:1.5}
+.tournament-type{display:inline-flex;align-items:center;gap:4px;padding:5px 8px;border-radius:9px;background:#e9f8ef;color:#168746;font-size:9px;font-weight:950;white-space:nowrap}
+.tournament-card.final .tournament-type{background:#3b2d12;color:#ffd45a;border:1px solid #8e6c24}
+.tournament-owner{display:flex;align-items:center;gap:6px;padding:0 13px 12px;color:#637365;font-size:10px;font-weight:900}
+.tournament-card.final .tournament-owner{color:#b9c4d0}
+.tournament-owner .creator-badge{width:19px;height:22px;margin:0}
+.tournament-meta{display:grid;grid-template-columns:1fr 1fr;gap:7px;padding:0 13px 12px}
+.tournament-meta-item{background:#f3f7f4;border:1px solid #e4ece6;border-radius:12px;padding:9px 8px;text-align:center;min-width:0}
+.tournament-card.final .tournament-meta-item{background:#111923;border-color:#344151}
+.tournament-meta-item b{display:block;font-size:14px;overflow-wrap:anywhere}
+.tournament-meta-item span{font-size:8px;color:#7d8a82;font-weight:800}
+.tournament-card.final .tournament-meta-item span{color:#a7b2c0}
+.tournament-countdown{margin:0 13px 12px;padding:11px 9px;text-align:center;border-radius:12px;background:#fff6dd;border:1px solid #f1d88b;color:#805a00;font-size:12px;font-weight:950}
+.tournament-card.final .tournament-countdown{background:#332713;border-color:#8b6b2c;color:#ffdb70}
+.tournament-room-details{margin:0 13px 12px;padding:10px;border-radius:12px;background:#f7f9fb;border:1px dashed #cbd5df;display:grid;gap:8px}
+.tournament-card.final .tournament-room-details{background:#0d131b;border-color:#4b5868}
+.tournament-room-line{display:flex;justify-content:space-between;align-items:center;gap:8px;font-size:11px}
+.tournament-room-line b{overflow-wrap:anywhere}
+.tournament-room-line button{padding:6px 8px;border-radius:8px;background:#e8f5ec;color:#14713a;font-size:9px;font-weight:900}
+.tournament-card.final .tournament-room-line button{background:#ffc83d;color:#19140b}
+.tournament-actions{padding:0 13px 13px;display:grid;grid-template-columns:1fr;gap:7px}
+.tournament-join{height:44px;border-radius:13px;background:linear-gradient(135deg,#118247,#07582e);color:#fff;font-weight:950}
+.tournament-card.final .tournament-join{background:linear-gradient(135deg,#ffe17c,#e2a51c);color:#211800}
+.tournament-join.joined{background:#e8f5ec;color:#14713a;border:1px solid #bfe1ca}
+.tournament-card.final .tournament-join.joined{background:#3b2d12;color:#ffdb70;border:1px solid #8e6c24}
+.tournament-empty{text-align:center;padding:48px 16px;background:#fff;border:1px dashed #d6dfd8;border-radius:20px;color:#7b8a80}
+.tournament-empty b{display:block;font-size:18px;color:#214534;margin:8px}
+.tournament-small-note{font-size:9px;color:#829087;text-align:center;margin-top:14px;line-height:1.8}
+@media(max-width:650px){.tournament-list{grid-template-columns:1fr}.tournament-heading h1{font-size:20px}.tournament-card{border-radius:20px}.bottom .nav{font-size:8px}.bottom .nav i{font-size:18px}}
+</style>
+
+<script id="romes-tournaments-script">
+
+// ===== بطولات Romes FreeFire: مزامنة مباشرة مع Firebase =====
+(function(){
+  const tournamentRef=database.ref("tournaments");
+  let tournamentRecords={};
+  let tournamentTick=null;
+  function tournamentEsc(v){return String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
+  function participantKey(){
+    if(firebaseUser&&firebaseUser.uid)return "u_"+firebaseUser.uid.replace(/[.#$\/\[\]]/g,"_");
+    let id=localStorage.getItem("ff_tournament_guest_id");
+    if(!id){id="g_"+Date.now().toString(36)+"_"+Math.random().toString(36).slice(2,12);localStorage.setItem("ff_tournament_guest_id",id)}
+    return id;
+  }
+  function participantName(){return (profile&&profile.name)||"لاعب"}
+  function timeText(ms){
+    if(!ms||Number(ms)<=0)return "لم يبدأ العد التنازلي";
+    const left=Math.max(0,Number(ms)-Date.now());
+    if(left<=0)return "🏁 حان وقت البطولة!";
+    const total=Math.floor(left/1000),h=Math.floor(total/3600),m=Math.floor(total%3600/60),s=total%60;
+    return "⏳ تبدأ البطولة خلال "+String(h).padStart(2,"0")+":"+String(m).padStart(2,"0")+":"+String(s).padStart(2,"0");
+  }
+  function renderTournamentCards(){
+    const list=document.getElementById("tournamentList"),empty=document.getElementById("tournamentEmpty"),total=document.getElementById("tournamentTotal");
+    if(!list)return;
+    const data=Object.keys(tournamentRecords).map(key=>({...tournamentRecords[key],key})).filter(t=>t.published===true).sort((a,b)=>(Number(b.publishedAt)||Number(b.updatedAt)||0)-(Number(a.publishedAt)||Number(a.updatedAt)||0));
+    if(total)total.textContent=data.length;
+    if(empty)empty.style.display=data.length?"none":"block";
+    list.innerHTML=data.map(t=>{
+      const people=t.participants&&typeof t.participants==="object"?t.participants:{};
+      const count=Object.keys(people).length,joined=!!people[participantKey()],isFinal=t.type==="final";
+      const title=tournamentEsc(t.title||"بطولة Free Fire"),key=t.key;
+      const roomDetails=joined?'<div class="tournament-room-details"><div class="tournament-room-line"><span>🆔 Room ID</span><b>'+tournamentEsc(t.roomId||"—")+'</b><button type="button" onclick="event.stopPropagation();copyText(\''+tournamentEsc(t.roomId||"")+'\')">نسخ</button></div><div class="tournament-room-line"><span>🔐 Room Code</span><b>'+tournamentEsc(t.roomCode||"—")+'</b><button type="button" onclick="event.stopPropagation();copyText(\''+tournamentEsc(t.roomCode||"")+'\')">نسخ</button></div></div>':"";
+      const countdown=joined?'<div class="tournament-countdown" id="tCountdown_'+key+'">'+timeText(t.startAt)+'</div>':"";
+      return '<article class="tournament-card '+(isFinal?"final":"normal")+'">'
+       +'<div class="tournament-card-head"><div class="tournament-title">'+title+'</div><span class="tournament-type">'+(isFinal?"🏆 النهائي":"🎮 روم عادي")+'</span></div>'
+       +'<div class="tournament-owner"><span class="creator-badge check" aria-label="حساب موثق"></span><span>Romes FreeFire • موثق</span></div>'
+       +'<div class="tournament-meta"><div class="tournament-meta-item"><b>👥 '+count+'</b><span>لاعب انضم</span></div><div class="tournament-meta-item"><b>'+(t.startAt?new Date(Number(t.startAt)).toLocaleTimeString('ar',{hour:'2-digit',minute:'2-digit'}):'بانتظار الإدارة')+'</b><span>موعد البطولة</span></div></div>'
+       +countdown+roomDetails
+       +'<div class="tournament-actions"><button class="tournament-join '+(joined?"joined":"")+'" onclick="joinTournament(\''+key+'\')">'+(joined?"✓ أنت منضم — عرض البيانات":"🚀 انضم إلى البطولة")+'</button></div></article>';
+    }).join("");
+    updateTournamentCountdowns();
+  }
+  function updateTournamentCountdowns(){
+    Object.keys(tournamentRecords).forEach(key=>{
+      const t=tournamentRecords[key]||{};
+      if(!t.published)return;
+      const joined=!!(t.participants&&t.participants[participantKey()]);
+      if(!joined)return;
+      const el=document.getElementById("tCountdown_"+key);
+      if(el)el.textContent=timeText(t.startAt);
+    });
+  }
+  window.joinTournament=async function(key){
+    const t=tournamentRecords[key];if(!t||t.published!==true)return;
+    const ref=tournamentRef.child(key).child("participants").child(participantKey());
+    try{
+      const result=await ref.transaction(current=>current||{name:participantName(),uid:firebaseUser?.uid||null,joinedAt:Date.now()});
+      if(result.committed){if(!result.snapshot.val())throw new Error("تعذر تسجيل الانضمام");}
+      const snap=await tournamentRef.child(key).once("value");
+      tournamentRecords[key]=snap.val()||t;
+      renderTournamentCards();
+      if(!t.startAt)notify("✅ تم تسجيل انضمامك. انتظر بدء العد التنازلي من الإدارة.");
+      else notify("🏆 تم انضمامك للبطولة وظهرت بيانات الروم.");
+    }catch(e){notify("⚠️ تعذر الانضمام: "+(e.message||"تحقق من اتصال Firebase"))}
+  };
+  window.openTournamentHub=function(){
+    document.getElementById("creatorPage")?.classList.remove("show");
+    document.getElementById("creatorDetail")?.classList.remove("show");
+    document.getElementById("profilePage")?.classList.remove("show");
+    document.getElementById("tournamentPage")?.classList.add("show");
+    document.body.style.overflow="hidden";
+    if(typeof setNav==="function")setNav("navTournaments");
+    renderTournamentCards();
+  };
+  window.closeTournamentHub=function(){
+    document.getElementById("tournamentPage")?.classList.remove("show");
+    document.body.style.overflow="";
+    if(typeof setNav==="function")setNav("navHome");
+  };
+  tournamentRef.on("value",snap=>{
+    tournamentRecords=snap.val()||{};
+    renderTournamentCards();
+  },err=>{console.warn("Tournament listener error:",err);notify("⚠️ تعذر تحميل البطولات من Firebase")});
+  if(tournamentTick)clearInterval(tournamentTick);
+  tournamentTick=setInterval(updateTournamentCountdowns,1000);
+})();
+
+</script>
 </body>
 </html>
 <style>
